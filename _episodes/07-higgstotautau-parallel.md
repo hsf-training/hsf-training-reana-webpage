@@ -10,5 +10,13 @@ keypoints:
 - "Writing parallel workflows to represent DAG analysis graph"
 ---
 
+Let's get back to HiggsToTauTau example.
+
+Serial was easy, but takes long. No fun to run serially. How can we process data in parallel?
+
+Writing together the Yadage workflow start.
+
+Excercise: write the rest of the workflow. (Foresee a lot of time.)
+
 {% include links.md %}
 

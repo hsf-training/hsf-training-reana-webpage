@@ -13,5 +13,21 @@ keypoints:
 - "Fully declare inputs and outputs for each step"
 ---
 
+We now know how to develop reproducible analyses on small scale.
+
+Need to scale-up for real life work -> parallel processing.
+
+Many workflow engines; we are going to use Yadage.
+
+Directed Acyclic Graph principles.
+
+Validation.
+
+Taking RooFit again (even though it is serial) and reading Yadage syntax.
+
+Running the same example on REANA.  Was it necessary to change anything?
+
+Excercise: Yadage parameter changing, Yadage syntax question.
+
 {% include links.md %}
 

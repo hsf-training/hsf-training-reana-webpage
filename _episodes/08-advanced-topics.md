@@ -14,5 +14,23 @@ keypoints:
 - "Wowkflow specification uses hints to hide complexity"
 ---
 
+We now know how to write serial and parallel workflows.
+
+What do people might want to do next?
+
+E.g. writing out the interesting data products to EOS.
+
+E.g. source control: which workflow run was run on which code version?  (git commit as an
+operational parameter)
+
+E.g. CVMFS: natively supported.  Just a tiny declaration in reana.yaml.
+
+E.g. HTC: how would I plug Condor?  Example of workflow hint: super easy.  Example of Kerberos
+authentication: need to submit keytabs.
+
+E.g. HPC: how can I run on Slurm?  Equally easy. Demo.
+
+REANA is in pilot state. Real-life use cases and early feedback greatly appreciated. Get in touch!
+
 {% include links.md %}
 

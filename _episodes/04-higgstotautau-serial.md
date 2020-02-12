@@ -10,5 +10,12 @@ keypoints:
 - "Writing serial workflows is like writing shell scripts"
 ---
 
+Let's get back to HiggsToTauTau example.
+
+Let's write together skimming for one input file.  People follow.
+
+Excercise: write the rest of the workflow. (Foresee a lot of time!) Use restart for efficiency. Get
+final plot.
+
 {% include links.md %}
 
