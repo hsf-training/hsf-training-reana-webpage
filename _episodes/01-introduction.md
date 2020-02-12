@@ -1,15 +1,14 @@
 ---
 title: "Introduction"
-teaching: 0
+teaching: 15
 exercises: 0
 questions:
-- "Key question (FIXME)"
+- "What makes data analyses reproducible?"
 objectives:
-- "First learning objective. (FIXME)"
+- "Understand the principles behind reproducible computational analyses"
 keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
+- "data + code + environment + workflow = reproducible analyses"
 ---
-FIXME
 
 {% include links.md %}
 

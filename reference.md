@@ -4,6 +4,8 @@ layout: reference
 
 ## Glossary
 
-FIXME
+reproducible analysis
+
+computational workflows
 
 {% include links.md %}
