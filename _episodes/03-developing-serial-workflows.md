@@ -30,7 +30,5 @@ commmand on the same workspace to gain time.
 
 Excercise: practice develoing workflow and joining it with git commands.
 
-Question: Opening interactive environment (notebook) on the same workspace: interesting?
-
 {% include links.md %}
 
