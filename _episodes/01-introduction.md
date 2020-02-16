@@ -81,19 +81,21 @@ abstractly.
 
 Example of a serial computational workflow:
 
-```
+~~~
   data --> step 1 --> step 2  --> ... --> step N --> results
-```
+~~~
+{: .source}
 
 Example of a parallel computational workflow:
 
-```
+~~~
      +-->  step 1 ---+
     /                 \
  data                  ---> merge --> results
      \                /
       +--> step 2 --+
-```
+~~~
+{: .source}
 
 Many different [computational data analysis workflow
 systems](https://github.com/common-workflow-language/common-workflow-language/wiki/Existing-Workflow-systems)
