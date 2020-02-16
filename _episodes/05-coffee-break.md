@@ -11,5 +11,7 @@ keypoints:
 - "Discuss your experience"
 ---
 
+![coffee](../fig/1280px-A_small_cup_of_coffee.JPG)
+
 {% include links.md %}
 
