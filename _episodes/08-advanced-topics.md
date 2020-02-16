@@ -79,7 +79,7 @@ hand.
 >
 > Publish all produced HigssToTauTau analysis plots to your EOS home directory.
 >
-{: .callout}
+{: .challenge}
 
 > ## Solution
 >
@@ -118,7 +118,7 @@ workflow:
 > Write a workflow that would run ROOT from the SFT repository on CVMFS and that would list all
 > configuration flags enabled in that executable.
 >
-{: .callout}
+{: .challenge}
 
 > ## Solution
 >
@@ -156,7 +156,7 @@ submit your ``keytab`` as in the EOS publishing example above.
 >
 > Modify HiggsToTauTau analysis to run the skimming part on the HTCondor cluster.
 >
-{: .callout}
+{: .challenge}
 
 > ## Solution
 >
@@ -189,7 +189,7 @@ workflow:
 >
 > Modify HiggsToTauTau analysis to run the histogramming part on the Slurm cluster.
 >
-{: .callout}
+{: .challenge}
 
 > ## Solution
 >
@@ -220,7 +220,7 @@ $ reana-client close -w myanalysis.42
 >
 > Open a Jupyter notebook on your HiggsToTauTau analysis example and inspect the ROOT files there.
 >
-{: .callout}
+{: .challenge}
 
 > ## Solution
 >
@@ -249,7 +249,7 @@ $ firefox https://reana.cern.ch/
 > Connect your REANA account and your GitLab account and run an example analysis from GitLab on
 > REANA cloud.
 >
-{: .callout}
+{: .challenge}
 
 > ## Solution
 >
