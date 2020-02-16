@@ -30,5 +30,8 @@ commmand on the same workspace to gain time.
 
 Excercise: practice develoing workflow and joining it with git commands.
 
+Note: sometimes you have to build a new container image when code changes (e.g. C++ compilation),
+sometimes you don't (e.g.  Python code, ROOT macros). Use latter for more productivity.
+
 {% include links.md %}
 
