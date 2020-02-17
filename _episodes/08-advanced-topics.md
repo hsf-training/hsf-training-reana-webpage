@@ -77,7 +77,7 @@ Note the presence of ``kerberos: true`` classifier in the final publishing step,
 REANA system to initialise Kerberos authentitation using provided secrets for the workflow step at
 hand.
 
-> ## Excercise
+> ## Exercise
 >
 > Publish all produced HigssToTauTau analysis plots to your EOS home directory.
 >
@@ -116,7 +116,7 @@ workflow:
 ~~~
 {: .source}
 
-> ## Excercise
+> ## Exercise
 >
 > Write a workflow that would run ROOT from the SFT repository on CVMFS and that would list all
 > configuration flags enabled in that executable.
@@ -156,7 +156,7 @@ workflow:
 Note that the access control will be handled automatically via Kerberos, so this requires you to
 submit your ``keytab`` as in the EOS publishing example above.
 
-> ## Excercise
+> ## Exercise
 >
 > Modify HiggsToTauTau analysis to run the skimming part on the HTCondor cluster.
 >
@@ -190,7 +190,7 @@ workflow:
 ~~~
 {: .source}
 
-> ## Excercise
+> ## Exercise
 >
 > Modify HiggsToTauTau analysis to run the histogramming part on the Slurm cluster.
 >
@@ -223,7 +223,7 @@ $ reana-client close -w myanalysis.42
 ~~~
 {: .bash}
 
-> ## Excercise
+> ## Exercise
 >
 > Open a Jupyter notebook on your HiggsToTauTau analysis example and inspect the ROOT files there.
 >
@@ -252,7 +252,7 @@ $ firefox https://reana.cern.ch/
 ~~~
 {: .bash}
 
-> ## Excercise
+> ## Exercise
 >
 > Connect your REANA account and your GitLab account and run an example analysis from GitLab on
 > REANA cloud.

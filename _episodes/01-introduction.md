@@ -51,7 +51,7 @@ Code and containerised environment was covered in previous two days; good!
 
 Today we'll cover the preservation of runtime procedures.
 
-> ## Excercise
+> ## Exercise
 >
 > Are containers enough to capture your runtime environment? What else might be necessary in your
 > typical physics analysis scienarios?

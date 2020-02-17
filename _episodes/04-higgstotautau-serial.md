@@ -10,12 +10,51 @@ keypoints:
 - "Writing serial workflows is like writing shell scripts"
 ---
 
-Let's get back to HiggsToTauTau example.
+## Overview
 
-Let's write together skimming for one input file.  People follow.
+We have practiced writing and running workflows on REANA using a simple RooFit analysis example.
 
-Excercise: write the rest of the workflow. (Foresee a lot of time!) Use restart for efficiency. Get
-final plot.
+In this lesson we shall go back to the HiggsToTauTau analysis used throughout this workshop and we
+shall write a serial workflow to run the analysis on the REANA platform.
 
+## Skimming workflow
+
+Let us write a simple serial workflow to run skimming for one dataset, say TTbar.
+
+> ## Exercise
+>
+> Write serial workflow tu run the skimming of TTbar dataset in the HiggsToTauTau analysis example.
+>
+{: .challenge}
+
+> ## Solution
+>
+> ~~~
+> FIXME
+> ~~~
+> {: .source}
+>
+{: .solution}
+
+## Full workflow
+
+If time permits, you can write full workflow up to producing final plot.  The workflow will not be
+efficient as it will work serially over various datasets; we shall speed it up in the forthcoming
+[HiggsToTauTau analysis: parallel](../07-higgstotautau-parallel) lesson after the break.
+
+> ## Exercise
+>
+> Write serial workflow tu run the skimming of TTbar dataset in the HiggsToTauTau analysis example.
+>
+{: .challenge}
+
+> ## Solution
+>
+> ~~~
+> FIXME
+> ~~~
+> {: .source}
+>
+{: .solution}
 {% include links.md %}
 

@@ -102,7 +102,7 @@ $ reana-client restart -w roofit.3 -o FROM=fitdata
 ~~~
 {: .bash}
 
-> ## Excercise
+> ## Exercise
 >
 > Consider we would like to produce the final plot of the roofit example and change the title from
 > "Fit example" to "RooFit example".  How do you do this in the most efficient way?

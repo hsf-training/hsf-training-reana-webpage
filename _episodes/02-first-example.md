@@ -207,7 +207,7 @@ $ reana-client ping
 ~~~
 {: .bash}
 
-> ## Excercise
+> ## Exercise
 >
 > Get REANA user token and connect to REANA cluster at ``reana.cern.ch``.
 >
@@ -261,7 +261,7 @@ $ display results/plot.png
 
 ![](../fig/reana-demo-root6-roofit-plot.png)
 
-> ## Excercise
+> ## Exercise
 >
 > Run the example workflow on REANA cluster. Practice ``create``, ``upload``, ``start``, ``status``,
 > ``logs``, ``download`` commands.

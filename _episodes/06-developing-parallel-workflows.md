@@ -27,7 +27,7 @@ Taking RooFit again (even though it is serial) and reading Yadage syntax.
 
 Running the same example on REANA.  Was it necessary to change anything?
 
-Excercise: Yadage parameter changing, Yadage syntax question.
+Exercise: Yadage parameter changing, Yadage syntax question.
 
 {% include links.md %}
 
