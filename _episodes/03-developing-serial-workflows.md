@@ -39,7 +39,7 @@ Start with earlier steps, run, debug, run, debug until satisfaction.
 
 Continue with later steps only afterwords.
 
-How to run only first step of our example workflow?  Use ``--target`` option:
+How to run only first step of our example workflow?  Use `TARGET` step option:
 
 ~~~
 $ reana-client run -w roofit -o TARGET=gendata
@@ -191,7 +191,8 @@ Running a new workflow every time could be very time consuming; running skimming
 more minutes than running statistical analysis.
 
 In these situations, you can take advantage of the ``restart`` functionality.  The REANA platform
-allows to restart a part of the workflow on a given workflow run's workspace:
+allows to restart a part of the workflow on the given workspace starting from the workflow step
+specified by the `FROM` option:
 
 ~~~
 $ reana-client restart -w roofit.3 -o FROM=fitdata
