@@ -13,21 +13,153 @@ keypoints:
 - "Fully declare inputs and outputs for each step"
 ---
 
-We now know how to develop reproducible analyses on small scale.
+## Overview
 
-Need to scale-up for real life work -> parallel processing.
+We now know how to develop reproducible analyses on small scale using serial workflows.
 
-Many workflow engines; we are going to use Yadage.
+In this lesson we shall learn how to scale-up for real life work, which requires using paraller
+workflows.
 
-Directed Acyclic Graph principles.
+## Workflows as Directed Acyclic Graphs (DAG)
 
-Validation.
+The computational analyses can be expressed as a set of steps where some steps depends on other
+steps before they can begin their computations.  In other words, the computational steps as
+expressed as Directed Acyclic Graphs, for example:
 
-Taking RooFit again (even though it is serial) and reading Yadage syntax.
+<img src="{{ page.root }}/fig/Tred-G.svg.png" width="200px" />
 
-Running the same example on REANA.  Was it necessary to change anything?
+The REANA platform supports several DAG workflow specification languages:
 
-Exercise: Yadage parameter changing, Yadage syntax question.
+- [Common Workflow Language (CWL)](https://www.commonwl.org/) originated in life sciences
+- [Yadage](https://yadage.readthedocs.io/en/latest/) originated in particle physics
+
+In this lesson we shall use the Yadage workflow specification language.
+
+## Yadage
+
+Yadage enables to describe complex computational workflows. Let us start having a look at the Yadag
+e specification for the RooFit example we have used in the beginning episodes:
+
+~~~
+stages:
+  - name: gendata
+    dependencies: [init]
+    scheduler:
+      scheduler_type: 'singlestep-stage'
+      parameters:
+        events: {step: init, output: events}
+        gendata: {step: init, output: gendata}
+        outfilename: '{workdir}/data.root'
+      step:
+        process:
+          process_type: 'interpolated-script-cmd'
+          script: root -b -q '{gendata}({events},"{outfilename}")'
+        publisher:
+          publisher_type: 'frompar-pub'
+          outputmap:
+            data: outfilename
+        environment:
+          environment_type: 'docker-encapsulated'
+          image: 'reanahub/reana-env-root6'
+          imagetag: '6.18.04'
+  - name: fitdata
+    dependencies: [gendata]
+    scheduler:
+      scheduler_type: 'singlestep-stage'
+      parameters:
+        fitdata: {step: init, output: fitdata}
+        data: {step: gendata, output: data}
+        outfile: '{workdir}/plot.png'
+      step:
+        process:
+          process_type: 'interpolated-script-cmd'
+          script: root -b -q '{fitdata}("{data}","{outfile}")'
+        publisher:
+          publisher_type: 'frompar-pub'
+          outputmap:
+            plot: outfile
+        environment:
+          environment_type: 'docker-encapsulated'
+          image: 'reanahub/reana-env-root6'
+          imagetag: '6.18.04'
+~~~
+{: .source}
+
+
+We can see that the workflow consists of two steps, ``gendata`` does not depending on anything
+(``[init]``) and ``fitdata`` depending on ``gendata``.  This is how linear workflows are expressed
+in the Yadage language.
+
+## Running Yadage workflows
+
+Let us write the above workflow as ``workflow.yaml`` in the RooFit example directory.
+
+How can we run the example on REANA platform?  We have to instruct REANA that we are going to use
+Yadage as our workflow engine.  We can do that by editing ``reana.yaml`` and specifying:
+
+~~~
+version: 0.6.0
+inputs:
+  parameters:
+    events: 20000
+    gendata: code/gendata.C
+    fitdata: code/fitdata.C
+workflow:
+  type: yadage
+  file: workflow.yaml
+outputs:
+  files:
+    - fitdata/plot.png
+~~~
+{: .source}
+
+We can run the example on REANA in the usual way:
+
+~~~
+$ reana-client run -w roofityadage
+~~~
+{: .bash}
+
+> ## Exercise
+>
+> Run RooFit example using Yadage workflow engine on the REANA cloud. Upload code, run workflow,
+> inspect status, check logs, download final plot.
+>
+{: .challenge}
+
+> ## Solution
+>
+> Nothing changes in the usual user interaction with the REANA platform:
+>
+> ~~~
+> $ reana-client create -w roofityadage
+> $ reana-client upload ./code -w roofityadage
+> $ reana-client start -w roofityadage
+> $ reana-client status -w roofityadage
+> $ reana-client logs -w roofityadage
+> $ reana-client ls -w roofityadage
+> $ reana-client download plot.png -w roofityadage
+> ~~~
+> {: .source}
+>
+{: .solution}
+
+## Physics code vs orchestration code
+
+Note that it wasn't necessary to change anything in our code: we simply modified the workflow
+definition and we could run the RooFit code "as is" using another workflow engine.  This is a simple
+demonstration of the separation of concerns between "physics code" and "orchestration code".
+
+## Parallelism via step dependencies
+
+We have seen how serial workflows can be also expressed in Yadage syntax using step dependencies.
+Note that if dependency graph would have permitted, the workflow steps not depending on each other
+or on the results of previous computations could have been executed in parallel by the workflow
+engine -- the physicist _only_ has to supply knoweldge about which steps depend on which other steps
+and the workflow engine takes care about efficiently starting and scheduling tasks.
+
+In the next episode we shall see how the workflow author can explicitly instruct the workflow engine
+to run a certain step over a certain input in a parallel manner.
 
 {% include links.md %}
 
