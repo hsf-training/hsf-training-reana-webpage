@@ -259,7 +259,7 @@ $ display results/plot.png
 ~~~
 {: .bash}
 
-![](../fig/reana-demo-root6-roofit-plot.png)
+<img src="{{ page.root }}/fig/reana-demo-root6-roofit-plot.png" width="400px" />
 
 > ## Exercise
 >

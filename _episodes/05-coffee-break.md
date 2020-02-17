@@ -11,7 +11,7 @@ keypoints:
 - "Discuss your experience"
 ---
 
-![coffee](../fig/1280px-A_small_cup_of_coffee.JPG)
+<img src="{{ page.root }}/fig/1280px-A_small_cup_of_coffee.JPG" width="400px" />
 
 {% include links.md %}
 

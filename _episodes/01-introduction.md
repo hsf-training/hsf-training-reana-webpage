@@ -25,16 +25,16 @@ keypoints:
 Computational reproducibility has many definitions.  Example: The Turing Way definition of computational reproducibility:
 [source](https://the-turing-way.netlify.com/reproducibility/03/definitions.html)
 
-![](../fig/the-turing-way-reproducibility-definition.jpg)
+<img src="{{ page.root }}/fig/the-turing-way-reproducibility-definition.jpg" width="400px" />
 
-Same data + same analysis = reproducible results
+In other words: same data + same analysis = reproducible results
 
 What about real life?
 
 Example: Nature volume 533 issue 7604 (2016) surveying 1500 scientists.
 [source](https://www.nature.com/news/1-500-scientists-lift-the-lid-on-reproducibility-1.19970)
 
-![](../fig/nature-reproducibility-failures.png)
+<img src="{{ page.root }}/fig/nature-reproducibility-failures.png" width="500px" />
 
 Half of researchers cannot reproduce their own results.
 
@@ -79,23 +79,13 @@ research.
 Hence the birth of declarative workflow systems that express the computational steps more
 abstractly.
 
-Example of a serial computational workflow:
+Example of a **serial** computational workflow typical for ATLAS RECAST analyses:
 
-~~~
-  data --> step 1 --> step 2  --> ... --> step N --> results
-~~~
-{: .source}
+<img src="{{ page.root }}/fig/atlas-recast-workflow.png" width="300px" />
 
-Example of a parallel computational workflow:
+Example of a **parallel** computational workflow typical for Beyond Standard Model searches:
 
-~~~
-     +-->  step 1 ---+
-    /                 \
- data                  ---> merge --> results
-     \                /
-      +--> step 2 --+
-~~~
-{: .source}
+<img src="{{ page.root }}/fig/bsm-search-workflow.png" width="800px" />
 
 Many different [computational data analysis workflow
 systems](https://github.com/common-workflow-language/common-workflow-language/wiki/Existing-Workflow-systems)
@@ -112,7 +102,7 @@ workflows in this lesson. REANA is a pilot project and supports:
 - multiple compute backends (Kubernetes, HTCondor, Slurm)
 - multiple storage backends (Ceph, EOS)
 
-![](../fig/reana-platform-20181202.png)
+<img src="{{ page.root }}/fig/reana-platform-20181202.png" width="800px" />
 
 ## Analysis preservation _ab initio_
 
