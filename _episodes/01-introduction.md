@@ -1,13 +1,17 @@
 ---
 title: "Introduction"
-teaching: 15
-exercises: 0
+teaching: 5
+exercises: 1
 questions:
-- "What makes data analyses reproducible?"
+- "What makes research data analyses reproducible?"
+- "Is preserving code, data, and containers enough?"
 objectives:
-- "Understand the principles behind reproducible computational analyses"
+- "Understand principles behind computational reproducibility"
+- "Understand the concept of serial and parallel computational workflows"
 keypoints:
-- "data + code + environment + workflow = reproducible analyses"
+- "Workflow is the new data."
+- "Data + Code + Environment + Workflow = Reproducible Analyses"
+- "Before reproducibility comes preproducibility"
 ---
 
 ## Computational reproducibility
@@ -98,9 +102,14 @@ Different tools used in different communities: fit for use, fit for purpose, cul
 We shall use [REANA](http://www.reana.io) reproducible analysis platform to explore computational
 workflows in this lesson. REANA is a pilot project and supports:
 
-- multiple workflow systems (CWL, Serial, Yadage)
-- multiple compute backends (Kubernetes, HTCondor, Slurm)
-- multiple storage backends (Ceph, EOS)
+- multiple workflow systems ([CWL](https://www.commonwl.org/),
+  [Serial](http://docs.reana.io/running-workflows/supported-systems/serial/),
+  [Yadage](https://yadage.readthedocs.io/en/latest/))
+- multiple compute backends ([Kubernetes](https://kubernetes.io/),
+  [HTCondor](https://research.cs.wisc.edu/htcondor/),
+  [Slurm](https://slurm.schedmd.com/documentation.html))
+- multiple storage backends ([Ceph](https://docs.ceph.com/docs/master/),
+  [EOS](http://eos.web.cern.ch/))
 
 <img src="{{ page.root }}/fig/reana-platform-20181202.png" width="800px" />
 
@@ -109,8 +118,9 @@ workflows in this lesson. REANA is a pilot project and supports:
 Preserving analysis code and processes _after_ the publication is often too late. Key information
 and knowledge may be lost during the lengthy analysis process.
 
-Making research reproducible from the start, in other words making research "preproducible", makes
-analysis preservation easy.
+Making research reproducible from the start, in other words making research
+["preproducible"](https://www.nature.com/articles/d41586-018-05256-0), makes analysis preservation
+easy.
 
 {% include links.md %}
 
