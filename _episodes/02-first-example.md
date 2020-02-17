@@ -28,6 +28,7 @@ Let's start by cloning it:
 
 ~~~
 $ git clone https://github.com/reanahub/reana-demo-root6-roofit
+$ cd reana-demo-root6-roofit
 ~~~
 {: .bash}
 
@@ -187,6 +188,23 @@ Options:
 ~~~
 {: .output}
 
+> ## Exercise
+>
+> Validate our `reana.yaml` file to discover any errors. Use `validate` command to do so.
+{: .challenge}
+
+> ## Solution
+> ~~~
+> $ reana-client validate -f ./reana.yaml
+> ~~~
+> {: .bash}
+>
+> ~~~
+> File reana-demo-root6-roofit/reana.yaml is a valid REANA specification file.
+> ~~~
+> {: .output}
+{: .solution}
+
 ## Connect REANA client to remote REANA cluster
 
 The REANA client will interact with remote REANA cluster. The authentication uses a token that one
@@ -206,6 +224,10 @@ The REANA client connection to remote REANA cluster can be verified via ``ping``
 $ reana-client ping
 ~~~
 {: .bash}
+~~~
+Connected to https://reana.cern.ch - Server is running.
+~~~
+{: .output}
 
 > ## Exercise
 >
@@ -220,12 +242,24 @@ $ reana-client ping
 
 ## Run example on REANA cluster
 
-Now that we have defined our ``reana.yaml``, we can run the example easily via:
+Now that we have defined and validated our ``reana.yaml``, and connected to the REANA production
+cluster, we can run the example easily via:
 
 ~~~
 $ reana-client run -w roofit
 ~~~
 {: .bash}
+
+~~~
+[INFO] Creating a workflow...
+roofit.1
+[INFO] Uploading files...
+File code/gendata.C was successfully uploaded.
+File code/fitdata.C was successfully uploaded.
+[INFO] Starting workflow...
+roofit.1 is running
+~~~
+{: .output}
 
 Here, we use ``run`` command that will create a new workflow named ``roofit``, upload its inputs as
 specified in the workflow specification and finally start the workflow.
@@ -237,6 +271,12 @@ $ reana-client status -w roofit
 ~~~
 {: .bash}
 
+~~~
+NAME     RUN_NUMBER   CREATED               STARTED               STATUS    PROGRESS
+roofit   1            2020-02-17T16:01:45   2020-02-17T16:01:48   running   2/3
+~~~
+{: .output}
+
 After a minute, the workflow should finish and we can list the output files in the remote workspace:
 
 ~~~
@@ -244,12 +284,43 @@ $ reana-client ls -w roofit
 ~~~
 {: .bash}
 
+~~~
+NAME                SIZE     LAST-MODIFIED
+code/gendata.C      1937     2020-02-17T16:01:46
+code/fitdata.C      1648     2020-02-17T16:01:47
+results/plot.png    15450    2020-02-17T16:02:44
+results/data.root   154457   2020-02-17T16:02:17
+~~~
+{: .output}
+
 We can also get the logs:
 
 ~~~
 $ reana-client logs -w roofit | less
 ~~~
 {: .bash}
+
+~~~
+==> Workflow engine logs
+2020-02-17 16:02:01,722 | root | MainThread | INFO | Publishing step:0, cmd: mkdir -p results, total steps 2 to MQ
+2020-02-17 16:02:10,859 | root | MainThread | INFO | Publishing step:0, cmd: root -b -q 'code/gendata.C(20000,"results/data.root")', total steps 2 to MQ
+2020-02-17 16:02:23,002 | root | MainThread | INFO | Publishing step:1, cmd: root -b -q 'code/fitdata.C("results/data.root","results/plot.png")', total steps>
+2020-02-17 16:02:50,093 | root | MainThread | INFO | Workflow 424bc949-b809-4782-ba96-bc8cfa3e1a89 finished. Files available at /var/reana/users/b57e902f-fd1>
+
+
+
+==> Job logs
+==> Step: gendata
+==> Workflow ID: 424bc949-b809-4782-ba96-bc8cfa3e1a89
+==> Compute backend: Kubernetes
+==> Job ID: 53c97429-25e9-4b74-94f7-c665d93fdbc2
+==> Docker image: reanahub/reana-env-root6:6.18.04
+==> Command: mkdir -p results
+==> Status: finished
+==> Logs:
+...
+~~~
+{: .output}
 
 We can download the resulting plot:
 
@@ -263,16 +334,18 @@ $ display results/plot.png
 
 > ## Exercise
 >
-> Run the example workflow on REANA cluster. Practice ``create``, ``upload``, ``start``, ``status``,
-> ``logs``, ``download`` commands.
+> Run the example workflow on REANA cluster. Practice `status`, `ls`, `logs`, `download` commands.
+> For example, can you get the logs of the gendata step only?
 >
 {: .challenge}
 
 > ## Solution
 >
-> Follow the instructions listed above.
+> ~~~
+> $ reana-client logs -w roofit --step gendata
+> ~~~
+> {: .bash}
 {: .solution}
-
 
 {% include links.md %}
 
