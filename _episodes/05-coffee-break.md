@@ -6,6 +6,7 @@ questions:
 - "Coffee break"
 objectives:
 - "Refresh your mind"
+- "Discuss your experience"
 keypoints:
 - "Refresh your mind"
 - "Discuss your experience"
