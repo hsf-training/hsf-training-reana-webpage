@@ -90,8 +90,7 @@ workflow:
       - name: gendata
         environment: 'reanahub/reana-env-root6:6.18.04'
         commands:
-        - mkdir -p results
-        - root -b -q 'code/gendata.C(${events},"${data}")'
+        - mkdir -p results && root -b -q 'code/gendata.C(${events},"${data}")'
       - name: fitdata
         environment: 'reanahub/reana-env-root6:6.18.04'
         commands:
@@ -273,7 +272,7 @@ $ reana-client status -w roofit
 
 ~~~
 NAME     RUN_NUMBER   CREATED               STARTED               STATUS    PROGRESS
-roofit   1            2020-02-17T16:01:45   2020-02-17T16:01:48   running   2/3
+roofit   1            2020-02-17T16:01:45   2020-02-17T16:01:48   running   1/2
 ~~~
 {: .output}
 
@@ -302,12 +301,9 @@ $ reana-client logs -w roofit | less
 
 ~~~
 ==> Workflow engine logs
-2020-02-17 16:02:01,722 | root | MainThread | INFO | Publishing step:0, cmd: mkdir -p results, total steps 2 to MQ
-2020-02-17 16:02:10,859 | root | MainThread | INFO | Publishing step:0, cmd: root -b -q 'code/gendata.C(20000,"results/data.root")', total steps 2 to MQ
-2020-02-17 16:02:23,002 | root | MainThread | INFO | Publishing step:1, cmd: root -b -q 'code/fitdata.C("results/data.root","results/plot.png")', total steps>
-2020-02-17 16:02:50,093 | root | MainThread | INFO | Workflow 424bc949-b809-4782-ba96-bc8cfa3e1a89 finished. Files available at /var/reana/users/b57e902f-fd1>
-
-
+2020-02-17 16:02:10,859 | root | MainThread | INFO | Publishing step:0, cmd: mkdir -p results && root -b -q 'code/gendata.C(20000,"results/data.root")', total steps 2 to MQ
+2020-02-17 16:02:23,002 | root | MainThread | INFO | Publishing step:1, cmd: root -b -q 'code/fitdata.C("results/data.root","results/plot.png")', total steps 2 to MQ
+2020-02-17 16:02:50,093 | root | MainThread | INFO | Workflow 424bc949-b809-4782-ba96-bc8cfa3e1a89 finished. Files available at /var/reana/users/b57e902f-edf7-4d29-8a90-cdf96e879005.
 
 ==> Job logs
 ==> Step: gendata
@@ -315,7 +311,7 @@ $ reana-client logs -w roofit | less
 ==> Compute backend: Kubernetes
 ==> Job ID: 53c97429-25e9-4b74-94f7-c665d93fdbc2
 ==> Docker image: reanahub/reana-env-root6:6.18.04
-==> Command: mkdir -p results
+==> Command: mkdir -p results && root -b -q 'code/gendata.C(20000,"results/data.root")'
 ==> Status: finished
 ==> Logs:
 ...

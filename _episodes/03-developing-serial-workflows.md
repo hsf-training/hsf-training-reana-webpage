@@ -66,7 +66,7 @@ $ reana-client status -w roofit
 
 ~~~
 NAME     RUN_NUMBER   CREATED               STARTED               ENDED                 STATUS     PROGRESS
-roofit   2            2020-02-17T16:07:29   2020-02-17T16:07:33   2020-02-17T16:08:48   finished   2/2
+roofit   2            2020-02-17T16:07:29   2020-02-17T16:07:33   2020-02-17T16:08:48   finished   1/1
 ~~~
 {: .output}
 
@@ -84,8 +84,8 @@ results/data.root   154458   2020-02-17T16:08:43
 ~~~
 {: .output}
 
-As we can see, the workflow run only the first two commands and the ``data.root`` file was well
-generated.  The final fitting step and the final plot were not produced.
+As we can see, the workflow run only the first command and the ``data.root`` file was well
+generated.  The final fitting step was not run and the final plot was not produced.
 
 ## Workflow runs
 
