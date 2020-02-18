@@ -1,15 +1,25 @@
 ---
 title: "Developing serial workflows"
-teaching: 15
+teaching: 20
 exercises: 10
 questions:
 - "How to write serial workflows?"
+- "What is declarative programming?"
+- "How to develop workflows progressively?"
+- "Can I temporarily override workflow parameters?"
+- "Do I always have to build new Docker image when my code changes?"
 objectives:
+- "Understand pros/cons between imperative and declarative programming styles"
 - "Get familiar with serial workflow development practices"
+- "Understand run numbers of your analysis"
+- "See how you can run only parts of the workflow"
+- "See how you can repeat workflow to fix a failed step"
 keypoints:
-- "Develop workflows progressively"
-- "Restart an interrupted workflow"
-- "Use test data and make atomic commits"
+- "Develop workflows progressively; add steps as needed"
+- "When developing a workflow, stay on the same workspace"
+- "When developing a bytecode-interpreted code, stay on the same container"
+- "Use smaller test data before scaling out"
+- "Use workflows as Continuous Integration; make atomic commits that always work"
 ---
 
 ## Overview
