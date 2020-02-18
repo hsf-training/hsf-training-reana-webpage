@@ -3,7 +3,7 @@ title: "HiggsToTauTau analysis: parallel"
 teaching: 10
 exercises: 20
 questions:
-- "Hands-on developing HiggsToTauTau parallel workflow and running it on REANA."
+- "Challenge: write the HiggsToTauTau analysis parallel workflow and run it on REANA"
 objectives:
 - "Develop a full HigssToTauTau analysis workflow using parallel language"
 keypoints:
@@ -16,52 +16,6 @@ We have seen an example of a full DAG-aware workflow language called Yadage and 
 to run RooFit example.
 
 In this episode we shall see how to efficiently apply to on the HiggsToTauTau example.
-
-## Scatter-gather paradigm
-
-A useful paradigm of workflow languages is a "scatter-gather" behaviour where we instruct the
-workflow engine to run a certain step over a certain input array in parallel as if each element of
-the input were a single item input (the "scatter" operation). The partial results processed in
-parallel are then assembled together (the "gather" operation). The "scatter-gather" paradigm allows
-to express "map-reduce" operations with a minimal of syntax without having to duplicate workflow
-code or statements.
-
-Here is an example of scatter-gather paradim in the Yadage language:
-
-<img src="{{ page.root }}/fig/yadage_multi_cascading_map_reduce.png" width="800px" />
-
-expressed as:
-
-~~~
-stages:
-  - name: map
-    dependencies: [init]
-    scheduler:
-      scheduler_type: multistep-stage
-      parameters:
-        input: {stages: init, output: input, unwrap: true}
-      batchsize: 3
-      scatter:
-        method: zip
-        parameters: [input]
-  - name: map2
-    dependencies: [map]
-    scheduler:
-      scheduler_type: multistep-stage
-      parameters:
-        input: {stages: map, output: outputA, unwrap: true}
-      batchsize: 2
-      scatter: ...
-  - name: reduce
-    dependencies: [map2]
-    scheduler:
-      scheduler_type: singlestep-stage
-      parameters:
-        input: {stages: 'map2', output: outputA}
-~~~
-{: .source}
-
-Note the "scatter" happening over "input" with a wanted batch size.
 
 ## HiggsToTauTau Skimming
 

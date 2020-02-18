@@ -4,6 +4,9 @@ teaching: 15
 exercises: 10
 questions:
 - "How to scale up and run thousands of jobs?"
+- "What is a DAG?"
+- "What is a Scatter-Gather paradigm?"
+- "How to run Yadage workflows on REANA?"
 objectives:
 - "Learn about Directed Acyclic Graphs (DAG)"
 - "Understand Yadage workflow language"
@@ -11,6 +14,7 @@ objectives:
 keypoints:
 - "Computational analysis is a graph of inter-dependent steps"
 - "Fully declare inputs and outputs for each step"
+- "Use Scatter/Gather or Map/Reduce to avoid copy-paste coding"
 ---
 
 ## Overview
@@ -90,6 +94,63 @@ We can see that the workflow consists of two steps, ``gendata`` does not dependi
 (``[init]``) and ``fitdata`` depending on ``gendata``.  This is how linear workflows are expressed
 in the Yadage language.
 
+## Parallelism via step dependencies
+
+We have seen how serial workflows can be also expressed in Yadage syntax using step dependencies.
+Note that if dependency graph would have permitted, the workflow steps not depending on each other
+or on the results of previous computations could have been executed in parallel by the workflow
+engine -- the physicist _only_ has to supply knoweldge about which steps depend on which other steps
+and the workflow engine takes care about efficiently starting and scheduling tasks.
+
+In the next episode we shall see how the workflow author can explicitly instruct the workflow engine
+to run a certain step over a certain input in a parallel manner.
+
+## Parallelism via scatter-gather paradigm
+
+A useful paradigm of workflow languages is a "scatter-gather" behaviour where we instruct the
+workflow engine to run a certain step over a certain input array in parallel as if each element of
+the input were a single item input (the "scatter" operation). The partial results processed in
+parallel are then assembled together (the "gather" operation). The "scatter-gather" paradigm allows
+to express "map-reduce" operations with a minimal of syntax without having to duplicate workflow
+code or statements.
+
+Here is an example of scatter-gather paradim in the Yadage language:
+
+<img src="{{ page.root }}/fig/yadage_multi_cascading_map_reduce.png" width="800px" />
+
+expressed as:
+
+~~~
+stages:
+  - name: map
+    dependencies: [init]
+    scheduler:
+      scheduler_type: multistep-stage
+      parameters:
+        input: {stages: init, output: input, unwrap: true}
+      batchsize: 3
+      scatter:
+        method: zip
+        parameters: [input]
+  - name: map2
+    dependencies: [map]
+    scheduler:
+      scheduler_type: multistep-stage
+      parameters:
+        input: {stages: map, output: outputA, unwrap: true}
+      batchsize: 2
+      scatter: ...
+  - name: reduce
+    dependencies: [map2]
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        input: {stages: 'map2', output: outputA}
+~~~
+{: .source}
+
+Note the "scatter" happening over "input" with a wanted batch size.
+
 ## Running Yadage workflows
 
 Let us write the above workflow as ``workflow.yaml`` in the RooFit example directory.
@@ -116,7 +177,7 @@ outputs:
 We can run the example on REANA in the usual way:
 
 ~~~
-$ reana-client run -w roofityadage
+$ reana-client run -w roofityadage -f reana-yadage.yaml
 ~~~
 {: .bash}
 
@@ -149,17 +210,6 @@ $ reana-client run -w roofityadage
 Note that it wasn't necessary to change anything in our code: we simply modified the workflow
 definition and we could run the RooFit code "as is" using another workflow engine.  This is a simple
 demonstration of the separation of concerns between "physics code" and "orchestration code".
-
-## Parallelism via step dependencies
-
-We have seen how serial workflows can be also expressed in Yadage syntax using step dependencies.
-Note that if dependency graph would have permitted, the workflow steps not depending on each other
-or on the results of previous computations could have been executed in parallel by the workflow
-engine -- the physicist _only_ has to supply knoweldge about which steps depend on which other steps
-and the workflow engine takes care about efficiently starting and scheduling tasks.
-
-In the next episode we shall see how the workflow author can explicitly instruct the workflow engine
-to run a certain step over a certain input in a parallel manner.
 
 {% include links.md %}
 
