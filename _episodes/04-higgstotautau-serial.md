@@ -56,7 +56,9 @@ run code from  certain absolute directories such as `/analysis/skim`. Note that 
 new workflow run, it creates a certain unique "workspace directory" for sharing read/write files by
 the workflow steps.  It is a good practice to have code and data directories _readable_ and
 workflow's workspace _writable_ in a clearly separated manner. In this way, the workflow won't risk
-to write over the inputs or the code provided by the container, which is good both for security.
+to write over the inputs or the code provided by the container, which is good both for
+reproducibility purposes (inputs aren't accidentally modified) and security purposes (code is not
+accidentally modified).
 
 ### Note: REANA_WORKSPACE environment variable
 
