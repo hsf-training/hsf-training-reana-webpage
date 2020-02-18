@@ -42,6 +42,31 @@ Example: Nature volume 533 issue 7604 (2016) surveying 1500 scientists.
 
 Half of researchers cannot reproduce their own results.
 
+## Slow uptake of best practices
+
+Many "best practices" guidelines published.  For example, "Ten Simple Rules for Reproducible
+Computational Research" by Geir Kjetil Sandve, Anton Nekrutenko, James Taylor, Eivind Hovig (2013)
+[DOI:10.1371/journal.pcbi.1003285](https://doi.org/10.1371/journal.pcbi.1003285):
+
+1. For every result, keep track of how it was produced
+2. Avoid manual data manipulation steps
+3. Archive the exact versions of all external programs used
+4. Version control all custom scripts
+5. Record all intermediate results, when possible in standardized formats
+6. For analyses that include randomness, note underlying random seeds
+7. Always store raw data behind plots
+8. Generate hierarchical analysis output, allowing layers of increasing detail to be inspected
+9. Connect textual statements to underlying results
+10. Provide public access to scripts, runs, and results
+
+Yet the uptake has been slow.  Several reasons:
+
+- sociological: publish-or-perish culture; missing incentives
+- technological: easy-to-use tools
+
+Top-down approaches (funding bodies asking for Data Management Plans) combined with bottom-up approaches
+(building tools integrating into daily research workflow) bringing the change.
+
 ## Four questions
 
 Four questions to aid robustness of analyses:
@@ -121,6 +146,10 @@ and knowledge may be lost during the lengthy analysis process.
 Making research reproducible from the start, in other words making research
 ["preproducible"](https://www.nature.com/articles/d41586-018-05256-0), makes analysis preservation
 easy.
+
+<img src="{{ page.root }}/fig/reproducibility-and-preservation.png" width="800px" />
+
+Preproducibility driving preservation: red-pill. Preservation driving reproducibility: blue pill.
 
 {% include links.md %}
 
