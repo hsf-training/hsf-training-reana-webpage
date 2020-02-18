@@ -1,6 +1,6 @@
 ---
 title: "Introduction"
-teaching: 5
+teaching: 10
 exercises: 1
 questions:
 - "What makes research data analyses reproducible?"
@@ -66,6 +66,12 @@ Yet the uptake has been slow.  Several reasons:
 
 Top-down approaches (funding bodies asking for Data Management Plans) combined with bottom-up approaches
 (building tools integrating into daily research workflow) bringing the change.
+
+> ## A reproducibility quote
+>
+> _Your closest collaborator is you six monhts ago... and your younger self does not reply to
+> emails._
+{: .testimonial}
 
 ## Four questions
 
