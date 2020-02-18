@@ -1,17 +1,29 @@
 ---
 title: "A glimpse on advanced topics"
 teaching: 15
-exercises: 0
+exercises: 5
 questions:
-- "Can I use CVMFS? HTCondor? Slurm? GitLab? EOS? Kerberos?"
+- "Can I publish workflow results on EOS?"
+- "Can I use Kerberos to access restricted resources?"
+- "Can I use CVMFS software repositeries?"
+- "Can I dispatch heavy computations to HTCondor?"
+- "Can I dispatch heavy computations to Slurm?"
+- "Can I open Jupyter notebooks on my REANA workspace?"
+- "Can I connect my GitLab repositories with REANA?"
 objectives:
 - "Learn about advanced possibilities of REANA platform"
-- "Publish results on EOS"
-- "Link GitLab repository with REANA for running longer CI tasks"
-- "Dispatch jobs to HTCondor and Slurm compute backends"
-- "Use Kubernetes secrets to access restricted resources"
+- "Learn how to use Kerberos secrets to access restricted resources"
+- "Learn how to interact with remote storage solutions (EOS)"
+- "Learn how to interact with remote compute backends (HTCondor, Slurm)"
+- "Learn how to interact with remote code repositories (CVMFS, GitLab)"
+- "Learn how to open interactive sessions (Jupyter notebooks)"
 keypoints:
-- "Workflow specification uses hints to hide complexity"
+- "Workflow specification uses hints to hide implementation complexity"
+- "Use `kerberos: true` clause to automatically trigger Kerberos token initalisation"
+- "Use `resources` clause to access CVMFS repositories"
+- "Use `compute_backend` hint in your workflow steps to dispatch jobs to various HPC/HTC backends"
+- "Use `open/close` commands to open and close interactive sessions on your workspace"
+- "Enable REANA application on GitLab to run long-standing tasks that would time out in GitLab CI"
 ---
 
 ## Overview
@@ -264,10 +276,6 @@ $ firefox https://reana.cern.ch/
 >
 > FIXME
 {: .solution}
-
-## Summary
-
-REANA is in pilot state. Real-life use cases and early feedback greatly appreciated. Get in touch!
 
 {% include links.md %}
 
