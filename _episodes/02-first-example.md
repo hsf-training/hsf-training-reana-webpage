@@ -220,8 +220,7 @@ Options:
 
 ## Connect REANA client to remote REANA cluster
 
-The REANA client will interact with remote REANA cluster. The authentication uses a token that one
-can get by logging into REANA UI at [reana.cern.ch](https://reana.cern.ch).
+The REANA client will interact with a remote REANA cluster.
 
 The REANA client knows to which REANA cluster it connects by means of two environment variables:
 
@@ -241,6 +240,9 @@ $ reana-client ping
 Connected to https://reana.cern.ch - Server is running.
 ~~~
 {: .output}
+
+The authentication uses a token that one can get by logging into REANA UI at
+[reana.cern.ch](https://reana.cern.ch).
 
 > ## Exercise
 >
@@ -277,7 +279,7 @@ roofit.1 is running
 Here, we use ``run`` command that will create a new workflow named ``roofit``, upload its inputs as
 specified in the workflow specification and finally start the workflow.
 
-While we workflow is running, we can enquire about its status:
+While the workflow is running, we can enquire about its status:
 
 ~~~
 $ reana-client status -w roofit
