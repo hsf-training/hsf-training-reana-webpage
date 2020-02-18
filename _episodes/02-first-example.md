@@ -303,7 +303,7 @@ $ reana-client logs -w roofit | less
 ==> Workflow engine logs
 2020-02-17 16:02:10,859 | root | MainThread | INFO | Publishing step:0, cmd: mkdir -p results && root -b -q 'code/gendata.C(20000,"results/data.root")', total steps 2 to MQ
 2020-02-17 16:02:23,002 | root | MainThread | INFO | Publishing step:1, cmd: root -b -q 'code/fitdata.C("results/data.root","results/plot.png")', total steps 2 to MQ
-2020-02-17 16:02:50,093 | root | MainThread | INFO | Workflow 424bc949-b809-4782-ba96-bc8cfa3e1a89 finished. Files available at /var/reana/users/b57e902f-edf7-4d29-8a90-cdf96e879005.
+2020-02-17 16:02:50,093 | root | MainThread | INFO | Workflow 424bc949-b809-4782-ba96-bc8cfa3e1a89 finished. Files available at /var/reana/users/b57e902f-fd11-4681-8a94-4318ae05d2ca/workflows/424bc949-b809-4782-ba96-bc8cfa3e1a89.
 
 ==> Job logs
 ==> Step: gendata
