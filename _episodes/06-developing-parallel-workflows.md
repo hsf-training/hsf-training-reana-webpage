@@ -94,6 +94,66 @@ We can see that the workflow consists of two steps, ``gendata`` does not dependi
 (``[init]``) and ``fitdata`` depending on ``gendata``.  This is how linear workflows are expressed
 in the Yadage language.
 
+## Running Yadage workflows
+
+Let us write the above workflow as ``workflow.yaml`` in the RooFit example directory.
+
+How can we run the example on REANA platform?  We have to instruct REANA that we are going to use
+Yadage as our workflow engine.  We can do that by editing ``reana.yaml`` and specifying:
+
+~~~
+version: 0.6.0
+inputs:
+  parameters:
+    events: 20000
+    gendata: code/gendata.C
+    fitdata: code/fitdata.C
+workflow:
+  type: yadage
+  file: workflow.yaml
+outputs:
+  files:
+    - fitdata/plot.png
+~~~
+{: .source}
+
+We can run the example on REANA in the usual way:
+
+~~~
+$ reana-client run -w roofityadage -f reana-yadage.yaml
+~~~
+{: .bash}
+
+> ## Exercise
+>
+> Run RooFit example using Yadage workflow engine on the REANA cloud. Upload code, run workflow,
+> inspect status, check logs, download final plot.
+>
+{: .challenge}
+
+> ## Solution
+>
+> Nothing changes in the usual user interaction with the REANA platform:
+>
+> ~~~
+> $ reana-client create -w roofityadage -f ./reana-yadage.yaml
+> $ reana-client upload ./code -w roofityadage
+> $ reana-client start -w roofityadage
+> $ reana-client status -w roofityadage
+> $ reana-client logs -w roofityadage
+> $ reana-client ls -w roofityadage
+> $ reana-client download plot.png -w roofityadage
+> ~~~
+> {: .source}
+>
+{: .solution}
+
+## Physics code vs orchestration code
+
+Note that it wasn't necessary to change anything in our code: we simply modified the workflow
+definition and we could run the RooFit code "as is" using another workflow engine.  This is a simple
+demonstration of the separation of concerns between "physics code" and "orchestration code".
+
 ## Parallelism via step dependencies
 
 We have seen how serial workflows can be also expressed in Yadage syntax using step dependencies.
@@ -102,8 +162,151 @@ or on the results of previous computations could have been executed in parallel 
 engine -- the physicist _only_ has to supply knoweldge about which steps depend on which other steps
 and the workflow engine takes care about efficiently starting and scheduling tasks.
 
-In the next episode we shall see how the workflow author can explicitly instruct the workflow engine
-to run a certain step over a certain input in a parallel manner.
+## HiggsToTauTau analysis: simple version
+
+Let us demonstrate how to write simple Yaage workflow for the HiggsToTauTau analysis using simple
+step dependencies.
+
+The workflow looks like:
+
+~~~
+stages:
+- name: skim
+  dependencies: [init]
+  scheduler:
+    scheduler_type: singlestep-stage
+    parameters:
+      input_dir: {step: init, output: input_dir}
+      output_dir: '{workdir}/output'
+    step: {$ref: 'steps.yml#/skim'}
+
+- name: histogram
+  dependencies: [skim]
+  scheduler:
+    scheduler_type: singlestep-stage
+    parameters:
+      input_dir: {step: skim, output: skimmed_dir}
+      output_dir: '{workdir}/output'
+    step: {$ref: 'steps.yml#/histogram'}
+
+- name: fit
+  dependencies: [histogram]
+  scheduler:
+    scheduler_type: singlestep-stage
+    parameters:
+      histogram_file: {step: histogram, output: histogram_file}
+      output_dir: '{workdir}/output'
+    step: {$ref: 'steps.yml#/fit'}
+
+- name: plot
+  dependencies: [histogram]
+  scheduler:
+    scheduler_type: singlestep-stage
+    parameters:
+      histogram_file: {step: histogram, output: histogram_file}
+      output_dir: '{workdir}/output'
+    step: {$ref: 'steps.yml#/plot'}
+~~~
+{: .source}
+
+where steps are expressed as:
+
+~~~
+skim:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      mkdir {output_dir}
+      bash skim.sh {input_dir} {output_dir}
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+    imagetag: master
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      skimmed_dir: '{output_dir}'
+
+histogram:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      mkdir {output_dir}
+      bash histograms_with_custom_output_location.sh {input_dir} {output_dir}
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+    imagetag: master
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      histogram_file: '{output_dir}/histograms.root'
+
+plot:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      mkdir {output_dir}
+      bash plot.sh {histogram_file} {output_dir}
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+    imagetag: master
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      datamc_plots: '{output_dir}'
+
+fit:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      mkdir {output_dir}
+      bash fit.sh {histogram_file} {output_dir}
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-statistics-stage3
+    imagetag: master
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      fitting_plot: '{output_dir}/fit.png'
+~~~
+{: .source}
+
+This is not too different from the Serial workflow, and, as we can see, it can already lead to
+certain parallelism, because the fitting step and the plotting step can run simultaneously once the
+histograms are produces.
+
+The graphical representation of the workflow is:
+
+<img src="{{ page.root }}/fig/awesome-workflow-yadage-simple.png" width="300px" />
+
+> ## Exercise
+>
+> Run HiggsToTauTau analysis example using simple Yadage workflow version. Take the
+> workflow definition listed above, write corresponding `reana.yaml`, and run the example on REANA
+> cloud.
+{: .challenge}
+
+> ## Solution
+>
+> ~~~
+> $ cat reana.yaml
+> version: 0.6.0
+> inputs:
+>   parameters:
+>     input_dir: root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced
+> workflow:
+>   type: yadage
+>   file: workflow.yml
+> outputs:
+>   files:
+>     - fit/output/fit.png
+> ~~~
+> {: .source}
+>
+{: .solution}
 
 ## Parallelism via scatter-gather paradigm
 
@@ -151,65 +354,8 @@ stages:
 
 Note the "scatter" happening over "input" with a wanted batch size.
 
-## Running Yadage workflows
-
-Let us write the above workflow as ``workflow.yaml`` in the RooFit example directory.
-
-How can we run the example on REANA platform?  We have to instruct REANA that we are going to use
-Yadage as our workflow engine.  We can do that by editing ``reana.yaml`` and specifying:
-
-~~~
-version: 0.6.0
-inputs:
-  parameters:
-    events: 20000
-    gendata: code/gendata.C
-    fitdata: code/fitdata.C
-workflow:
-  type: yadage
-  file: workflow.yaml
-outputs:
-  files:
-    - fitdata/plot.png
-~~~
-{: .source}
-
-We can run the example on REANA in the usual way:
-
-~~~
-$ reana-client run -w roofityadage -f reana-yadage.yaml
-~~~
-{: .bash}
-
-> ## Exercise
->
-> Run RooFit example using Yadage workflow engine on the REANA cloud. Upload code, run workflow,
-> inspect status, check logs, download final plot.
->
-{: .challenge}
-
-> ## Solution
->
-> Nothing changes in the usual user interaction with the REANA platform:
->
-> ~~~
-> $ reana-client create -w roofityadage
-> $ reana-client upload ./code -w roofityadage
-> $ reana-client start -w roofityadage
-> $ reana-client status -w roofityadage
-> $ reana-client logs -w roofityadage
-> $ reana-client ls -w roofityadage
-> $ reana-client download plot.png -w roofityadage
-> ~~~
-> {: .source}
->
-{: .solution}
-
-## Physics code vs orchestration code
-
-Note that it wasn't necessary to change anything in our code: we simply modified the workflow
-definition and we could run the RooFit code "as is" using another workflow engine.  This is a simple
-demonstration of the separation of concerns between "physics code" and "orchestration code".
+In the next episode we shall see how the scatter paradigm can be used to speed up the HiggsToTauTau
+workflow using more parallelism.
 
 {% include links.md %}
 
