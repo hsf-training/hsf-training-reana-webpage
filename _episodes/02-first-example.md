@@ -4,10 +4,15 @@ teaching: 15
 exercises: 5
 questions:
 - "How to run analyses on REANA cloud?"
+- "What are the basic REANA command-line client usage scenarios?"
+- "How to monitor my analysis using REANA web interface?"
 objectives:
-- "Get hands-on experience with reana-client"
+- "Get hands-on experience with REANA command-line client"
 keypoints:
-- "Use reana-client to run containerised workflows on remote compute clouds"
+- "Use `reana-client` rich command-line client to run containerised workflows from your laptop on
+  remote compute clouds"
+- "Before running analysis remotely, check locally its correctness via `validate` command"
+- "As always, when it doubt, use the `--help` command-line argument"
 ---
 ## Overview
 
@@ -17,6 +22,12 @@ In this lesson we shall run our first simple REANA example. We shall see:
 - how to install of REANA command-line client
 - how to connect REANA client to remote REANA cluster
 - how to run analysis on remote REANA cluster
+
+> ## Checklist
+>
+> Have you installed `reana-client` and/or have you logged into LXPLUS as described in
+> [Setup](../setup)?
+{: .checklist}
 
 ## First REANA example
 
@@ -100,6 +111,9 @@ outputs:
     - results/plot.png
 ~~~
 {: .source}
+
+Note the basic structure of `reana.yaml` answering the Four Questions. (input data? analysis code?
+compute environment? workflow steps?)
 
 ## Install REANA command-line client
 
