@@ -30,20 +30,48 @@ In this lesson we see more use cases suitable for developing serial workflows.
 
 ## Imperative vs declarative programming
 
-Imperative programming is natural: use a library and write code.
+Imperative programming feels natural: use a library and just write code. Example: C.
 
-However, it has also its drawbacks. If you need port the code to use GPUs, to different compute
-architectures, or to scale up, it may be necessary to do considerable code refactoring, which is not
-_science code_, but rather _orchestration of the said science code_.
+~~~
+for (int i = 0; i < sizeof(people) / sizeof(struct people); i++) {
+  if (people[i].age < 20) {
+    printf("%s\n", people[i].name)
+  }
+}
+~~~
+{: .source}
 
-Enter declarative programming. The idea is to express research work as a series of steps and let an
-independent "orchestration tool" or a "workflow system" the chores of running things properly on
-various architectures.
+However, it has also its drawbacks. If you write scientific workflows imperatively and you need port
+the code to use GPUs, to run on different compute architectures, or to scale up, it may be necessary
+to do considerable code refactoring. This is not writing _science code_, but rather _writing
+orchestration for the said science code_ onto different deployment scenarios.
 
-This achieves better separation of physics code from computing glue code.  However, the development
-may be less immediate. There is no silver bullet.
+Enter declarative programming that "expresses the logic of a computation without describing its
+control flow". Example: SQL.
+
+~~~
+SELECT name FROM people WHERE age<20
+~~~
+{: .source}
+
+The idea of declarative approach to scientific worflows is to express research as a series of data
+analysis steps and let an independent "orchestration tool" or a "workflow system" the task of
+running things properly on various deployment architectures.
+
+This achieves better separation of concerns between physics code knowledge and computing
+orchestration glue code knowledge.  However, the development may be felt less immediate. There are
+pros and cons.  There is no silver bullet.
+
+> ## Imperative or declarative?
+>
+> Imperative programming is about _how_ you want to achieve  something. Declarative programming is
+> about _what_ you want to achieve.
+>
+{: .testimonial}
 
 ## Developing workflows progressively
+
+Developing workflows declaratively may feel less natural. How do we do that?
 
 Start with earlier steps, run, debug, run, debug until satisfaction.
 
