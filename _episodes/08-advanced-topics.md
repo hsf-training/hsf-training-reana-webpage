@@ -99,10 +99,8 @@ hand.
 >
 > Modify your workflow to add a final publishing step.
 >
-> Hint: Use a previously finished  analysis run and the ``restart`` command so that you don't have
+> Hint: Use a previously finished analysis run and the ``restart`` command so that you don't have
 > to rerun the full analysis again.
->
-> FIXME
 {: .solution}
 
 ## Using CVMFS software repositories
@@ -137,8 +135,7 @@ workflow:
 
 > ## Solution
 >
->
-> FIXME
+> See also [REANA documentation on CVMFS](http://docs.reana.io/advanced-usage/code-repositories/cvmfs/).
 {: .solution}
 
 ## Using high-throughput computing backends: HTCondor
@@ -176,8 +173,7 @@ submit your ``keytab`` as in the EOS publishing example above.
 
 > ## Solution
 >
->
-> FIXME
+> See also [REANA documentation on HTCondor](http://docs.reana.io/advanced-usage/compute-backends/htcondor/).
 {: .solution}
 
 ## Using high-performance computing backends: Slurm
@@ -210,8 +206,7 @@ workflow:
 
 > ## Solution
 >
->
-> FIXME
+> See also [REANA documentation on Slurm](http://docs.reana.io/advanced-usage/compute-backends/slurm/).
 {: .solution}
 
 ## Opening interactive environments (notebooks) on workflow workspace
@@ -243,8 +238,7 @@ $ reana-client close -w myanalysis.42
 
 > ## Solution
 >
->
-> FIXME
+> See also [REANA documentation on running notebooks](http://docs.reana.io/running-notebooks/).
 {: .solution}
 
 ## Bridging GitLab with REANA
@@ -273,8 +267,7 @@ $ firefox https://reana.cern.ch/
 
 > ## Solution
 >
->
-> FIXME
+> See also [REANA documentation on GitLab integration](http://docs.reana.io/advanced-usage/code-repositories/gitlab/).
 {: .solution}
 
 {% include links.md %}
