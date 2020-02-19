@@ -274,13 +274,15 @@ fit:
 ~~~
 {: .source}
 
-This is not too different from the Serial workflow, and, as we can see, it can already lead to
-certain parallelism, because the fitting step and the plotting step can run simultaneously once the
-histograms are produces.
+The workflow definition is similar to that of the Serial workflow, and, as we can see, it can
+already lead to certain parallelism, because the fitting step and the plotting step can run
+simultaneously once the histograms are produced.
 
 The graphical representation of the workflow is:
 
 <img src="{{ page.root }}/fig/awesome-workflow-yadage-simple.png" width="300px" />
+
+Let us try to run it on REANA cloud.
 
 > ## Exercise
 >
@@ -292,6 +294,9 @@ The graphical representation of the workflow is:
 > ## Solution
 >
 > ~~~
+> $ vim workflow.yml # take contents above and store it as workflow.yml
+> $ vim steps.yml    # take contents above and store it as steps.yml
+> $ vim reana.yaml   # this was the task
 > $ cat reana.yaml
 > version: 0.6.0
 > inputs:
