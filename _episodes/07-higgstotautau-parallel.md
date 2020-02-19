@@ -60,7 +60,7 @@ inputs:
       - [dataRunC]
 workflow:
   type: yadage
-  file: workflow.yml
+  file: workflow.yaml
 outputs:
   files:
     - fit/fit.png
@@ -86,7 +86,7 @@ The skimming step definition looks like:
     scatter:
        method: zip
        parameters: [input_file, cross_section]
-    step: {$ref: 'steps.yml#/skim'}
+    step: {$ref: 'steps.yaml#/skim'}
 ~~~
 {: .source}
 
@@ -127,7 +127,7 @@ The histograms can be produced as follows:
     scatter:
        method: zip
        parameters: [input_file, output_names]
-    step: {$ref: 'steps.yml#/histogram'}
+    step: {$ref: 'steps.yaml#/histogram'}
 ~~~
 {: .source}
 
@@ -165,7 +165,7 @@ Gather time!  How do we merge scattered results?
     parameters:
       input_files: {stages: histogram, output: histogram_file, flatten: true}
       output_file: '{workdir}/merged.root'
-    step: {$ref: 'steps.yml#/merge'}
+    step: {$ref: 'steps.yaml#/merge'}
 ~~~
 {: .source}
 
@@ -200,7 +200,7 @@ The fit can be performed as follows:
     parameters:
       histogram_file: {step: merge, output: merged_file}
       fit_outputs: '{workdir}'
-    step: {$ref: 'steps.yml#/fit'}
+    step: {$ref: 'steps.yaml#/fit'}
 ~~~
 {: .source}
 
@@ -243,7 +243,7 @@ Challenge time! Add plotting step to the workflow.
 >     parameters:
 >       histogram_file: {step: merge, output: merged_file}
 >       plot_outputs: '{workdir}'
->     step: {$ref: 'steps.yml#/plot'}
+>     step: {$ref: 'steps.yaml#/plot'}
 > ~~~
 > {: .source}
 >
@@ -325,14 +325,14 @@ We are now ready to run the example of REANA cloud.
 >       - [dataRunC]
 > workflow:
 >   type: yadage
->   file: workflow.yml
+>   file: workflow.yaml
 > outputs:
 >   files:
 >     - fit/fit.png
 > ~~~
 > {: .source}
 >
-> workflow.yml:
+> workflow.yaml:
 >
 > ~~~
 > stages:
@@ -347,7 +347,7 @@ We are now ready to run the example of REANA cloud.
 >     scatter:
 >        method: zip
 >        parameters: [input_file, cross_section]
->     step: {$ref: 'steps.yml#/skim'}
+>     step: {$ref: 'steps.yaml#/skim'}
 >
 > - name: histogram
 >   dependencies: [skim]
@@ -360,7 +360,7 @@ We are now ready to run the example of REANA cloud.
 >     scatter:
 >        method: zip
 >        parameters: [input_file, output_names]
->     step: {$ref: 'steps.yml#/histogram'}
+>     step: {$ref: 'steps.yaml#/histogram'}
 >
 > - name: merge
 >   dependencies: [histogram]
@@ -369,7 +369,7 @@ We are now ready to run the example of REANA cloud.
 >     parameters:
 >       input_files: {stages: histogram, output: histogram_file, flatten: true}
 >       output_file: '{workdir}/merged.root'
->     step: {$ref: 'steps.yml#/merge'}
+>     step: {$ref: 'steps.yaml#/merge'}
 >
 > - name: fit
 >   dependencies: [merge]
@@ -378,7 +378,7 @@ We are now ready to run the example of REANA cloud.
 >     parameters:
 >       histogram_file: {step: merge, output: merged_file}
 >       fit_outputs: '{workdir}'
->     step: {$ref: 'steps.yml#/fit'}
+>     step: {$ref: 'steps.yaml#/fit'}
 >
 > - name: plot
 >   dependencies: [merge]
@@ -387,11 +387,11 @@ We are now ready to run the example of REANA cloud.
 >     parameters:
 >       histogram_file: {step: merge, output: merged_file}
 >       plot_outputs: '{workdir}'
->     step: {$ref: 'steps.yml#/plot'}
+>     step: {$ref: 'steps.yaml#/plot'}
 > ~~~
 > {: .source}
 >
-> steps.yml:
+> steps.yaml:
 >
 > ~~~
 > skim:

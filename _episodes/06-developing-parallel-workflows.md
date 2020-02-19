@@ -178,7 +178,7 @@ stages:
     parameters:
       input_dir: {step: init, output: input_dir}
       output_dir: '{workdir}/output'
-    step: {$ref: 'steps.yml#/skim'}
+    step: {$ref: 'steps.yaml#/skim'}
 
 - name: histogram
   dependencies: [skim]
@@ -187,7 +187,7 @@ stages:
     parameters:
       input_dir: {step: skim, output: skimmed_dir}
       output_dir: '{workdir}/output'
-    step: {$ref: 'steps.yml#/histogram'}
+    step: {$ref: 'steps.yaml#/histogram'}
 
 - name: fit
   dependencies: [histogram]
@@ -196,7 +196,7 @@ stages:
     parameters:
       histogram_file: {step: histogram, output: histogram_file}
       output_dir: '{workdir}/output'
-    step: {$ref: 'steps.yml#/fit'}
+    step: {$ref: 'steps.yaml#/fit'}
 
 - name: plot
   dependencies: [histogram]
@@ -205,7 +205,7 @@ stages:
     parameters:
       histogram_file: {step: histogram, output: histogram_file}
       output_dir: '{workdir}/output'
-    step: {$ref: 'steps.yml#/plot'}
+    step: {$ref: 'steps.yaml#/plot'}
 ~~~
 {: .source}
 
@@ -294,8 +294,8 @@ Let us try to run it on REANA cloud.
 > ## Solution
 >
 > ~~~
-> $ vim workflow.yml # take contents above and store it as workflow.yml
-> $ vim steps.yml    # take contents above and store it as steps.yml
+> $ vim workflow.yaml # take contents above and store it as workflow.yaml
+> $ vim steps.yaml    # take contents above and store it as steps.yaml
 > $ vim reana.yaml   # this was the task
 > $ cat reana.yaml
 > version: 0.6.0
@@ -304,7 +304,7 @@ Let us try to run it on REANA cloud.
 >     input_dir: root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced
 > workflow:
 >   type: yadage
->   file: workflow.yml
+>   file: workflow.yaml
 > outputs:
 >   files:
 >     - fit/output/fit.png

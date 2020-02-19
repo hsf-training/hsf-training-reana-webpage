@@ -9,8 +9,8 @@ stages:
       output_file: '{workdir}/skimmed.root'
     scatter:
        method: zip
-       parameters: [input_file, cross_section] 
-    step: {$ref: 'steps.yml#/skim'}
+       parameters: [input_file, cross_section]
+    step: {$ref: 'steps.yaml#/skim'}
 
 - name: histogram
   dependencies: [skim]
@@ -22,8 +22,8 @@ stages:
       output_dir: '{workdir}'
     scatter:
        method: zip
-       parameters: [input_file, output_names] 
-    step: {$ref: 'steps.yml#/histogram'}    
+       parameters: [input_file, output_names]
+    step: {$ref: 'steps.yaml#/histogram'}
 
 - name: merge
   dependencies: [histogram]
@@ -32,7 +32,7 @@ stages:
     parameters:
       input_files: {stages: histogram, output: histogram_file, flatten: true}
       output_file: '{workdir}/merged.root'
-    step: {$ref: 'steps.yml#/merge'}
+    step: {$ref: 'steps.yaml#/merge'}
 
 - name: fit
   dependencies: [merge]
@@ -41,7 +41,7 @@ stages:
     parameters:
       histogram_file: {step: merge, output: merged_file}
       fit_outputs: '{workdir}'
-    step: {$ref: 'steps.yml#/fit'}
+    step: {$ref: 'steps.yaml#/fit'}
 
 - name: plot
   dependencies: [merge]
@@ -50,5 +50,5 @@ stages:
     parameters:
       histogram_file: {step: merge, output: merged_file}
       plot_outputs: '{workdir}'
-    step: {$ref: 'steps.yml#/plot'}
+    step: {$ref: 'steps.yaml#/plot'}
 

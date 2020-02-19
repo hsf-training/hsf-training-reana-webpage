@@ -4,7 +4,7 @@ inputs:
     input_dir: root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced
 workflow:
   type: yadage
-  file: workflow.yml
+  file: workflow.yaml
 outputs:
   files:
     - outputs/statanalysis/fitresults/pre.png

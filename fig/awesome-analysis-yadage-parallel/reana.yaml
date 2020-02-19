@@ -23,7 +23,7 @@ inputs:
       - 1.0
     short_hands:
       - [ggH]
-      - [qqH] 
+      - [qqH]
       - [ZLL,ZTT]
       - [TT]
       - [W1J]
@@ -33,7 +33,7 @@ inputs:
       - [dataRunC]
 workflow:
   type: yadage
-  file: workflow.yml
+  file: workflow.yaml
 outputs:
   files:
     - outputs/statanalysis/fitresults/pre.png
