@@ -7,53 +7,74 @@ questions:
 objectives:
 - "Develop a full HigssToTauTau analysis workflow using parallel language"
 keypoints:
-- "Writing parallel workflows to represent DAG analysis graph"
+- "Use step dependencies to express main analysis stages"
+- "Use scatter-gather paradigm in staged to massively parallelise DAG workflow execution"
+- "REANA usage scenarios remain the same regardless of workflow language details"
 ---
 
 ## Overview
 
 We have seen an example of a full DAG-aware workflow language called Yadage and how it can be used
-to run RooFit example.
+to describe and run the RooFit example and a simple version of HiggsToTauTau example.
 
-In this episode we shall see how to efficiently apply to on the HiggsToTauTau example.
+In this episode we shall see how to efficiently apply parallelism to speed up the HiggsToTauTau
+example via the scatter-gather paradigm introduced in the previous episode.
 
-## HiggsToTauTau Skimming
+## HiggsToTauTau analysis
 
-Let us now write the Yadage workflow for the skimming part of the HiggsToTauTau analysis example.
-
-The example uses several dataset files over which we shall be able to "scatter" the computations.
-
-We start by defining workflow input files and cross section values:
+The overall ``reana.yaml`` looks like:
 
 ~~~
-files:
-- root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/GluGluToHToTauTau.root
-- root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/VBF_HToTauTau.root
-- root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/DYJetsToLL.root
-- root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/TTbar.root
-- root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/W1JetsToLNu.root
-- root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/W2JetsToLNu.root
-- root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/W3JetsToLNu.root
-- root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/Run2012B_TauPlusX.root
-- root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/Run2012C_TauPlusX.root
-
-cross_sections:
-- 19.6
-- 1.55
-- 3503.7
-- 225.2
-- 6381.2
-- 2039.8
-- 612.5
-- 1.0
-- 1.0
+version: 0.6.0
+inputs:
+  parameters:
+    files:
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/GluGluToHToTauTau.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/VBF_HToTauTau.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/DYJetsToLL.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/TTbar.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/W1JetsToLNu.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/W2JetsToLNu.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/W3JetsToLNu.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/Run2012B_TauPlusX.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/Run2012C_TauPlusX.root
+    cross_sections:
+      - 19.6
+      - 1.55
+      - 3503.7
+      - 225.2
+      - 6381.2
+      - 2039.8
+      - 612.5
+      - 1.0
+      - 1.0
+    short_hands:
+      - [ggH]
+      - [qqH]
+      - [ZLL,ZTT]
+      - [TT]
+      - [W1J]
+      - [W2J]
+      - [W3J]
+      - [dataRunB]
+      - [dataRunC]
+workflow:
+  type: yadage
+  file: workflow.yml
+outputs:
+  files:
+    - fit/fit.png
 ~~~
 {: .source}
 
-The workflow for skimming can be expressed in ``workflow.yaml``:
+Note that we define input files and cross sections and short names as an array.  It is this array
+that we shall be scattering around.
+
+## HiggsToTauTau skimming
+
+The skimming step definition looks like:
 
 ~~~
-stages:
 - name: skim
   dependencies: [init]
   scheduler:
@@ -65,11 +86,11 @@ stages:
     scatter:
        method: zip
        parameters: [input_file, cross_section]
-    step: {$ref: 'steps.yaml#/skim'}
+    step: {$ref: 'steps.yml#/skim'}
 ~~~
 {: .source}
 
-where the computation steps are defined for clarity in an auxiliary file ``steps.yaml``:
+where the step is defined as:
 
 ~~~
 skim:
@@ -79,7 +100,7 @@ skim:
       ./skim {input_file} {output_file} {cross_section} 11467.0 0.1
   environment:
     environment_type: 'docker-encapsulated'
-    image: gitlab-registry.cern.ch/awesome-workshop/payload-stage3-analysis
+    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
     imagetag: master
   publisher:
     publisher_type: interpolated-pub
@@ -88,21 +109,187 @@ skim:
 ~~~
 {: .source}
 
+Note the scatter paradigm that will cause nine parallel jobs for each input dataset file.
+
+## HiggsToTauTau histogramming
+
+The histograms can be produced as follows:
+
+~~~
+- name: histogram
+  dependencies: [skim]
+  scheduler:
+    scheduler_type: multistep-stage
+    parameters:
+      input_file: {stages: skim, output: skimmed_file}
+      output_names: {step: init, output: short_hands}
+      output_dir: '{workdir}'
+    scatter:
+       method: zip
+       parameters: [input_file, output_names]
+    step: {$ref: 'steps.yml#/histogram'}
+~~~
+{: .source}
+
+with:
+
+~~~
+histogram:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      for x in {output_names}; do
+        python histograms.py {input_file} $x {output_dir}/$x.root;
+      done
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+    imagetag: master
+  publisher:
+    publisher_type: interpolated-pub
+    glob: true
+    publish:
+      histogram_file: '{output_dir}/*.root'
+~~~
+{: .source}
+
+## HiggsToTauTau merging
+
+Gather time!  How do we merge scattered results?
+
+~~~
+- name: merge
+  dependencies: [histogram]
+  scheduler:
+    scheduler_type: singlestep-stage
+    parameters:
+      input_files: {stages: histogram, output: histogram_file, flatten: true}
+      output_file: '{workdir}/merged.root'
+    step: {$ref: 'steps.yml#/merge'}
+~~~
+{: .source}
+
+with:
+
+~~~
+merge:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      hadd {output_file} {input_files}
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+    imagetag: master
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      merged_file: '{output_file}'
+~~~
+{: .source}
+
+## HiggsToTauTau fitting
+
+The fit can be performed as follows:
+
+~~~
+- name: fit
+  dependencies: [merge]
+  scheduler:
+    scheduler_type: singlestep-stage
+    parameters:
+      histogram_file: {step: merge, output: merged_file}
+      fit_outputs: '{workdir}'
+    step: {$ref: 'steps.yml#/fit'}
+~~~
+{: .source}
+
+with:
+
+~~~
+fit:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      python fit.py {histogram_file} {fit_outputs}
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-statistics-stage3
+    imagetag: master
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      fit_results: '{fit_outputs}/fit.png'
+~~~
+{: .source}
+
+## HiggsToTauTau plotting
+
+Challenge time! Add plotting step to the workflow.
+
 > ## Exercise
 >
-> Write ``reana.yaml`` specification for the above skimming workflow and run the example on the
-> REANA platform. Using REANA web interface observe the running jobs for this workflow. Are the data
-> files processed in parallel?
+> Following the example above, write plotting step and plug it into the overall workflow.
 >
 {: .challenge}
 
 > ## Solution
 >
 > ~~~
-> $ vim workflow.yaml # use above
-> $ vim steps.yaml # use above
-> $ vim reana.yaml # see below
-> $ cat reana.yaml # see below
+> - name: plot
+>   dependencies: [merge]
+>   scheduler:
+>     scheduler_type: singlestep-stage
+>     parameters:
+>       histogram_file: {step: merge, output: merged_file}
+>       plot_outputs: '{workdir}'
+>     step: {$ref: 'steps.yml#/plot'}
+> ~~~
+> {: .source}
+>
+> with:
+>
+> ~~~
+> plot:
+>   process:
+>     process_type: 'interpolated-script-cmd'
+>     script: |
+>       python plot.py {histogram_file} {plot_outputs} 0.1
+>   environment:
+>     environment_type: 'docker-encapsulated'
+>     image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+>     imagetag: master
+>   publisher:
+>     publisher_type: interpolated-pub
+>     publish:
+>       fitting_plot: '{plot_outputs}'
+> ~~~
+> {: .source}
+>
+{: .solution}
+
+## Full workflow
+
+Assembling the previous stages visually, the full workflow looks like:
+
+<img src="{{ page.root }}/fig/awesome-workflow-yadage-parallel.png" />
+
+## Running full workflow
+
+We are now ready to run the example of REANA cloud.
+
+> ## Exercise
+>
+> Run HiggsToTauTau parallel workflow on REANA cloud.  How many job does the workflow have?  How
+> much faster it is executed when compared to the simple Serial version?
+>
+{: .challenge}
+
+> ## Solution
+>
+> reana.yaml:
+>
+> ~~~
 > version: 0.6.0
 > inputs:
 >   parameters:
@@ -126,112 +313,161 @@ skim:
 >       - 612.5
 >       - 1.0
 >       - 1.0
+>     short_hands:
+>       - [ggH]
+>       - [qqH]
+>       - [ZLL,ZTT]
+>       - [TT]
+>       - [W1J]
+>       - [W2J]
+>       - [W3J]
+>       - [dataRunB]
+>       - [dataRunC]
 > workflow:
 >   type: yadage
->   file: workflow.yaml
-> $ reana-client run -w htt-skimming-only
+>   file: workflow.yml
+> outputs:
+>   files:
+>     - fit/fit.png
 > ~~~
 > {: .source}
 >
-{: .solution}
-
-## Full workflow
-
-Now that we know how to do skimming, we can finish the full HiggsToTauTau analysis.
-
-### Adding histogramming, merging, fitting
-
-We need to add several new steps: histogramming, merging, and fitting.
-
-The histograming step will iterate over ROOT files produced by skimming and call ``
-python histograms.py`` on those files.
-
-The merging step will use ``hadd`` to merge output histograms.
-
-The fitting step will call ``python fit.py`` on the merged histogram file.
-
-> ## Exercise
->
-> How can one define histogramming step job?
->
-{: .challenge}
-
-> ## Solution
+> workflow.yml:
 >
 > ~~~
-> FIXME
-> ~~~
-> {: .source}
+> stages:
+> - name: skim
+>   dependencies: [init]
+>   scheduler:
+>     scheduler_type: multistep-stage
+>     parameters:
+>       input_file: {step: init, output: files}
+>       cross_section: {step: init, output: cross_sections}
+>       output_file: '{workdir}/skimmed.root'
+>     scatter:
+>        method: zip
+>        parameters: [input_file, cross_section]
+>     step: {$ref: 'steps.yml#/skim'}
 >
-{: .solution}
-
-> ## Exercise
+> - name: histogram
+>   dependencies: [skim]
+>   scheduler:
+>     scheduler_type: multistep-stage
+>     parameters:
+>       input_file: {stages: skim, output: skimmed_file}
+>       output_names: {step: init, output: short_hands}
+>       output_dir: '{workdir}'
+>     scatter:
+>        method: zip
+>        parameters: [input_file, output_names]
+>     step: {$ref: 'steps.yml#/histogram'}
 >
-> How can one define merging step job?
+> - name: merge
+>   dependencies: [histogram]
+>   scheduler:
+>     scheduler_type: singlestep-stage
+>     parameters:
+>       input_files: {stages: histogram, output: histogram_file, flatten: true}
+>       output_file: '{workdir}/merged.root'
+>     step: {$ref: 'steps.yml#/merge'}
 >
-{: .challenge}
-
-> ## Solution
+> - name: fit
+>   dependencies: [merge]
+>   scheduler:
+>     scheduler_type: singlestep-stage
+>     parameters:
+>       histogram_file: {step: merge, output: merged_file}
+>       fit_outputs: '{workdir}'
+>     step: {$ref: 'steps.yml#/fit'}
 >
-> ~~~
-> FIXME
-> ~~~
-> {: .source}
->
-{: .solution}
-
-> ## Exercise
->
-> How can one define fitting step job?
->
-{: .challenge}
-
-> ## Solution
->
-> ~~~
-> FIXME
-> ~~~
-> {: .source}
->
-{: .solution}
-
-### Completing the workflow
-
-Now that all the workflow steps are defined, we can complete the main workflow definition to
-include the additional steps after skimming.
-
-> ## Exercise
->
-> Write Yadage workflow to run the full HiggsToTauTau analysis example, processing different
-> datasets in parallel.
->
-{: .challenge}
-
-> ## Solution
->
-> ~~~
-> FIXME
+> - name: plot
+>   dependencies: [merge]
+>   scheduler:
+>     scheduler_type: singlestep-stage
+>     parameters:
+>       histogram_file: {step: merge, output: merged_file}
+>       plot_outputs: '{workdir}'
+>     step: {$ref: 'steps.yml#/plot'}
 > ~~~
 > {: .source}
-{: .solution}
-
-### Running the full workflow
-
-Having defined the full workflow, let us run it on the REANA platform.
-
-> ## Exercise
 >
-> Run full HiggsToTauTau analysis example on the REANA cloud using parallel workflow.
->
-{: .challenge}
-
-> ## Solution
+> steps.yml:
 >
 > ~~~
-> $ reana-client run -w htt
-> ~~~
-> {: .bash}
+> skim:
+>   process:
+>     process_type: 'interpolated-script-cmd'
+>     script: |
+>       ./skim {input_file} {output_file} {cross_section} 11467.0 0.1
+>   environment:
+>     environment_type: 'docker-encapsulated'
+>     image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+>     imagetag: master
+>   publisher:
+>     publisher_type: interpolated-pub
+>     publish:
+>       skimmed_file: '{output_file}'
 >
+> histogram:
+>   process:
+>     process_type: 'interpolated-script-cmd'
+>     script: |
+>       for x in {output_names}; do
+>         python histograms.py {input_file} $x {output_dir}/$x.root;
+>       done
+>   environment:
+>     environment_type: 'docker-encapsulated'
+>     image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+>     imagetag: master
+>   publisher:
+>     publisher_type: interpolated-pub
+>     glob: true
+>     publish:
+>       histogram_file: '{output_dir}/*.root'
+>
+> merge:
+>   process:
+>     process_type: 'interpolated-script-cmd'
+>     script: |
+>       hadd {output_file} {input_files}
+>   environment:
+>     environment_type: 'docker-encapsulated'
+>     image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+>     imagetag: master
+>   publisher:
+>     publisher_type: interpolated-pub
+>     publish:
+>       merged_file: '{output_file}'
+>
+> fit:
+>   process:
+>     process_type: 'interpolated-script-cmd'
+>     script: |
+>       python fit.py {histogram_file} {fit_outputs}
+>   environment:
+>     environment_type: 'docker-encapsulated'
+>     image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-statistics-stage3
+>     imagetag: master
+>   publisher:
+>     publisher_type: interpolated-pub
+>     publish:
+>       fit_results: '{fit_outputs}/fit.png'
+>
+> plot:
+>   process:
+>     process_type: 'interpolated-script-cmd'
+>     script: |
+>       python plot.py {histogram_file} {plot_outputs} 0.1
+>   environment:
+>     environment_type: 'docker-encapsulated'
+>     image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+>     imagetag: master
+>   publisher:
+>     publisher_type: interpolated-pub
+>     publish:
+>       fitting_plot: '{plot_outputs}'
+> ~~~
+> {: .source}
 {: .solution}
 
 {% include links.md %}
