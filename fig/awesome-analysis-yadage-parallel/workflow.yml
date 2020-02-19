@@ -1,0 +1,54 @@
+stages:
+- name: skim
+  dependencies: [init]
+  scheduler:
+    scheduler_type: multistep-stage
+    parameters:
+      input_file: {step: init, output: files}
+      cross_section: {step: init, output: cross_sections}
+      output_file: '{workdir}/skimmed.root'
+    scatter:
+       method: zip
+       parameters: [input_file, cross_section] 
+    step: {$ref: 'steps.yml#/skim'}
+
+- name: histogram
+  dependencies: [skim]
+  scheduler:
+    scheduler_type: multistep-stage
+    parameters:
+      input_file: {stages: skim, output: skimmed_file}
+      output_names: {step: init, output: short_hands}
+      output_dir: '{workdir}'
+    scatter:
+       method: zip
+       parameters: [input_file, output_names] 
+    step: {$ref: 'steps.yml#/histogram'}    
+
+- name: merge
+  dependencies: [histogram]
+  scheduler:
+    scheduler_type: singlestep-stage
+    parameters:
+      input_files: {stages: histogram, output: histogram_file, flatten: true}
+      output_file: '{workdir}/merged.root'
+    step: {$ref: 'steps.yml#/merge'}
+
+- name: fit
+  dependencies: [merge]
+  scheduler:
+    scheduler_type: singlestep-stage
+    parameters:
+      histogram_file: {step: merge, output: merged_file}
+      fit_outputs: '{workdir}'
+    step: {$ref: 'steps.yml#/fit'}
+
+- name: plot
+  dependencies: [merge]
+  scheduler:
+    scheduler_type: singlestep-stage
+    parameters:
+      histogram_file: {step: merge, output: merged_file}
+      plot_outputs: '{workdir}'
+    step: {$ref: 'steps.yml#/plot'}
+

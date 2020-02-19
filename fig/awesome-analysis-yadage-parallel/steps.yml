@@ -1,0 +1,73 @@
+skim:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      ./skim {input_file} {output_file} {cross_section} 11467.0 0.1 
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+    imagetag: master
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      skimmed_file: '{output_file}'
+        
+histogram:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      for x in {output_names}; do
+        python histograms.py {input_file} $x {output_dir}/$x.root;
+      done
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+    imagetag: master
+  publisher:
+    publisher_type: interpolated-pub
+    glob: true
+    publish:
+      histogram_file: '{output_dir}/*.root'
+
+merge:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      hadd {output_file} {input_files}
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+    imagetag: master
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      merged_file: '{output_file}'
+        
+fit:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      python fit.py {histogram_file} {fit_outputs}
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-statistics-stage3
+    imagetag: master
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      fit_results: '{fit_outputs}/fit.png'
+        
+plot:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      python plot.py {histogram_file} {plot_outputs} 0.1
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
+    imagetag: master
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      fitting_plot: '{plot_outputs}'
+

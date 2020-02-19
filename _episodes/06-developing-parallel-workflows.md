@@ -280,7 +280,7 @@ simultaneously once the histograms are produced.
 
 The graphical representation of the workflow is:
 
-<img src="{{ page.root }}/fig/awesome-workflow-yadage-simple.png" width="300px" />
+<img src="{{ page.root }}/fig/awesome-analysis-yadage-simple/workflow.png" width="300px" />
 
 Let us try to run it on REANA cloud.
 

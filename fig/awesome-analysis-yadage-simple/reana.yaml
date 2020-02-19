@@ -1,0 +1,10 @@
+version: 0.6.0
+inputs:
+  parameters:
+    input_dir: root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced
+workflow:
+  type: yadage
+  file: workflow.yml
+outputs:
+  files:
+    - outputs/statanalysis/fitresults/pre.png

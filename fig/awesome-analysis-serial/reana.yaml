@@ -1,0 +1,27 @@
+version: 0.6.0
+inputs:
+  parameters:
+    eosdir: root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced
+workflow:
+  type: serial
+  specification:
+    steps:
+      - name: skimming
+        environment: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master
+        commands:
+          - mkdir $$REANA_WORKSPACE/skimming && cd /analysis/skim && bash ./skim.sh ${eosdir} $$REANA_WORKSPACE/skimming
+      - name: histogramming
+        environment: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master
+        commands:
+          - mkdir $$REANA_WORKSPACE/histogramming && cd /analysis/skim && bash ./histograms_with_custom_output_location.sh $$REANA_WORKSPACE/skimming $$REANA_WORKSPACE/histogramming
+      - name: plotting
+        environment: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master
+        commands:
+          - mkdir $$REANA_WORKSPACE/plotting && cd /analysis/skim && bash ./plot.sh $$REANA_WORKSPACE/histogramming/histograms.root $$REANA_WORKSPACE/plotting 0.1
+      - name: fitting
+        environment: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-statistics-stage3:master
+        commands:
+          - mkdir $$REANA_WORKSPACE/fitting && cd /fit && bash ./fit.sh $$REANA_WORKSPACE/histogramming/histograms.root $$REANA_WORKSPACE/fitting
+outputs:
+  files:
+    - fitting/fit.png

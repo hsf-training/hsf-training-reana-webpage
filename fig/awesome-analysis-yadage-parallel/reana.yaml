@@ -1,0 +1,39 @@
+version: 0.6.0
+inputs:
+  parameters:
+    files:
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/GluGluToHToTauTau.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/VBF_HToTauTau.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/DYJetsToLL.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/TTbar.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/W1JetsToLNu.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/W2JetsToLNu.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/W3JetsToLNu.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/Run2012B_TauPlusX.root
+      - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/Run2012C_TauPlusX.root
+    cross_sections:
+      - 19.6
+      - 1.55
+      - 3503.7
+      - 225.2
+      - 6381.2
+      - 2039.8
+      - 612.5
+      - 1.0
+      - 1.0
+    short_hands:
+      - [ggH]
+      - [qqH] 
+      - [ZLL,ZTT]
+      - [TT]
+      - [W1J]
+      - [W2J]
+      - [W3J]
+      - [dataRunB]
+      - [dataRunC]
+workflow:
+  type: yadage
+  file: workflow.yml
+outputs:
+  files:
+    - outputs/statanalysis/fitresults/pre.png

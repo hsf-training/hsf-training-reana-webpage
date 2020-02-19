@@ -272,7 +272,7 @@ Challenge time! Add plotting step to the workflow.
 
 Assembling the previous stages visually, the full workflow looks like:
 
-<img src="{{ page.root }}/fig/awesome-workflow-yadage-parallel.png" />
+<img src="{{ page.root }}/fig/awesome-analysis-yadage-parallel/workflow.png" />
 
 ## Running full workflow
 

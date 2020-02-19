@@ -1,0 +1,38 @@
+stages:
+- name: skim
+  dependencies: [init]
+  scheduler:
+    scheduler_type: singlestep-stage
+    parameters:
+      input_dir: {step: init, output: input_dir}
+      output_dir: '{workdir}/output'
+    step: {$ref: 'steps.yml#/skim'}
+
+- name: histogram
+  dependencies: [skim]
+  scheduler:
+    scheduler_type: singlestep-stage
+    parameters:
+      input_dir: {step: skim, output: skimmed_dir}
+      output_dir: '{workdir}/output'
+    step: {$ref: 'steps.yml#/histogram'}
+
+- name: fit
+  dependencies: [histogram]
+  scheduler:
+    scheduler_type: singlestep-stage
+    parameters:
+      histogram_file: {step: histogram, output: histogram_file}
+      output_dir: '{workdir}/output'
+    step: {$ref: 'steps.yml#/fit'}
+
+- name: plot
+  dependencies: [histogram]
+  scheduler:
+    scheduler_type: singlestep-stage
+    parameters:
+      histogram_file: {step: histogram, output: histogram_file}
+      output_dir: '{workdir}/output'
+    step: {$ref: 'steps.yml#/plot'}
+
+
