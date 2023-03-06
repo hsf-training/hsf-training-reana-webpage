@@ -65,7 +65,20 @@ Look for the tag ![good_first_issue][gfi-badge], which marks particularly simple
 <!-- END CENTRALLY MAINTAINED SECTION -->
 ## 💖 Authors
 
-This lesson was written by [Tibor Šimko](https://github.com/tiborsimko).
+This lesson was written by:
+
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://tiborsimko.org/"><img src="https://avatars.githubusercontent.com/u/517546?v=4?s=100" width="100px;" alt="Tibor Šimko"/><br /><sub><b>Tibor Šimko</b></sub></a><br /><a href="#content-tiborsimko" title="Content">🖋</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
 
 Thanks also goes to these wonderful people ([emoji key][allcontrib-emoji-key]) for additional contributions:
 
