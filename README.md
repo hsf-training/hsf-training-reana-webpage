@@ -64,7 +64,7 @@ Look for the tag ![good_first_issue][gfi-badge], which marks particularly simple
 <!-- END CENTRALLY MAINTAINED SECTION -->
 ## 💖 Authors
 
-This lesson was written by [Tibor Šimko](https://github.com/tiborsimko). 
+This lesson was written by [Tibor Šimko](https://github.com/tiborsimko).
 
 Thanks also goes to these wonderful people ([emoji key][allcontrib-emoji-key]) for additional contributions:
 
