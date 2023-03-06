@@ -8,6 +8,17 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true,
-  "contributors": [],
-  "contributorsPerLine": 7
+  "contributors": [
+    {
+      "login": "tiborsimko",
+      "name": "Tibor Šimko",
+      "avatar_url": "https://avatars.githubusercontent.com/u/517546?v=4",
+      "profile": "http://tiborsimko.org/",
+      "contributions": [
+        "content"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "commitConvention": "angular"
 }
