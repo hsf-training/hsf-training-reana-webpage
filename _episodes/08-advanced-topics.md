@@ -19,7 +19,7 @@ objectives:
 - "Learn how to open interactive sessions (Jupyter notebooks)"
 keypoints:
 - "Workflow specification uses hints to hide implementation complexity"
-- "Use `kerberos: true` clause to automatically trigger Kerberos token initalisation"
+- "Use `kerberos: true` clause to automatically trigger Kerberos token initialisation"
 - "Use `resources` clause to access CVMFS repositories"
 - "Use `compute_backend` hint in your workflow steps to dispatch jobs to various HPC/HTC backends"
 - "Use `open/close` commands to open and close interactive sessions on your workspace"
@@ -106,7 +106,7 @@ hand.
 ## Using CVMFS software repositories
 
 Many physics analyses need software living in CVMFS filesystem.  Packaging this software into the
-container is possible, but it could make the container size enourmous.  Can we access CVMFS
+container is possible, but it could make the container size enormous.  Can we access CVMFS
 filesystem at runtime?
 
 REANA allows to specify custom resource need declarations in ``reana.yaml`` by means of a
@@ -271,4 +271,3 @@ $ firefox https://reana.cern.ch/
 {: .solution}
 
 {% include links.md %}
-

@@ -15,4 +15,3 @@ keypoints:
 <img src="{{ page.root }}/fig/1280px-A_small_cup_of_coffee.JPG" width="500px" />
 
 {% include links.md %}
-

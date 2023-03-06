@@ -54,7 +54,7 @@ SELECT name FROM people WHERE age<20
 ~~~
 {: .source}
 
-The idea of declarative approach to scientific worflows is to express research as a series of data
+The idea of declarative approach to scientific workflows is to express research as a series of data
 analysis steps and let an independent "orchestration tool" or a "workflow system" the task of
 running things properly on various deployment architectures.
 
@@ -75,7 +75,7 @@ Developing workflows declaratively may feel less natural. How do we do that?
 
 Start with earlier steps, run, debug, run, debug until satisfaction.
 
-Continue with later steps only afterwords.
+Continue with later steps only afterwards.
 
 How to run only first step of our example workflow?  Use `TARGET` step option:
 
@@ -312,4 +312,3 @@ sometimes you don't (e.g.  Python code, ROOT macros). Use latter for more produc
 developing workflows.
 
 {% include links.md %}
-

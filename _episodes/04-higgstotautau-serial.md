@@ -44,7 +44,7 @@ Let us now write a serial workflow how the HiggsToTauTau example can be run sequ
 ### Note: efficiency
 
 Note that the serial workflow will not be necessarily efficient here, since it will run sequentially
-over various dataset files and not process them in paralell. Do not pay attention to this
+over various dataset files and not process them in parallel. Do not pay attention to this
 inefficiency here. We shall speed up the example via parallel processing in a forthcoming
 [HiggsToTauTau analysis: parallel](../07-higgstotautau-parallel) episode coming after the coffee
 break.
@@ -114,4 +114,3 @@ With the above hits, please try to write workflow either individually or in pair
 {: .solution}
 
 {% include links.md %}
-
