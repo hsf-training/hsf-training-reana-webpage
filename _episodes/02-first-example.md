@@ -360,4 +360,3 @@ $ display results/plot.png
 {: .solution}
 
 {% include links.md %}
-

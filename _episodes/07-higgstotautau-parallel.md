@@ -471,4 +471,3 @@ We are now ready to run the example of REANA cloud.
 {: .solution}
 
 {% include links.md %}
-

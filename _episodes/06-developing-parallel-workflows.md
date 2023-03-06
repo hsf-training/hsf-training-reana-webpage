@@ -363,4 +363,3 @@ In the next episode we shall see how the scatter paradigm can be used to speed u
 workflow using more parallelism.
 
 {% include links.md %}
-

@@ -36,4 +36,3 @@ Get in touch:
 Thanks and here's to many preproducible analyses ;)
 
 {% include links.md %}
-
