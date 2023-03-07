@@ -8,6 +8,7 @@
 
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/hsf-training/hsf-training-reana-webpage/gh-pages.svg)](https://results.pre-commit.ci/latest/github/hsf-training/hsf-training-reana-webpage/gh-pages)
 [![pages-build-deployment](https://github.com/hsf-training/hsf-training-reana-webpage/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/hsf-training/hsf-training-reana-webpage/actions/workflows/pages/pages-build-deployment)
+[![Check Markdown links](https://github.com/hsf-training/hsf-training-reana-webpage/actions/workflows/check-links.yaml/badge.svg)](https://github.com/hsf-training/hsf-training-reana-webpage/actions/workflows/check-links.yaml)
 
 # Reproducible analyses with REANA
 
