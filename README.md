@@ -6,7 +6,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/hsf-training/hsf-training-reana-webpage/main.svg)](https://results.pre-commit.ci/latest/github/hsf-training/hsf-training-reana-webpage/main)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/hsf-training/hsf-training-reana-webpage/gh-pages.svg)](https://results.pre-commit.ci/latest/github/hsf-training/hsf-training-reana-webpage/gh-pages)
 [![pages-build-deployment](https://github.com/hsf-training/hsf-training-reana-webpage/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/hsf-training/hsf-training-reana-webpage/actions/workflows/pages/pages-build-deployment)
 
 # Reproducible analyses with REANA
