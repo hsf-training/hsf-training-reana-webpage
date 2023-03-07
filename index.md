@@ -18,4 +18,8 @@ permalink: index.html  # Is the only page that doesn't follow the pattern /:path
   </div>
 </div>
 
+{% include curriculum.html %}
+
+{% include authors.html %}
+
 {% include links.md %}

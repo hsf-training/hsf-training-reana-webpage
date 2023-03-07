@@ -10,7 +10,7 @@
 carpentry: "hsf"
 
 # Overall title for pages.
-title: "Reproducible analyses"
+title: "Reproducible analyses with REANA"
 
 # Life cycle stage of the lesson
 # possible values: "pre-alpha", "alpha", "beta", "stable"
@@ -26,7 +26,7 @@ kind: "lesson"
 # Magic to make URLs resolve both locally and on GitHub.
 # See https://help.github.com/articles/repository-metadata-on-github-pages/.
 # Please don't change it: <USERNAME>/<PROJECT> is correct.
-repository: <USERNAME>/<PROJECT>
+repository: hsf-training/hsf-training-reana-webpage
 
 # Email address, no mailto:
 email: "team@reana.io"
