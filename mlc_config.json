@@ -8,6 +8,9 @@
     },
     {
       "pattern": "\\.\\..*"
+    },
+    {
+      "pattern": "https://opensource.org/.*"
     }
   ]
 }
