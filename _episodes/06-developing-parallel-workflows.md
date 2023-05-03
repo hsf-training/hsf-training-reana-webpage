@@ -117,7 +117,7 @@ outputs:
 ~~~
 {: .source}
 
-We can run the example on REANA in the usual way:
+We now can run the example on REANA in the usual way:
 
 ~~~
 $ reana-client run -w roofityadage -f reana-yadage.yaml
