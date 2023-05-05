@@ -164,7 +164,7 @@ and the workflow engine takes care about efficiently starting and scheduling tas
 
 ## HiggsToTauTau analysis: simple version
 
-Let us demonstrate how to write simple Yaage workflow for the HiggsToTauTau analysis using simple
+Let us demonstrate how to write simple Yadage workflow for the HiggsToTauTau analysis using simple
 step dependencies.
 
 The workflow looks like:
