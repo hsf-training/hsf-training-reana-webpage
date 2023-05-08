@@ -8,6 +8,12 @@
     },
     {
       "pattern": "\\.\\..*"
-    }
+    },
+    {
+      "pattern": "https://opensource.org.*"
+    },
+    {
+      "pattern": "https://github.com/issues.*"
+    }    
   ]
 }
