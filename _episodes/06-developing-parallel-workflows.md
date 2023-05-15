@@ -41,8 +41,7 @@ In this lesson we shall use the Yadage workflow specification language.
 
 ## Yadage
 
-Yadage enables to describe complex computational workflows. Let us start having a look at the Yadag
-e specification for the RooFit example we have used in the beginning episodes:
+Yadage enables to describe complex computational workflows. Let us start having a look at the Yadage specification for the RooFit example we have used in the beginning episodes:
 
 ~~~
 stages:
