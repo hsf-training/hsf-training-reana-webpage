@@ -14,6 +14,9 @@
     },
     {
       "pattern": "https://github.com/issues.*"
-    }    
+    },
+    {
+      "pattern": "https://twitter.com.*"
+    }
   ]
 }
