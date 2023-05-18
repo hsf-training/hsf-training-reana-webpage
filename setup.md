@@ -26,8 +26,6 @@ lxplus> source ~simko/public/reana/bin/activate
 ~~~
 {: .bash}
 
-Since the `reana-client` installation step is short, we can do it at the beginning of the lesson.
-
 ---
 
 {% include links.md %}
