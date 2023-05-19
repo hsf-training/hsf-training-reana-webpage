@@ -43,6 +43,8 @@ $ cd reana-demo-root6-roofit
 ~~~
 {: .bash}
 
+For those who are using a remote setup, first go down to the "Connect REANA client to remote REANA cluster" section to set up `reana-client`. Then return back to this section.
+
 What does the example do? The example emulates a typical particle physics analysis where the signal
 and background data is processed and fitted against a model. The example will use the
 [RooFit](https://root.cern.ch/roofit) package of the [ROOT](https://root.cern.ch/) framework.
@@ -220,15 +222,18 @@ Options:
 
 ## Connect REANA client to remote REANA cluster
 
-The REANA client will interact with a remote REANA cluster.
+The REANA client will interact with a remote REANA cluster. Go to https://reana,cern.ch to activate your REANA token.
 
 The REANA client knows to which REANA cluster it connects by means of two environment variables:
 
 ~~~
+$ source /afs/cern.ch/user/r/reana/public/bin/reana/activate/
 $ export REANA_SERVER_URL=https://reana.cern.ch
 $ export REANA_ACCESS_TOKEN=xxxxxx
 ~~~
 {: .bash}
+
+The source command is for remote users only. Also, it may be good to to create a `.sh` file to store these commands. That way you all you need to do to setup your environment is `source file.sh`.
 
 The REANA client connection to remote REANA cluster can be verified via ``ping`` command:
 
