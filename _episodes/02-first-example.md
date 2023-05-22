@@ -233,7 +233,7 @@ $ export REANA_ACCESS_TOKEN=xxxxxx
 ~~~
 {: .bash}
 
-The source command is for remote users only. Also, it may be good to to create a `.sh` file to store these commands. That way you all you need to do to setup your environment is `source file.sh`. An alternative to this is opening up your `.bashrc` file and pasting these lines within there.
+The source command is for lxplus users only. Also, it may be good to to create a `.sh` file to store these commands. That way you all you need to do to setup your environment is `source file.sh`. An alternative to this is opening up your `.bashrc` file and pasting these lines within there.
 
 The REANA client connection to remote REANA cluster can be verified via ``ping`` command:
 
