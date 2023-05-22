@@ -115,10 +115,10 @@ outputs:
 Note the basic structure of `reana.yaml` answering the Four Questions. (input data? analysis code?
 compute environment? workflow steps?)
 
-## Install REANA command-line client
+## First steps with the REANA command-line client
 
-First we need to make sure we can use REANA command-line client.  Option 1: use locally on your
-laptop.  Option 2: use preinstalled on LXPLUS.  See [setup instructions](../setup).
+First we need to make sure we can use REANA command-line client. See the [setup instructions](../setup) if
+you haven't already installed it.
 
 The client will offer several commands which we shall go through in this tutorial:
 
