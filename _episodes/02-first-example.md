@@ -220,7 +220,7 @@ Options:
 
 ## Connect REANA client to remote REANA cluster
 
-The REANA client will interact with a remote REANA cluster. It knows to which REANA cluster it connects by means of two environment variables:
+The REANA client will interact with a remote REANA cluster. It knows to which REANA cluster it connects by means of the following environment variable:
 
 ~~~
 $ source /afs/cern.ch/user/r/reana/public/bin/reana/activate/
@@ -228,7 +228,7 @@ $ export REANA_SERVER_URL=https://reana.cern.ch
 ~~~
 {: .bash}
 
-The source command is for lxplus users only. Also, it may be good to to create a `.sh` file to store these commands. That way you all you need to do to setup your environment is `source file.sh`. An alternative to this is opening up your `.bashrc` file and pasting these lines within there.
+The source command is for lxplus users only.
 
 In order to authenticate to REANA, you need to generate a token.
 
@@ -242,6 +242,8 @@ In your terminal, paste the line with your new access token as seen below.
 $ export REANA_ACCESS_TOKEN=xxxxxx
 ~~~
 {: .bash}
+
+It may be good to to create a `.sh` file to store these commands. That way you all you need to do to setup your environment is `source file.sh`. An alternative to this is opening up your `.bashrc` file and pasting these lines within there.
 
 The REANA client connection to remote REANA cluster can be verified via ``ping`` command:
 
