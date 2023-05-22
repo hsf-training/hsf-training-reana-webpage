@@ -311,8 +311,8 @@ results/data.root   154457   2020-02-17T16:02:17
 We can also get the logs:
 
 ~~~
-# Hit q to quit the less pager
 $ reana-client logs -w roofit | less
+# (Hit q to quit 'less')
 ~~~
 {: .bash}
 
