@@ -220,18 +220,28 @@ Options:
 
 ## Connect REANA client to remote REANA cluster
 
-The REANA client will interact with a remote REANA cluster. Go to https://reana,cern.ch to activate your REANA token.
-
-The REANA client knows to which REANA cluster it connects by means of two environment variables:
+The REANA client will interact with a remote REANA cluster. It knows to which REANA cluster it connects by means of two environment variables:
 
 ~~~
 $ source /afs/cern.ch/user/r/reana/public/bin/reana/activate/
 $ export REANA_SERVER_URL=https://reana.cern.ch
-$ export REANA_ACCESS_TOKEN=xxxxxx
 ~~~
 {: .bash}
 
 The source command is for lxplus users only. Also, it may be good to to create a `.sh` file to store these commands. That way you all you need to do to setup your environment is `source file.sh`. An alternative to this is opening up your `.bashrc` file and pasting these lines within there.
+
+In order to authenticate to REANA, you need to generate a token.
+
+> ## Exercise: Obtain a token.
+>In order to set the token, go to https://reana.cern.ch to activate your REANA token.
+{: .challenge}
+
+In your terminal, paste the line with your new access token as seen below.
+
+~~~
+$ export REANA_ACCESS_TOKEN=xxxxxx
+~~~
+{: .bash}
 
 The REANA client connection to remote REANA cluster can be verified via ``ping`` command:
 
@@ -243,20 +253,6 @@ $ reana-client ping
 Connected to https://reana.cern.ch - Server is running.
 ~~~
 {: .output}
-
-The authentication uses a token that one can get by logging into REANA UI at
-[reana.cern.ch](https://reana.cern.ch).
-
-> ## Exercise
->
-> Get REANA user token and connect to REANA cluster at ``reana.cern.ch``.
->
-{: .challenge}
-
-> ## Solution
->
-> Login to [reana.cern.ch](https://reana.cern.ch), copy your token, and use the commands above.
-{: .solution}
 
 ## Run example on REANA cluster
 
