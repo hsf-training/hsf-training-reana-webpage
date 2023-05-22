@@ -45,7 +45,7 @@ $ cd reana-demo-root6-roofit
 
 What does the example do? The example emulates a typical particle physics analysis where the signal
 and background data is processed and fitted against a model. The example will use the
-[RooFit](https://root.cern.ch/roofit) package of the [ROOT](https://root.cern.ch/) framework.
+[RooFit](https://root.cern/manual/roofit/) package of the [ROOT](https://root.cern.ch/) framework.
 
 Four questions:
 
