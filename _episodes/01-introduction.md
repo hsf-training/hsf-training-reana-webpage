@@ -27,7 +27,7 @@ keypoints:
 {: .testimonial}
 
 Computational reproducibility has many definitions.  Example: The Turing Way definition of computational reproducibility:
-[source](https://the-turing-way.netlify.com/reproducibility/03/definitions.html)
+[source](https://the-turing-way.netlify.app/reproducible-research/reproducible-research.html)
 
 <img src="{{ page.root }}/fig/the-turing-way-reproducibility-definition.jpg" width="400px" />
 
