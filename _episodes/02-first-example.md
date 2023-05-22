@@ -43,8 +43,6 @@ $ cd reana-demo-root6-roofit
 ~~~
 {: .bash}
 
-For those who are using lxplus, first go down to the "Connect REANA client to remote REANA cluster" section to set up `reana-client`. Then return back to this section.
-
 What does the example do? The example emulates a typical particle physics analysis where the signal
 and background data is processed and fitted against a model. The example will use the
 [RooFit](https://root.cern.ch/roofit) package of the [ROOT](https://root.cern.ch/) framework.
