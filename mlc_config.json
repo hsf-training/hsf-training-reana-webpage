@@ -10,7 +10,13 @@
       "pattern": "\\.\\..*"
     },
     {
-      "pattern": "https://opensource.org/.*"
+      "pattern": "https://opensource.org.*"
+    },
+    {
+      "pattern": "https://github.com/issues.*"
+    },
+    {
+      "pattern": "https://twitter.com.*"
     }
   ]
 }
