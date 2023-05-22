@@ -43,7 +43,7 @@ $ cd reana-demo-root6-roofit
 ~~~
 {: .bash}
 
-For those who are using a remote setup, first go down to the "Connect REANA client to remote REANA cluster" section to set up `reana-client`. Then return back to this section.
+For those who are using lxplus, first go down to the "Connect REANA client to remote REANA cluster" section to set up `reana-client`. Then return back to this section.
 
 What does the example do? The example emulates a typical particle physics analysis where the signal
 and background data is processed and fitted against a model. The example will use the
@@ -233,7 +233,7 @@ $ export REANA_ACCESS_TOKEN=xxxxxx
 ~~~
 {: .bash}
 
-The source command is for remote users only. Also, it may be good to to create a `.sh` file to store these commands. That way you all you need to do to setup your environment is `source file.sh`.
+The source command is for remote users only. Also, it may be good to to create a `.sh` file to store these commands. That way you all you need to do to setup your environment is `source file.sh`. An alternative to this is opening up your `.bashrc` file and pasting these lines within there.
 
 The REANA client connection to remote REANA cluster can be verified via ``ping`` command:
 
