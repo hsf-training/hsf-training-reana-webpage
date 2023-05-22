@@ -26,12 +26,6 @@ lxplus> source ~simko/public/reana/bin/activate
 ~~~
 {: .bash}
 
->## Note: For those who are using lxplus
-> You will need to complete the setup. You do so in "episode 2". After you do the `git pull` command, you will then go to "Connect REANA client to remote REANA cluster" section to set up `reana-client`. After that pick up where you left off.
-{: .callout}
-
-Since the `reana-client` installation step is short, we can do it at the beginning of the lesson.
-
 ---
 
 {% include links.md %}
