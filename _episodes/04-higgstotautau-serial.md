@@ -110,7 +110,7 @@ With the above hits, please try to write workflow either individually or in pair
 >   files:
 >     - fitting/fit.png
 > ~~~
-> {: .source}
+> {: .yaml}
 {: .solution}
 
 {% include links.md %}
