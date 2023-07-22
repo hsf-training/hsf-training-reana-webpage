@@ -65,7 +65,7 @@ outputs:
   files:
     - fit/fit.png
 ~~~
-{: .source}
+{: .yaml}
 
 Note that we define input files and cross sections and short names as an array.  It is this array
 that we shall be scattering around.
@@ -88,7 +88,7 @@ The skimming step definition looks like:
        parameters: [input_file, cross_section]
     step: {$ref: 'steps.yaml#/skim'}
 ~~~
-{: .source}
+{: .yaml}
 
 where the step is defined as:
 
@@ -107,7 +107,7 @@ skim:
     publish:
       skimmed_file: '{output_file}'
 ~~~
-{: .source}
+{: .yaml}
 
 Note the scatter paradigm that will cause nine parallel jobs for each input dataset file.
 
@@ -129,7 +129,7 @@ The histograms can be produced as follows:
        parameters: [input_file, output_names]
     step: {$ref: 'steps.yaml#/histogram'}
 ~~~
-{: .source}
+{: .yaml}
 
 with:
 
@@ -151,7 +151,7 @@ histogram:
     publish:
       histogram_file: '{output_dir}/*.root'
 ~~~
-{: .source}
+{: .yaml}
 
 ## HiggsToTauTau merging
 
@@ -167,7 +167,7 @@ Gather time!  How do we merge scattered results?
       output_file: '{workdir}/merged.root'
     step: {$ref: 'steps.yaml#/merge'}
 ~~~
-{: .source}
+{: .yaml}
 
 with:
 
@@ -186,7 +186,7 @@ merge:
     publish:
       merged_file: '{output_file}'
 ~~~
-{: .source}
+{: .yaml}
 
 ## HiggsToTauTau fitting
 
@@ -202,7 +202,7 @@ The fit can be performed as follows:
       fit_outputs: '{workdir}'
     step: {$ref: 'steps.yaml#/fit'}
 ~~~
-{: .source}
+{: .yaml}
 
 with:
 
@@ -221,7 +221,7 @@ fit:
     publish:
       fit_results: '{fit_outputs}/fit.png'
 ~~~
-{: .source}
+{: .yaml}
 
 ## HiggsToTauTau plotting
 
@@ -245,7 +245,7 @@ Challenge time! Add plotting step to the workflow.
 >       plot_outputs: '{workdir}'
 >     step: {$ref: 'steps.yaml#/plot'}
 > ~~~
-> {: .source}
+> {: .yaml}
 >
 > with:
 >
@@ -264,7 +264,7 @@ Challenge time! Add plotting step to the workflow.
 >     publish:
 >       fitting_plot: '{plot_outputs}'
 > ~~~
-> {: .source}
+> {: .yaml}
 >
 {: .solution}
 
@@ -330,7 +330,7 @@ We are now ready to run the example of REANA cloud.
 >   files:
 >     - fit/fit.png
 > ~~~
-> {: .source}
+> {: .yaml}
 >
 > workflow.yaml:
 >
@@ -389,7 +389,7 @@ We are now ready to run the example of REANA cloud.
 >       plot_outputs: '{workdir}'
 >     step: {$ref: 'steps.yaml#/plot'}
 > ~~~
-> {: .source}
+> {: .yaml}
 >
 > steps.yaml:
 >
@@ -467,7 +467,7 @@ We are now ready to run the example of REANA cloud.
 >     publish:
 >       fitting_plot: '{plot_outputs}'
 > ~~~
-> {: .source}
+> {: .yaml}
 {: .solution}
 
 {% include links.md %}
