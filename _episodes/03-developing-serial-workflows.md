@@ -39,7 +39,7 @@ for (int i = 0; i < sizeof(people) / sizeof(struct people); i++) {
   }
 }
 ~~~
-{: .source}
+{: .c}
 
 However, it has also its drawbacks. If you write scientific workflows imperatively and you need port
 the code to use GPUs, to run on different compute architectures, or to scale up, it may be necessary
@@ -52,7 +52,7 @@ control flow". Example: SQL.
 ~~~
 SELECT name FROM people WHERE age<20
 ~~~
-{: .source}
+{: .sql}
 
 The idea of declarative approach to scientific workflows is to express research as a series of data
 analysis steps and let an independent "orchestration tool" or a "workflow system" the task of
