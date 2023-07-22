@@ -86,7 +86,7 @@ stages:
           image: 'reanahub/reana-env-root6'
           imagetag: '6.18.04'
 ~~~
-{: .source}
+{: .yaml}
 
 
 We can see that the workflow consists of two steps, ``gendata`` does not depending on anything
@@ -114,7 +114,7 @@ outputs:
   files:
     - fitdata/plot.png
 ~~~
-{: .source}
+{: .yaml}
 
 We now can run this example on REANA in the usual way:
 
@@ -143,7 +143,7 @@ $ reana-client run -w roofityadage -f reana-yadage.yaml
 > $ reana-client ls -w roofityadage
 > $ reana-client download plot.png -w roofityadage
 > ~~~
-> {: .source}
+> {: .bash}
 >
 {: .solution}
 
@@ -206,7 +206,7 @@ stages:
       output_dir: '{workdir}/output'
     step: {$ref: 'steps.yaml#/plot'}
 ~~~
-{: .source}
+{: .yaml}
 
 where steps are expressed as:
 
@@ -271,7 +271,7 @@ fit:
     publish:
       fitting_plot: '{output_dir}/fit.png'
 ~~~
-{: .source}
+{: .yaml}
 
 The workflow definition is similar to that of the Serial workflow, and, as we can see, it can
 already lead to certain parallelism, because the fitting step and the plotting step can run
@@ -308,7 +308,7 @@ Let us try to run it on REANA cloud.
 >   files:
 >     - fit/output/fit.png
 > ~~~
-> {: .source}
+> {: .yaml}
 >
 {: .solution}
 
@@ -354,7 +354,7 @@ stages:
       parameters:
         input: {stages: 'map2', output: outputA}
 ~~~
-{: .source}
+{: .yaml}
 
 Note the "scatter" happening over "input" with a wanted batch size.
 
