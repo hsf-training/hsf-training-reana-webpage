@@ -37,11 +37,10 @@ We shall get acquainted with REANA by means of running a sample analysis example
 
 Let's start by cloning it:
 
-~~~
+```bash
 $ git clone https://github.com/reanahub/reana-demo-root6-roofit
 $ cd reana-demo-root6-roofit
-~~~
-{: .bash}
+```
 
 What does the example do? The example emulates a typical particle physics analysis where the signal
 and background data is processed and fitted against a model. The example will use the
@@ -57,7 +56,7 @@ Four questions:
 
 Workflow definition:
 
-~~~
+```
            START
             |
             |
@@ -79,12 +78,11 @@ Workflow definition:
             | plot.png
             V
            STOP
-~~~
-{: .source}
+```
 
 The four questions expressed in ``reana.yaml`` fully define our analysis:
 
-~~~yaml
+```yaml
 version: 0.6.0
 inputs:
   files:
@@ -109,7 +107,7 @@ workflow:
 outputs:
   files:
     - results/plot.png
-~~~
+```
 
 Note the basic structure of `reana.yaml` answering the Four Questions. (input data? analysis code?
 compute environment? workflow steps?)
@@ -121,12 +119,11 @@ you haven't already installed it.
 
 The client will offer several commands which we shall go through in this tutorial:
 
-~~~
+```bash
 $ reana-client --help
-~~~
-{: .bash}
+```
 
-~~~
+```output
 Usage: reana-client [OPTIONS] COMMAND [ARGS]...
 
   REANA client for interacting with REANA server.
@@ -171,17 +168,15 @@ Secret management commands:
   secrets-add     Add secrets from literal string or from file.
   secrets-delete  Delete user secrets by name.
   secrets-list    List user secrets.
-~~~
-{: .output}
+```
 
 You can use ``--help`` option to learn more about any command, for example ``validate``:
 
-~~~
+```bash
 $ reana-client validate --help
-~~~
-{: .bash}
+```
 
-~~~
+```output
 Usage: reana-client validate [OPTIONS]
 
   Validate workflow specification file.
@@ -197,8 +192,7 @@ Options:
   -f, --file PATH  REANA specifications file describing the workflow and
                    context which REANA should execute.
   --help           Show this message and exit.
-~~~
-{: .output}
+```
 
 > ## Exercise
 >
@@ -206,26 +200,23 @@ Options:
 {: .challenge}
 
 > ## Solution
-> ~~~
+> ```bash
 > $ reana-client validate -f ./reana.yaml
-> ~~~
-> {: .bash}
+> ```
 >
-> ~~~
+> ```output
 > File reana-demo-root6-roofit/reana.yaml is a valid REANA specification file.
-> ~~~
-> {: .output}
+> ```
 {: .solution}
 
 ## Connect REANA client to remote REANA cluster
 
 The REANA client will interact with a remote REANA cluster. It knows to which REANA cluster it connects by means of the following environment variable:
 
-~~~
+```bash
 $ source /afs/cern.ch/user/r/reana/public/bin/reana/activate/
 $ export REANA_SERVER_URL=https://reana.cern.ch
-~~~
-{: .bash}
+```
 
 The source command is for lxplus users only.
 
@@ -237,35 +228,31 @@ In order to authenticate to REANA, you need to generate a token.
 
 In your terminal, paste the line with your new access token as seen below.
 
-~~~
+```bash
 $ export REANA_ACCESS_TOKEN=xxxxxx
-~~~
-{: .bash}
+```
 
 It may be good to to create a `.sh` file to store these commands. That way you all you need to do to setup your environment is `source file.sh`. An alternative to this is opening up your `.bashrc` file and pasting these lines within there.
 
 The REANA client connection to remote REANA cluster can be verified via ``ping`` command:
 
-~~~
+```bash
 $ reana-client ping
-~~~
-{: .bash}
-~~~
+```
+```output
 Connected to https://reana.cern.ch - Server is running.
-~~~
-{: .output}
+```
 
 ## Run example on REANA cluster
 
 Now that we have defined and validated our ``reana.yaml``, and connected to the REANA production
 cluster, we can run the example easily via:
 
-~~~
+```bash
 $ reana-client run -w roofit
-~~~
-{: .bash}
+```
 
-~~~
+```output
 [INFO] Creating a workflow...
 roofit.1
 [INFO] Uploading files...
@@ -273,50 +260,44 @@ File code/gendata.C was successfully uploaded.
 File code/fitdata.C was successfully uploaded.
 [INFO] Starting workflow...
 roofit.1 is running
-~~~
-{: .output}
+```
 
 Here, we use ``run`` command that will create a new workflow named ``roofit``, upload its inputs as
 specified in the workflow specification and finally start the workflow.
 
 While the workflow is running, we can enquire about its status:
 
-~~~
+```bash
 $ reana-client status -w roofit
-~~~
-{: .bash}
+```
 
-~~~
+```output
 NAME     RUN_NUMBER   CREATED               STARTED               STATUS    PROGRESS
 roofit   1            2020-02-17T16:01:45   2020-02-17T16:01:48   running   1/2
-~~~
-{: .output}
+```
 
 After a minute, the workflow should finish and we can list the output files in the remote workspace:
 
-~~~
+```bash
 $ reana-client ls -w roofit
-~~~
-{: .bash}
+```
 
-~~~
+```output
 NAME                SIZE     LAST-MODIFIED
 code/gendata.C      1937     2020-02-17T16:01:46
 code/fitdata.C      1648     2020-02-17T16:01:47
 results/plot.png    15450    2020-02-17T16:02:44
 results/data.root   154457   2020-02-17T16:02:17
-~~~
-{: .output}
+```
 
 We can also get the logs:
 
-~~~
+```bash
 $ reana-client logs -w roofit | less
 # (Hit q to quit 'less')
-~~~
-{: .bash}
+```
 
-~~~
+```output
 ==> Workflow engine logs
 2020-02-17 16:02:10,859 | root | MainThread | INFO | Publishing step:0, cmd: mkdir -p results && root -b -q 'code/gendata.C(20000,"results/data.root")', total steps 2 to MQ
 2020-02-17 16:02:23,002 | root | MainThread | INFO | Publishing step:1, cmd: root -b -q 'code/fitdata.C("results/data.root","results/plot.png")', total steps 2 to MQ
@@ -332,16 +313,14 @@ $ reana-client logs -w roofit | less
 ==> Status: finished
 ==> Logs:
 ...
-~~~
-{: .output}
+```
 
 We can download the resulting plot:
 
-~~~
+```bash
 $ reana-client download results/plot.png -w roofit
 $ display results/plot.png
-~~~
-{: .bash}
+```
 
 <img src="{{ page.root }}/fig/reana-demo-root6-roofit-plot.png" width="400px" />
 
@@ -354,10 +333,9 @@ $ display results/plot.png
 
 > ## Solution
 >
-> ~~~
+> ```bash
 > $ reana-client logs -w roofit --step gendata
-> ~~~
-> {: .bash}
+> ```
 {: .solution}
 
 {% include links.md %}

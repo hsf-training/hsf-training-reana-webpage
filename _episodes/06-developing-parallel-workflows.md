@@ -43,7 +43,7 @@ In this lesson we shall use the Yadage workflow specification language.
 
 Yadage enables to describe complex computational workflows. Let us start having a look at the Yadage specification for the RooFit example we have used in the beginning episodes:
 
-~~~
+```yaml
 stages:
   - name: gendata
     dependencies: [init]
@@ -85,8 +85,7 @@ stages:
           environment_type: 'docker-encapsulated'
           image: 'reanahub/reana-env-root6'
           imagetag: '6.18.04'
-~~~
-{: .yaml}
+```
 
 
 We can see that the workflow consists of two steps, ``gendata`` does not depending on anything
@@ -100,7 +99,7 @@ Let us write the above workflow as ``workflow.yaml`` in the RooFit example direc
 How can we run the example on REANA platform?  We have to instruct REANA that we are going to use
 Yadage as our workflow engine.  We can do that by editing ``reana.yaml`` and specifying:
 
-~~~
+```yaml
 version: 0.6.0
 inputs:
   parameters:
@@ -113,15 +112,13 @@ workflow:
 outputs:
   files:
     - fitdata/plot.png
-~~~
-{: .yaml}
+```
 
 We now can run this example on REANA in the usual way:
 
-~~~
+```bash
 $ reana-client run -w roofityadage -f reana-yadage.yaml
-~~~
-{: .bash}
+```
 
 > ## Exercise
 >
@@ -134,7 +131,7 @@ $ reana-client run -w roofityadage -f reana-yadage.yaml
 >
 > Nothing changes in the usual user interaction with the REANA platform:
 >
-> ~~~
+> ```bash
 > $ reana-client create -w roofityadage -f ./reana-yadage.yaml
 > $ reana-client upload ./code -w roofityadage
 > $ reana-client start -w roofityadage
@@ -142,8 +139,7 @@ $ reana-client run -w roofityadage -f reana-yadage.yaml
 > $ reana-client logs -w roofityadage
 > $ reana-client ls -w roofityadage
 > $ reana-client download plot.png -w roofityadage
-> ~~~
-> {: .bash}
+> ```
 >
 {: .solution}
 
@@ -168,7 +164,7 @@ step dependencies.
 
 The workflow looks like:
 
-~~~
+```yaml
 stages:
 - name: skim
   dependencies: [init]
@@ -205,12 +201,11 @@ stages:
       histogram_file: {step: histogram, output: histogram_file}
       output_dir: '{workdir}/output'
     step: {$ref: 'steps.yaml#/plot'}
-~~~
-{: .yaml}
+```
 
 where steps are expressed as:
 
-~~~
+```yaml
 skim:
   process:
     process_type: 'interpolated-script-cmd'
@@ -270,8 +265,7 @@ fit:
     publisher_type: interpolated-pub
     publish:
       fitting_plot: '{output_dir}/fit.png'
-~~~
-{: .yaml}
+```
 
 The workflow definition is similar to that of the Serial workflow, and, as we can see, it can
 already lead to certain parallelism, because the fitting step and the plotting step can run
@@ -292,7 +286,7 @@ Let us try to run it on REANA cloud.
 
 > ## Solution
 >
-> ~~~
+> ```yaml
 > $ vim workflow.yaml # take contents above and store it as workflow.yaml
 > $ vim steps.yaml    # take contents above and store it as steps.yaml
 > $ vim reana.yaml   # this was the task
@@ -307,8 +301,7 @@ Let us try to run it on REANA cloud.
 > outputs:
 >   files:
 >     - fit/output/fit.png
-> ~~~
-> {: .yaml}
+> ```
 >
 {: .solution}
 
@@ -327,7 +320,7 @@ Here is an example of scatter-gather paradim in the Yadage language:
 
 expressed as:
 
-~~~
+```yaml
 stages:
   - name: map
     dependencies: [init]
@@ -353,8 +346,7 @@ stages:
       scheduler_type: singlestep-stage
       parameters:
         input: {stages: 'map2', output: outputA}
-~~~
-{: .yaml}
+```
 
 Note the "scatter" happening over "input" with a wanted batch size.
 
