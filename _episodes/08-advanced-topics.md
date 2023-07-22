@@ -83,7 +83,7 @@ workflow:
         - mkdir -p /eos/home/j/johndoe/myanalysis-outputs
         - cp myplots/*.png /eos/home/j/johndoe/myanalysis-outputs/
 ~~~
-{: .source}
+{: .yaml}
 
 Note the presence of ``kerberos: true`` classifier in the final publishing step, which tells the
 REANA system to initialise Kerberos authentitation using provided secrets for the workflow step at
@@ -124,7 +124,7 @@ workflow:
         commands:
         - ls -l /cvmfs/fcc.cern.ch/sw/views/releases/
 ~~~
-{: .source}
+{: .yaml}
 
 > ## Exercise
 >
@@ -160,7 +160,7 @@ workflow:
         - mkdir -p results
         - root -b -q 'code/gendata.C(${events},"${data}")'
 ~~~
-{: .source}
+{: .yaml}
 
 Note that the access control will be handled automatically via Kerberos, so this requires you to
 submit your ``keytab`` as in the EOS publishing example above.
@@ -196,7 +196,7 @@ workflow:
         - mkdir -p results
         - root -b -q 'code/gendata.C(${events},"${data}")'
 ~~~
-{: .source}
+{: .yaml}
 
 > ## Exercise
 >
