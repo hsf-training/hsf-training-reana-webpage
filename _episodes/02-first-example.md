@@ -84,7 +84,7 @@ Workflow definition:
 
 The four questions expressed in ``reana.yaml`` fully define our analysis:
 
-~~~
+~~~yaml
 version: 0.6.0
 inputs:
   files:
@@ -110,7 +110,6 @@ outputs:
   files:
     - results/plot.png
 ~~~
-{: .yaml}
 
 Note the basic structure of `reana.yaml` answering the Four Questions. (input data? analysis code?
 compute environment? workflow steps?)
