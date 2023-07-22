@@ -110,7 +110,7 @@ outputs:
   files:
     - results/plot.png
 ~~~
-{: .source}
+{: .yaml}
 
 Note the basic structure of `reana.yaml` answering the Four Questions. (input data? analysis code?
 compute environment? workflow steps?)
