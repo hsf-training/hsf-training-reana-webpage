@@ -80,7 +80,7 @@ With the above hits, please try to write workflow either individually or in pair
 
 > ## Solution
 >
-> ~~~
+> ```yaml
 > $ cat reana.yaml
 > version: 0.6.0
 > inputs:
@@ -109,8 +109,7 @@ With the above hits, please try to write workflow either individually or in pair
 > outputs:
 >   files:
 >     - fitting/fit.png
-> ~~~
-> {: .source}
+> ```
 {: .solution}
 
 {% include links.md %}

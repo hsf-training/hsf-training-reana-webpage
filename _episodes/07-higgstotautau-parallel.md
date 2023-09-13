@@ -24,7 +24,7 @@ example via the scatter-gather paradigm introduced in the previous episode.
 
 The overall ``reana.yaml`` looks like:
 
-~~~
+```yaml
 version: 0.6.0
 inputs:
   parameters:
@@ -64,8 +64,7 @@ workflow:
 outputs:
   files:
     - fit/fit.png
-~~~
-{: .source}
+```
 
 Note that we define input files and cross sections and short names as an array.  It is this array
 that we shall be scattering around.
@@ -74,7 +73,7 @@ that we shall be scattering around.
 
 The skimming step definition looks like:
 
-~~~
+```yaml
 - name: skim
   dependencies: [init]
   scheduler:
@@ -87,12 +86,11 @@ The skimming step definition looks like:
        method: zip
        parameters: [input_file, cross_section]
     step: {$ref: 'steps.yaml#/skim'}
-~~~
-{: .source}
+```
 
 where the step is defined as:
 
-~~~
+```yaml
 skim:
   process:
     process_type: 'interpolated-script-cmd'
@@ -106,8 +104,7 @@ skim:
     publisher_type: interpolated-pub
     publish:
       skimmed_file: '{output_file}'
-~~~
-{: .source}
+```
 
 Note the scatter paradigm that will cause nine parallel jobs for each input dataset file.
 
@@ -115,7 +112,7 @@ Note the scatter paradigm that will cause nine parallel jobs for each input data
 
 The histograms can be produced as follows:
 
-~~~
+```yaml
 - name: histogram
   dependencies: [skim]
   scheduler:
@@ -128,12 +125,11 @@ The histograms can be produced as follows:
        method: zip
        parameters: [input_file, output_names]
     step: {$ref: 'steps.yaml#/histogram'}
-~~~
-{: .source}
+```
 
 with:
 
-~~~
+```yaml
 histogram:
   process:
     process_type: 'interpolated-script-cmd'
@@ -150,14 +146,13 @@ histogram:
     glob: true
     publish:
       histogram_file: '{output_dir}/*.root'
-~~~
-{: .source}
+```
 
 ## HiggsToTauTau merging
 
 Gather time!  How do we merge scattered results?
 
-~~~
+```yaml
 - name: merge
   dependencies: [histogram]
   scheduler:
@@ -166,12 +161,11 @@ Gather time!  How do we merge scattered results?
       input_files: {stages: histogram, output: histogram_file, flatten: true}
       output_file: '{workdir}/merged.root'
     step: {$ref: 'steps.yaml#/merge'}
-~~~
-{: .source}
+```
 
 with:
 
-~~~
+```yaml
 merge:
   process:
     process_type: 'interpolated-script-cmd'
@@ -185,14 +179,13 @@ merge:
     publisher_type: interpolated-pub
     publish:
       merged_file: '{output_file}'
-~~~
-{: .source}
+```
 
 ## HiggsToTauTau fitting
 
 The fit can be performed as follows:
 
-~~~
+```yaml
 - name: fit
   dependencies: [merge]
   scheduler:
@@ -201,12 +194,11 @@ The fit can be performed as follows:
       histogram_file: {step: merge, output: merged_file}
       fit_outputs: '{workdir}'
     step: {$ref: 'steps.yaml#/fit'}
-~~~
-{: .source}
+```
 
 with:
 
-~~~
+```yaml
 fit:
   process:
     process_type: 'interpolated-script-cmd'
@@ -220,8 +212,7 @@ fit:
     publisher_type: interpolated-pub
     publish:
       fit_results: '{fit_outputs}/fit.png'
-~~~
-{: .source}
+```
 
 ## HiggsToTauTau plotting
 
@@ -235,7 +226,7 @@ Challenge time! Add plotting step to the workflow.
 
 > ## Solution
 >
-> ~~~
+> ```yaml
 > - name: plot
 >   dependencies: [merge]
 >   scheduler:
@@ -244,12 +235,11 @@ Challenge time! Add plotting step to the workflow.
 >       histogram_file: {step: merge, output: merged_file}
 >       plot_outputs: '{workdir}'
 >     step: {$ref: 'steps.yaml#/plot'}
-> ~~~
-> {: .source}
+> ```
 >
 > with:
 >
-> ~~~
+> ```yaml
 > plot:
 >   process:
 >     process_type: 'interpolated-script-cmd'
@@ -263,8 +253,7 @@ Challenge time! Add plotting step to the workflow.
 >     publisher_type: interpolated-pub
 >     publish:
 >       fitting_plot: '{plot_outputs}'
-> ~~~
-> {: .source}
+> ```
 >
 {: .solution}
 
@@ -289,7 +278,7 @@ We are now ready to run the example of REANA cloud.
 >
 > reana.yaml:
 >
-> ~~~
+> ```yaml
 > version: 0.6.0
 > inputs:
 >   parameters:
@@ -329,12 +318,11 @@ We are now ready to run the example of REANA cloud.
 > outputs:
 >   files:
 >     - fit/fit.png
-> ~~~
-> {: .source}
+> ```
 >
 > workflow.yaml:
 >
-> ~~~
+> ```yaml
 > stages:
 > - name: skim
 >   dependencies: [init]
@@ -388,12 +376,11 @@ We are now ready to run the example of REANA cloud.
 >       histogram_file: {step: merge, output: merged_file}
 >       plot_outputs: '{workdir}'
 >     step: {$ref: 'steps.yaml#/plot'}
-> ~~~
-> {: .source}
+> ```
 >
 > steps.yaml:
 >
-> ~~~
+> ```yaml
 > skim:
 >   process:
 >     process_type: 'interpolated-script-cmd'
@@ -466,8 +453,7 @@ We are now ready to run the example of REANA cloud.
 >     publisher_type: interpolated-pub
 >     publish:
 >       fitting_plot: '{plot_outputs}'
-> ~~~
-> {: .source}
+> ```
 {: .solution}
 
 {% include links.md %}

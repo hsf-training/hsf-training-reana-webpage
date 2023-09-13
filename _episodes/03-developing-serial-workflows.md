@@ -32,14 +32,13 @@ In this lesson we see more use cases suitable for developing serial workflows.
 
 Imperative programming feels natural: use a library and just write code. Example: C.
 
-~~~
+```c
 for (int i = 0; i < sizeof(people) / sizeof(struct people); i++) {
   if (people[i].age < 20) {
     printf("%s\n", people[i].name)
   }
 }
-~~~
-{: .source}
+```
 
 However, it has also its drawbacks. If you write scientific workflows imperatively and you need port
 the code to use GPUs, to run on different compute architectures, or to scale up, it may be necessary
@@ -49,10 +48,9 @@ orchestration for the said science code_ onto different deployment scenarios.
 Enter declarative programming that "expresses the logic of a computation without describing its
 control flow". Example: SQL.
 
-~~~
+```sql
 SELECT name FROM people WHERE age<20
-~~~
-{: .source}
+```
 
 The idea of declarative approach to scientific workflows is to express research as a series of data
 analysis steps and let an independent "orchestration tool" or a "workflow system" the task of
@@ -79,12 +77,11 @@ Continue with later steps only afterwards.
 
 How to run only first step of our example workflow?  Use `TARGET` step option:
 
-~~~
+```bash
 $ reana-client run -w roofit -o TARGET=gendata
-~~~
-{: .bash}
+```
 
-~~~
+```output
 [INFO] Creating a workflow...
 roofit.2
 [INFO] Uploading files...
@@ -92,35 +89,30 @@ File code/gendata.C was successfully uploaded.
 File code/fitdata.C was successfully uploaded.
 [INFO] Starting workflow...
 roofit.2 is running
-~~~
-{: .output}
+```
 
 After a minute, let us check the status:
 
-~~~
+```bash
 $ reana-client status -w roofit
-~~~
-{: .bash}
+```
 
-~~~
+```output
 NAME     RUN_NUMBER   CREATED               STARTED               ENDED                 STATUS     PROGRESS
 roofit   2            2020-02-17T16:07:29   2020-02-17T16:07:33   2020-02-17T16:08:48   finished   1/1
-~~~
-{: .output}
+```
 
 and the workspace content:
-~~~
+```bash
 $ reana-client ls -w roofit
-~~~
-{: .bash}
+```
 
-~~~
+```output
 NAME                SIZE     LAST-MODIFIED
 code/gendata.C      1937     2020-02-17T16:07:30
 code/fitdata.C      1648     2020-02-17T16:07:31
 results/data.root   154458   2020-02-17T16:08:43
-~~~
-{: .output}
+```
 
 As we can see, the workflow run only the first command and the ``data.root`` file was well
 generated.  The final fitting step was not run and the final plot was not produced.
@@ -132,41 +124,36 @@ runs each workflow in an independent workspace. To distinguish between various w
 same analysis, the REANA platform keeps an incremental "run number".  You can obtain the list of all
 your workflows by using the ``list`` command:
 
-~~~
+```bash
 $ reana-client list
-~~~
-{: .bash}
+```
 
-~~~
+```output
 NAME     RUN_NUMBER   CREATED               STARTED               ENDED                 STATUS
 roofit   2            2020-02-17T16:07:29   2020-02-17T16:07:33   2020-02-17T16:08:48   finished
 roofit   1            2020-02-17T16:01:45   2020-02-17T16:01:48   2020-02-17T16:02:50   finished
-~~~
-{: .output}
+```
 
 You can use ``myanalysis.myrunnumber`` to refer to a given run number of an analysis:
 
-~~~
+```bash
 $ reana-client ls -w roofit.1
 $ reana-client ls -w roofit.2
-~~~
-{: .bash}
+```
 
 To quickly know the differences between various workflow runs, you can use the ``diff`` command:
 
-~~~
+```bash
 $ reana-client diff roofit.1 roofit.2 --brief
-~~~
-{: .bash}
+```
 
-~~~
+```output
 No differences in reana specifications.
 
 DIFFERENCES IN WORKSPACE LISTINGS:
 Files roofit.1/results/data.root and roofit.2/results/data.root differ
 Only in roofit.1/results: plot.png
-~~~
-{: .output}
+```
 
 ## Workflow parameters
 
@@ -175,12 +162,11 @@ workflow is debugged.  For example, instead of generating 20000 events, we can g
 While you could achieve this by simply modifying the workflow definition, REANA offers an option to
 run _parametrised workflows_, meaning that you can pass the wanted value on the command line:
 
-~~~
+```bash
 $ reana-client run -w roofit -p events=1000
-~~~
-{: .bash}
+```
 
-~~~
+```output
 [INFO] Creating a workflow...
 roofit.3
 [INFO] Uploading files...
@@ -188,37 +174,31 @@ File code/gendata.C was successfully uploaded.
 File code/fitdata.C was successfully uploaded.
 [INFO] Starting workflow...
 roofit.3 is running
-~~~
-{: .output}
+```
 
 The generated ROOT file is much smaller:
 
-~~~
+```bash
 $ reana-client ls -w roofit.1 | grep data.root
-~~~
-{: .bash}
+```
 
-~~~
+```output
 results/data.root   154457   2020-02-17T16:02:17
-~~~
-{: .output}
+```
 
-~~~
+```bash
 $ reana-client ls -w roofit.3 | grep data.root
-~~~
-{: .bash}
+```
 
-~~~
+```output
 results/data.root   19216   2020-02-17T16:18:45
-~~~
-{: .output}
+```
 
 and the plot much coarser:
 
-~~~
+```bash
 $ reana-client download results/plot.png -w roofit.3
-~~~
-{: .bash}
+```
 
 <img src="{{ page.root }}/fig/reana-demo-root6-roofit-plot-events1000.png" width="400px" />
 
@@ -232,48 +212,42 @@ In these situations, you can take advantage of the ``restart`` functionality.  T
 allows to restart a part of the workflow on the given workspace starting from the workflow step
 specified by the `FROM` option:
 
-~~~
+```bash
 $ reana-client restart -w roofit.3 -o FROM=fitdata
-~~~
-{: .bash}
+```
 
-~~~
+```output
 roofit.3.1 has been queued
-~~~
-{: .output}
+```
 
 Note that the run number got an extra digit, meaning the number of restarts of the given workflow.
 The full semantics of REANA run numbers is `myanalysis.myrunnumber.myrestartnumber`.
 
 Let us enquire about the status of the restarted workflow:
 
-~~~
+```bash
 $ reana-client status -w roofit.3.1
-~~~
-{: .bash}
+```
 
-~~~
+```output
 NAME     RUN_NUMBER   CREATED               STARTED               ENDED                 STATUS     PROGRESS
 roofit   3.1          2020-02-17T16:26:09   2020-02-17T16:26:10   2020-02-17T16:27:24   finished   1/1
-~~~
-{: .output}
+```
 
 Looking at the number of steps of the 3.1 rerun, and looking at modification timestamps of the
 workspace files:
 
-~~~
+```bash
 $ reana-client ls -w roofit.3.1
-~~~
-{: .bash}
+```
 
-~~~
+```output
 NAME                SIZE    LAST-MODIFIED
 code/gendata.C      1937    2020-02-17T16:17:00
 code/fitdata.C      1648    2020-02-17T16:17:01
 results/plot.png    16754   2020-02-17T16:27:20
 results/data.root   19216   2020-02-17T16:18:45
-~~~
-{: .output}
+```
 
 We can see that only the last step of the workflow was rerun, as wanted.
 
@@ -292,7 +266,7 @@ former stages of the workflow.
 > Amend ``fitdata.C``, upload changed file to the workspace, and rerun the past successful workflow
 > starting from the fitdata step:
 >
-> ~~~
+> ```bash
 > $ reana-client list
 > $ vim code/fitdata.C # edit title printing statement
 > $ reana-client upload ./code/fitdata.C -w roofit.3
@@ -300,8 +274,7 @@ former stages of the workflow.
 > $ reana-client list
 > $ reana-client status -w roofit.3.2
 > $ reana-client download -w roofit.3.2
-> ~~~
-> {: .bash}
+> ```
 >
 {: .solution}
 

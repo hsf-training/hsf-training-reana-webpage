@@ -57,17 +57,16 @@ First, you have to let the REANA platform know your
 [keytab](https://web.mit.edu/kerberos/krb5-devel/doc/basic/keytab_def.html) so that the writing is
 authorised. We can do this by uploading appropriate "secrets":
 
-~~~
+```yaml
 $ reana-client secrets-add --env CERN_USER=johndoe
 $ reana-client secrets-add --env CERN_KEYTAB=johndoe.keytab
 $ reana-client secrets-add --file ~/johndoe.keytab
-~~~
-{: .bash}
+```
 
 Second, once we have the secrets, we can use a Kerberos-aware container image (such as
 ``reanahub/krb5``) in the final publishing step of the workflow:
 
-~~~
+```yaml
 workflow:
   type: serial
   specification:
@@ -82,8 +81,7 @@ workflow:
         commands:
         - mkdir -p /eos/home/j/johndoe/myanalysis-outputs
         - cp myplots/*.png /eos/home/j/johndoe/myanalysis-outputs/
-~~~
-{: .source}
+```
 
 Note the presence of ``kerberos: true`` classifier in the final publishing step, which tells the
 REANA system to initialise Kerberos authentitation using provided secrets for the workflow step at
@@ -112,7 +110,7 @@ filesystem at runtime?
 REANA allows to specify custom resource need declarations in ``reana.yaml`` by means of a
 ``resources`` clause.  An example:
 
-~~~
+```yaml
 workflow:
   type: serial
   resources:
@@ -123,8 +121,7 @@ workflow:
       - environment: 'cern/slc6-base'
         commands:
         - ls -l /cvmfs/fcc.cern.ch/sw/views/releases/
-~~~
-{: .source}
+```
 
 > ## Exercise
 >
@@ -148,7 +145,7 @@ same procedures on mutually independent data files.
 If you would like to dispatch parts of the workflow to HTCondor backend, you can use the
 ``compute_backend`` clause of the workflow specification, for example:
 
-~~~
+```yaml
 workflow:
   type: serial
   specification:
@@ -159,8 +156,7 @@ workflow:
         commands:
         - mkdir -p results
         - root -b -q 'code/gendata.C(${events},"${data}")'
-~~~
-{: .source}
+```
 
 Note that the access control will be handled automatically via Kerberos, so this requires you to
 submit your ``keytab`` as in the EOS publishing example above.
@@ -184,7 +180,7 @@ MPI and similar programming techniques.
 REANA supports Slurm job scheduler to send jobs to HPC clusters.  You can simply use the
 ``compute_backend`` clause again to specify wanted compute backend for each step:
 
-~~~
+```yaml
 workflow:
   type: serial
   specification:
@@ -195,8 +191,7 @@ workflow:
         commands:
         - mkdir -p results
         - root -b -q 'code/gendata.C(${events},"${data}")'
-~~~
-{: .source}
+```
 
 > ## Exercise
 >
@@ -215,20 +210,18 @@ While your analysis workflows are running, you may want to open interactive sess
 workflow workspace.  For example, to run a Jupyter notebook. This can be achieved via the ``open``
 command:
 
-~~~
+```bash
 $ reana-client open -w myanalysis.42
-~~~
-{: .bash}
+```
 
 The command will generate unique URL that will become active after a minute or two and where you
 will be able to open a notebook or a remote terminal on your workflow workspace.
 
 When the notebook is no longer needed, it can be brought down via the ``close`` command:
 
-~~~
+```bash
 $ reana-client close -w myanalysis.42
-~~~
-{: .bash}
+```
 
 > ## Exercise
 >
@@ -253,10 +246,9 @@ and the GItLab platform via OAuth technology.
 
 This can be easily achieved from "Your profile" page on REANA user interface:
 
-~~~
+```bash
 $ firefox https://reana.cern.ch/
-~~~
-{: .bash}
+```
 
 > ## Exercise
 >
