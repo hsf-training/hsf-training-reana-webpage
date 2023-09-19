@@ -135,6 +135,7 @@ workflows in this lesson. REANA is a pilot project and supports:
 
 - multiple workflow systems ([CWL](https://www.commonwl.org/),
   [Serial](http://docs.reana.io/running-workflows/supported-systems/serial/),
+  [Snakemake](https://snakemake.readthedocs.io/en/stable/),
   [Yadage](https://yadage.readthedocs.io/en/latest/))
 - multiple compute backends ([Kubernetes](https://kubernetes.io/),
   [HTCondor](https://research.cs.wisc.edu/htcondor/),

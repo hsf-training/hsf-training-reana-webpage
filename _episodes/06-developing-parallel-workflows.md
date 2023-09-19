@@ -35,6 +35,7 @@ expressed as Directed Acyclic Graphs, for example:
 The REANA platform supports several DAG workflow specification languages:
 
 - [Common Workflow Language (CWL)](https://www.commonwl.org/) originated in life sciences
+- [Snakemake](https://snakemake.readthedocs.io/en/stable/) originated in bioinformatics
 - [Yadage](https://yadage.readthedocs.io/en/latest/) originated in particle physics
 
 In this lesson we shall use the Yadage workflow specification language.
