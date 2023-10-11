@@ -10,21 +10,33 @@ This lesson teaches the principles of containerised scientific workflows by mean
 The participants should either install [reana-client](https://pypi.org/project/reana-client/) on
 their laptops:
 
+~~~bash
+virtualenv ~/.virtualenvs/reana
+source ~/.virtualenvs/reana/bin/activate
+pip install reana-client
 ~~~
-$ virtualenv ~/.virtualenvs/reana
-$ source ~/.virtualenvs/reana/bin/activate
-$ pip install --pre reana-client
-~~~
-{: .bash}
+{: .source}
 
-Alternatively, the participants can log into CERN's LXPLUS cluster and use a pre-existing
-environment there:
+Alternatively, the participants can log into CERN's LXPLUS cluster using `ssh lxplus.cern.ch` and
+activate a pre-existing environment there:
+
+~~~bash
+source /afs/cern.ch/user/r/reana/public/reana/bin/activate
+~~~
+{: .source}
+
+After installation of `reana-client`, please check whether the client works by asking for its
+version:
+
+~~~bash
+reana-client version
+~~~
+{: .source}
 
 ~~~
-$ ssh lxplus.cern.ch
-lxplus> source ~simko/public/reana/bin/activate
+0.9.1
 ~~~
-{: .bash}
+{: .output}
 
 ---
 

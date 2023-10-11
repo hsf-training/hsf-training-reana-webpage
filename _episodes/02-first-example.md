@@ -214,11 +214,8 @@ Options:
 The REANA client will interact with a remote REANA cluster. It knows to which REANA cluster it connects by means of the following environment variable:
 
 ```bash
-$ source /afs/cern.ch/user/r/reana/public/bin/reana/activate/
 $ export REANA_SERVER_URL=https://reana.cern.ch
 ```
-
-The source command is for lxplus users only.
 
 In order to authenticate to REANA, you need to generate a token.
 
