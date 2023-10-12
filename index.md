@@ -5,21 +5,10 @@ permalink: index.html  # Is the only page that doesn't follow the pattern /:path
 ---
 
 <center>
-<big>Lesson on reproducible analyses and reusable containerised scientific workflows</big>
+  <big>Lesson on reproducible analyses and reusable containerised scientific workflows</big>
+  <img src="fig/reana-platform-20181202.png" align="middle" height="75%" width="75%">
 </center>
 
-<div class="row">
-  <div class="col-md-6">
-    <img src="fig/logo-awesome-workshop.png" align="middle" height="100%" width="100%">
-  </div>
-  <div class="col-md-6">
-    <img src="fig/reana-platform-20181202.png" align="middle" height="100%" width="100%">
-    <img src="fig/logo-reana.svg" align="middle" height="75%" width="75%">
-  </div>
-</div>
-
 {% include curriculum.html %}
-
-{% include authors.html %}
 
 {% include links.md %}
