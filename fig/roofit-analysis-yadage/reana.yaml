@@ -1,0 +1,16 @@
+inputs:
+  files:
+    - code/gendata.C
+    - code/fitdata.C
+    - workflow.yaml
+  parameters:
+    events: 20000
+    gendata: code/gendata.C
+    fitdata: code/fitdata.C
+workflow:
+  type: yadage
+  file: workflow.yaml
+outputs:
+  files:
+    - fitdata/plot.png
+

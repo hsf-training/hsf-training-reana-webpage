@@ -64,7 +64,7 @@ stages:
             data: outfilename
         environment:
           environment_type: 'docker-encapsulated'
-          image: 'reanahub/reana-env-root6'
+          image: 'docker.io/reanahub/reana-env-root6'
           imagetag: '6.18.04'
   - name: fitdata
     dependencies: [gendata]
@@ -84,10 +84,10 @@ stages:
             plot: outfile
         environment:
           environment_type: 'docker-encapsulated'
-          image: 'reanahub/reana-env-root6'
+          image: 'docker.io/reanahub/reana-env-root6'
           imagetag: '6.18.04'
 ```
-
+{: .source}
 
 We can see that the workflow consists of two steps, ``gendata`` does not depending on anything
 (``[init]``) and ``fitdata`` depending on ``gendata``.  This is how linear workflows are expressed
@@ -101,8 +101,11 @@ How can we run the example on REANA platform?  We have to instruct REANA that we
 Yadage as our workflow engine.  We can do that by editing ``reana.yaml`` and specifying:
 
 ```yaml
-version: 0.6.0
 inputs:
+  files:
+    - code/gendata.C
+    - code/fitdata.C
+    - workflow.yaml
   parameters:
     events: 20000
     gendata: code/gendata.C
@@ -114,12 +117,14 @@ outputs:
   files:
     - fitdata/plot.png
 ```
+{: .source}
 
 We now can run this example on REANA in the usual way:
 
 ```bash
-$ reana-client run -w roofityadage -f reana-yadage.yaml
+reana-client run -w roofityadage
 ```
+{: .source}
 
 > ## Exercise
 >
@@ -133,15 +138,15 @@ $ reana-client run -w roofityadage -f reana-yadage.yaml
 > Nothing changes in the usual user interaction with the REANA platform:
 >
 > ```bash
-> $ reana-client create -w roofityadage -f ./reana-yadage.yaml
-> $ reana-client upload ./code -w roofityadage
-> $ reana-client start -w roofityadage
-> $ reana-client status -w roofityadage
-> $ reana-client logs -w roofityadage
-> $ reana-client ls -w roofityadage
-> $ reana-client download plot.png -w roofityadage
+> reana-client create -w roofityadage -f ./reana-yadage.yaml
+> reana-client upload ./code -w roofityadage
+> reana-client start -w roofityadage
+> reana-client status -w roofityadage
+> reana-client logs -w roofityadage
+> reana-client ls -w roofityadage
+> reana-client download plot.png -w roofityadage
 > ```
->
+> {: .source}
 {: .solution}
 
 ## Physics code vs orchestration code
@@ -203,6 +208,7 @@ stages:
       output_dir: '{workdir}/output'
     step: {$ref: 'steps.yaml#/plot'}
 ```
+{: .source}
 
 where steps are expressed as:
 
@@ -267,6 +273,7 @@ fit:
     publish:
       fitting_plot: '{output_dir}/fit.png'
 ```
+{: .source}
 
 The workflow definition is similar to that of the Serial workflow, and, as we can see, it can
 already lead to certain parallelism, because the fitting step and the plotting step can run
@@ -287,23 +294,27 @@ Let us try to run it on REANA cloud.
 
 > ## Solution
 >
-> ```yaml
-> $ vim workflow.yaml # take contents above and store it as workflow.yaml
-> $ vim steps.yaml    # take contents above and store it as steps.yaml
-> $ vim reana.yaml   # this was the task
-> $ cat reana.yaml
-> version: 0.6.0
+> ```bash
+> mkdir awesome-analysis-yadage-simple
+> cd awesome-analysis-yadage-simple
+> vim workflow.yaml # take contents above and store it as workflow.yaml
+> vim steps.yaml    # take contents above and store it as steps.yaml
+> vim reana.yaml    # to create this file was the task
+> cat reana.yaml
+> ```
+> {: .source}
+> ```
 > inputs:
+>  files:
+>    - steps.yaml
+>    - workflow.yaml
 >   parameters:
 >     input_dir: root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced
 > workflow:
 >   type: yadage
 >   file: workflow.yaml
-> outputs:
->   files:
->     - fit/output/fit.png
 > ```
->
+> {: .output}
 {: .solution}
 
 ## Parallelism via scatter-gather paradigm
@@ -348,6 +359,7 @@ stages:
       parameters:
         input: {stages: 'map2', output: outputA}
 ```
+{: .source}
 
 Note the "scatter" happening over "input" with a wanted batch size.
 

@@ -1,10 +1,9 @@
-version: 0.6.0
 inputs:
+  files:
+    - steps.yaml
+    - workflow.yaml
   parameters:
     input_dir: root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced
 workflow:
   type: yadage
   file: workflow.yaml
-outputs:
-  files:
-    - outputs/statanalysis/fitresults/pre.png
