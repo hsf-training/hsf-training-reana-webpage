@@ -81,8 +81,6 @@ With the above hits, please try to write workflow either individually or in pair
 > ## Solution
 >
 > ```yaml
-> $ cat reana.yaml
-> version: 0.6.0
 > inputs:
 >   parameters:
 >     eosdir: root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced
@@ -110,6 +108,7 @@ With the above hits, please try to write workflow either individually or in pair
 >   files:
 >     - fitting/fit.png
 > ```
+> {: .output}
 {: .solution}
 
 {% include links.md %}
