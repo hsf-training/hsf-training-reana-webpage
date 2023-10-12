@@ -25,8 +25,10 @@ example via the scatter-gather paradigm introduced in the previous episode.
 The overall ``reana.yaml`` looks like:
 
 ```yaml
-version: 0.6.0
 inputs:
+  files:
+    - steps.yaml
+    - workflow.yaml
   parameters:
     files:
       - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/GluGluToHToTauTau.root
@@ -65,6 +67,7 @@ outputs:
   files:
     - fit/fit.png
 ```
+{: .source}
 
 Note that we define input files and cross sections and short names as an array.  It is this array
 that we shall be scattering around.
@@ -87,6 +90,7 @@ The skimming step definition looks like:
        parameters: [input_file, cross_section]
     step: {$ref: 'steps.yaml#/skim'}
 ```
+{: .source}
 
 where the step is defined as:
 
@@ -105,6 +109,7 @@ skim:
     publish:
       skimmed_file: '{output_file}'
 ```
+{: .source}
 
 Note the scatter paradigm that will cause nine parallel jobs for each input dataset file.
 
@@ -126,6 +131,7 @@ The histograms can be produced as follows:
        parameters: [input_file, output_names]
     step: {$ref: 'steps.yaml#/histogram'}
 ```
+{: .source}
 
 with:
 
@@ -147,6 +153,7 @@ histogram:
     publish:
       histogram_file: '{output_dir}/*.root'
 ```
+{: .source}
 
 ## HiggsToTauTau merging
 
@@ -162,6 +169,7 @@ Gather time!  How do we merge scattered results?
       output_file: '{workdir}/merged.root'
     step: {$ref: 'steps.yaml#/merge'}
 ```
+{: .source}
 
 with:
 
@@ -180,6 +188,7 @@ merge:
     publish:
       merged_file: '{output_file}'
 ```
+{: .source}
 
 ## HiggsToTauTau fitting
 
@@ -195,6 +204,7 @@ The fit can be performed as follows:
       fit_outputs: '{workdir}'
     step: {$ref: 'steps.yaml#/fit'}
 ```
+{: .source}
 
 with:
 
@@ -213,6 +223,7 @@ fit:
     publish:
       fit_results: '{fit_outputs}/fit.png'
 ```
+{: .source}
 
 ## HiggsToTauTau plotting
 
@@ -226,6 +237,8 @@ Challenge time! Add plotting step to the workflow.
 
 > ## Solution
 >
+> The addition to the worklow specification is:
+>
 > ```yaml
 > - name: plot
 >   dependencies: [merge]
@@ -236,8 +249,9 @@ Challenge time! Add plotting step to the workflow.
 >       plot_outputs: '{workdir}'
 >     step: {$ref: 'steps.yaml#/plot'}
 > ```
+> {: .source}
 >
-> with:
+> The step is being defined as:
 >
 > ```yaml
 > plot:
@@ -254,33 +268,29 @@ Challenge time! Add plotting step to the workflow.
 >     publish:
 >       fitting_plot: '{plot_outputs}'
 > ```
->
+> {: .source}
 {: .solution}
 
 ## Full workflow
 
-Assembling the previous stages visually, the full workflow looks like:
-
-<img src="{{ page.root }}/fig/awesome-analysis-yadage-parallel/workflow.png" />
-
-## Running full workflow
-
-We are now ready to run the example of REANA cloud.
+We are now ready to assemble the previous stages together and run the example on the REANA cloud.
 
 > ## Exercise
 >
-> Run HiggsToTauTau parallel workflow on REANA cloud.  How many job does the workflow have?  How
-> much faster it is executed when compared to the simple Serial version?
+> Write and run the HiggsToTauTau parallel workflow on REANA cloud.  How many job does the workflow
+> have?  How much faster it is executed when compared to the simple Serial version?
 >
 {: .challenge}
 
 > ## Solution
 >
-> reana.yaml:
+> The REANA specification file `reana.yaml` looks as follows:
 >
 > ```yaml
-> version: 0.6.0
 > inputs:
+>  files:
+>    - steps.yaml
+>    - workflow.yaml
 >   parameters:
 >     files:
 >       - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/GluGluToHToTauTau.root
@@ -319,8 +329,9 @@ We are now ready to run the example of REANA cloud.
 >   files:
 >     - fit/fit.png
 > ```
+> {: .source}
 >
-> workflow.yaml:
+> The workflow definition file `workflow.yaml` is:
 >
 > ```yaml
 > stages:
@@ -378,7 +389,7 @@ We are now ready to run the example of REANA cloud.
 >     step: {$ref: 'steps.yaml#/plot'}
 > ```
 >
-> steps.yaml:
+> The workflow steps defined in `steps.yaml` are:
 >
 > ```yaml
 > skim:
@@ -455,5 +466,15 @@ We are now ready to run the example of REANA cloud.
 >       fitting_plot: '{plot_outputs}'
 > ```
 {: .solution}
+
+## Results
+
+The computational graph of the workflow looks like:
+
+<img src="{{ page.root }}/fig/awesome-analysis-yadage-parallel/workflow.png" />
+
+The workflow produces the following fit:
+
+<img src="{{ page.root }}/fig/awesome-analysis-yadage-parallel/fit.png" />
 
 {% include links.md %}
