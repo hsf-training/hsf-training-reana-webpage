@@ -5,7 +5,7 @@ exercises: 5
 questions:
 - "Can I publish workflow results on EOS?"
 - "Can I use Kerberos to access restricted resources?"
-- "Can I use CVMFS software repositeries?"
+- "Can I use CVMFS software repositories?"
 - "Can I dispatch heavy computations to HTCondor?"
 - "Can I dispatch heavy computations to Slurm?"
 - "Can I open Jupyter notebooks on my REANA workspace?"
@@ -54,17 +54,48 @@ folder?
 
 First, you have to let the REANA platform know your
 [Kerberos](https://web.mit.edu/kerberos/krb5-devel/doc/user/index.html)
-[keytab](https://web.mit.edu/kerberos/krb5-devel/doc/basic/keytab_def.html) so that the writing is
-authorised. We can do this by uploading appropriate "secrets":
+[keytab](https://web.mit.edu/kerberos/krb5-devel/doc/basic/keytab_def.html) so that writing to EOS
+would be authorised.
 
-```yaml
-$ reana-client secrets-add --env CERN_USER=johndoe
-$ reana-client secrets-add --env CERN_KEYTAB=johndoe.keytab
-$ reana-client secrets-add --file ~/johndoe.keytab
+If you don't have a keytab file yet, you can generate it on LXPLUS by using the following command
+(assuming the user login name to be `johndoe`):
+
+```bash
+cern-get-keytab --keytab ~/.keytab --user --login johndoe
 ```
+{: .source}
 
-Second, once we have the secrets, we can use a Kerberos-aware container image (such as
-``reanahub/krb5``) in the final publishing step of the workflow:
+Check whether it works:
+
+```bash
+kdestroy; kinit -kt ~/.keytab johndoe; klist
+```
+{: .source}
+
+```
+Ticket cache: FILE:/tmp/krb5cc_1234_5678
+Default principal: johndoe@CERN.CH
+
+Valid starting       Expires              Service principal
+07/05/2023 18:04:13  07/06/2023 19:04:13  krbtgt/CERN.CH@CERN.CH
+    renew until 07/10/2023 18:04:13
+07/05/2023 18:04:13  07/06/2023 19:04:13  afs/cern.ch@CERN.CH
+    renew until 07/10/2023 18:04:13
+```
+{: .output}
+
+Upload it to the REANA platform as "user secrets":
+
+```bash
+reana-client secrets-add --env CERN_USER=johndoe \
+                         --env CERN_KEYTAB=.keytab \
+                         --file ~/.keytab
+```
+{: .source}
+
+Second, once your Kerberos user secrets are uploaded to the REANA platform, you can modify your
+workflow to add a final data publishing step that copies the resulting plots to the desired EOS
+directories:
 
 ```yaml
 workflow:
@@ -76,29 +107,37 @@ workflow:
       - name: mysecondstep
         ...
       - name: publish
+        environment: 'docker.io/library/ubuntu:20.04'
         kerberos: true
-        environment: 'reanahub/krb5'
+        kubernetes_memory_limit: '256Mi'
         commands:
-        - mkdir -p /eos/home/j/johndoe/myanalysis-outputs
-        - cp myplots/*.png /eos/home/j/johndoe/myanalysis-outputs/
+          - mkdir -p /eos/home-j/johndoe/myanalysis-outputs
+          - cp myplots/*.png /eos/home-j/johndoe/myanalysis-outputs/
 ```
+{: .source}
 
-Note the presence of ``kerberos: true`` classifier in the final publishing step, which tells the
-REANA system to initialise Kerberos authentitation using provided secrets for the workflow step at
-hand.
+Note the presence of the ``kerberos: true`` clause in the final publishing step definition which
+instructs the REANA system to initialise the Kerberos-based authentication process using the
+provided user secrets.
 
 > ## Exercise
 >
-> Publish all produced HigssToTauTau analysis plots to your EOS home directory.
+> Publish some of the produced HigssToTauTau analysis plots to your EOS home directory.
 >
 {: .challenge}
 
 > ## Solution
 >
-> Modify your workflow to add a final publishing step.
+> Modify your workflow specification to add a final publishing step.
 >
 > Hint: Use a previously finished analysis run and the ``restart`` command so that you don't have
 > to rerun the full analysis again.
+>
+> If you need more assistance with creating and uploading keytab files, please see the [REANA
+documentation on Keytab](https://docs.reana.io/advanced-usage/access-control/kerberos/).
+>
+> If you need more assistance with creating final workflow publishing step, please see the [REANA
+> documentation on EOS](https://docs.reana.io/advanced-usage/storage-backends/eos/).
 {: .solution}
 
 ## Using CVMFS software repositories
@@ -118,10 +157,11 @@ workflow:
       - fcc.cern.ch
   specification:
     steps:
-      - environment: 'cern/slc6-base'
+      - environment: 'docker.io/cern/slc6-base'
         commands:
         - ls -l /cvmfs/fcc.cern.ch/sw/views/releases/
 ```
+{: .source}
 
 > ## Exercise
 >
@@ -151,12 +191,13 @@ workflow:
   specification:
     steps:
       - name: gendata
-        environment: 'reanahub/reana-env-root6:6.18.04'
+        environment: 'docker.io/reanahub/reana-env-root6:6.18.04'
         compute_backend: htcondorcern
+        htcondor_max_runtime: espresso
         commands:
-        - mkdir -p results
-        - root -b -q 'code/gendata.C(${events},"${data}")'
+        - mkdir -p results && root -b -q 'code/gendata.C(${events},"${data}")'
 ```
+{: .source}
 
 Note that the access control will be handled automatically via Kerberos, so this requires you to
 submit your ``keytab`` as in the EOS publishing example above.
@@ -186,12 +227,12 @@ workflow:
   specification:
     steps:
       - name: gendata
-        environment: 'reanahub/reana-env-root6:6.18.04'
+        environment: 'docker.io/reanahub/reana-env-root6:6.18.04'
         compute_backend: slurmcern
         commands:
-        - mkdir -p results
-        - root -b -q 'code/gendata.C(${events},"${data}")'
+        - mkdir -p results && root -b -q 'code/gendata.C(${events},"${data}")'
 ```
+{: .source}
 
 > ## Exercise
 >
@@ -211,8 +252,9 @@ workflow workspace.  For example, to run a Jupyter notebook. This can be achieve
 command:
 
 ```bash
-$ reana-client open -w myanalysis.42
+reana-client open -w myanalysis.42
 ```
+{: .source}
 
 The command will generate unique URL that will become active after a minute or two and where you
 will be able to open a notebook or a remote terminal on your workflow workspace.
@@ -220,8 +262,9 @@ will be able to open a notebook or a remote terminal on your workflow workspace.
 When the notebook is no longer needed, it can be brought down via the ``close`` command:
 
 ```bash
-$ reana-client close -w myanalysis.42
+reana-client close -w myanalysis.42
 ```
+{: .source}
 
 > ## Exercise
 >
@@ -247,8 +290,9 @@ and the GItLab platform via OAuth technology.
 This can be easily achieved from "Your profile" page on REANA user interface:
 
 ```bash
-$ firefox https://reana.cern.ch/
+firefox https://reana.cern.ch/
 ```
+{: .source}
 
 > ## Exercise
 >

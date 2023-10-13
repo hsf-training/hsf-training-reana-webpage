@@ -5,8 +5,8 @@ skim:
       ./skim {input_file} {output_file} {cross_section} 11467.0 0.1
   environment:
     environment_type: 'docker-encapsulated'
-    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
-    imagetag: master
+    image: docker.io/mdonadoni/hsf-training-cms-analysis-snapshot
+    imagetag: latest
   publisher:
     publisher_type: interpolated-pub
     publish:
@@ -21,8 +21,8 @@ histogram:
       done
   environment:
     environment_type: 'docker-encapsulated'
-    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
-    imagetag: master
+    image: docker.io/mdonadoni/hsf-training-cms-analysis-snapshot
+    imagetag: latest
   publisher:
     publisher_type: interpolated-pub
     glob: true
@@ -36,8 +36,8 @@ merge:
       hadd {output_file} {input_files}
   environment:
     environment_type: 'docker-encapsulated'
-    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
-    imagetag: master
+    image: docker.io/mdonadoni/hsf-training-cms-analysis-snapshot
+    imagetag: latest
   publisher:
     publisher_type: interpolated-pub
     publish:
@@ -50,8 +50,8 @@ fit:
       python fit.py {histogram_file} {fit_outputs}
   environment:
     environment_type: 'docker-encapsulated'
-    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-statistics-stage3
-    imagetag: master
+    image: docker.io/mdonadoni/hsf-training-cms-analysis-snapshot-stats
+    imagetag: latest
   publisher:
     publisher_type: interpolated-pub
     publish:
@@ -64,8 +64,8 @@ plot:
       python plot.py {histogram_file} {plot_outputs} 0.1
   environment:
     environment_type: 'docker-encapsulated'
-    image: gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3
-    imagetag: master
+    image: docker.io/mdonadoni/hsf-training-cms-analysis-snapshot
+    imagetag: latest
   publisher:
     publisher_type: interpolated-pub
     publish:
