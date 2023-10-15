@@ -49,11 +49,10 @@ and background data is processed and fitted against a model. The example uses th
 
 Four questions:
 
-1. **Input data?** None. We'll simulate them.
-2. **Analysis code?** Two files: ``gendata.C`` macro generates signal and background data;
-   ``fitdata.C`` macro makes a fit for the signal and the background data.
-3. **Compute environment?** ROOT with RooFit.
-4. **Runtime procedures?** Simple serial workflow: first run gendata, then run fitdata.
+1. **Where is your input data?** There is no input data. We shall simulate them.
+2. **Where is your analysis code?** Two files: ``gendata.C`` macro generates signal and background data; ``fitdata.C`` macro makes a fit for the signal and the background data.
+3. **Which computing environment do you use?** ROOT 6.18.04 with RooFit.
+4. **What are the computational steps to achieve the results?** Simple sequential steps: first run gendata, then run fitdata.
 
 Workflow definition:
 
@@ -438,7 +437,7 @@ firefox results/plot.png
 > ## Solution
 >
 > ```bash
-> $ reana-client logs -w roofit --filter step=gendata
+> reana-client logs -w roofit --filter step=gendata
 > ```
 > {: .source}
 {: .solution}
