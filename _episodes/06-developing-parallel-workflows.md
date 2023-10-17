@@ -14,35 +14,45 @@ objectives:
 keypoints:
 - "Computational analysis is a graph of inter-dependent steps"
 - "Fully declare inputs and outputs for each step"
-- "Use Scatter/Gather or Map/Reduce to avoid copy-paste coding"
+- "Use dependencies between workflow steps to allow running jobs in parallel"
+- "Use scatter/gather paradigm to parallelise parametrised computations"
 ---
 
 ## Overview
 
 We now know how to develop reproducible analyses on small scale using serial workflows.
 
-In this lesson we shall learn how to scale-up for real life work, which requires using paraller
-workflows.
+In this lesson we shall learn how to scale-up for real-life work which usually requires using
+parallel workflows.
 
-## Workflows as Directed Acyclic Graphs (DAG)
+## Computational workflows as Directed Acyclic Graphs (DAG)
 
-The computational analyses can be expressed as a set of steps where some steps depends on other
-steps before they can begin their computations.  In other words, the computational steps as
-expressed as Directed Acyclic Graphs, for example:
+The computational workflows can be expressed as a set of computational steps where some steps
+depends on other steps before they can begin their computations.  In other words, the computational
+steps constitute a Directed Acyclic Graph (DAG) where each graph vertex represents a unit of
+computation with its inputs and outputs, and the graph edges describe the interconnection of various
+computational steps. For example:
 
-<img src="{{ page.root }}/fig/Tred-G.svg.png" width="200px" />
+<img src="{{ page.root }}/fig/Tred-G.svg.png" width="20%" />
+
+The graph is "directed" and "acyclic" because it can be topographically ordered so that later steps
+depends on earlier steps without cyclic dependencies, the progress flowing steadily from former
+steps to latter steps during analysis.
 
 The REANA platform supports several DAG workflow specification languages:
 
-- [Common Workflow Language (CWL)](https://www.commonwl.org/) originated in life sciences
-- [Snakemake](https://snakemake.readthedocs.io/en/stable/) originated in bioinformatics
-- [Yadage](https://yadage.readthedocs.io/en/latest/) originated in particle physics
-
-In this lesson we shall use the Yadage workflow specification language.
+- [Common Workflow Language (CWL)](https://www.commonwl.org/) originated in life sciences;
+- [Snakemake](https://snakemake.readthedocs.io/en/stable/) originated in bioinformatics;
+- [Yadage](https://yadage.readthedocs.io/en/latest/) originated in particle physics.
 
 ## Yadage
 
-Yadage enables to describe complex computational workflows. Let us start having a look at the Yadage specification for the RooFit example we have used in the beginning episodes:
+In this lesson we shall mostly use the [Yadage](https://yadage.readthedocs.io/en/latest/) workflow
+specification language (used e.g. in ATLAS). Yadage enables to describe even very complex
+computational workflows.
+
+Let us start by having a look at the Yadage specification for the RooFit example we have used in the
+previous episodes:
 
 ```yaml
 stages:
@@ -89,16 +99,73 @@ stages:
 ```
 {: .source}
 
-We can see that the workflow consists of two steps, ``gendata`` does not depending on anything
-(``[init]``) and ``fitdata`` depending on ``gendata``.  This is how linear workflows are expressed
-in the Yadage language.
+We can see that the workflow consists of two stages, the ``gendata`` stage that does not depend on
+anything (this is denoted by ``[init]`` dependency which means the stage can run right after the
+workflow initialisation already), and the ``fitdata`` stage that depends on the completion of the
+``gendata`` stage (this is denoted by ``[gendata]``).
+
+Note that each stage consists of a single workflow step (`singlestep-stage`) which represents the
+basic unit of computation of the workflow. (We shall see below an example of a multi-step stages
+which express the same basic unit of computations scattered over inputs.)
+
+The step consists of the description of the process to run, the containerised environment in which
+to run the process, as well as the mapping of its outputs to the stage.
+
+This is how the Yadage workflow engine understands which stages can be run in which order, what
+commands to run in each stage, and how to pass inputs and outputs between steps.
+
+## Snakemake
+
+Let us open a brief parenthesis about other workflow languages such as
+[Snakemake](https://snakemake.readthedocs.io/en/stable/) (used e.g. in LHCb). The same computational
+graph concepts apply here as well. What differs is the syntax how to express the dependencies
+between steps and the processes to run in each step.
+
+For example, Snakemake uses "rules" where each rule defines its inputs and outputs and the command
+to run to produce them. The Snakemake workflow engine then computes the dependencies between rules
+based on how the outputs from some rules are used as inputs to other rules.
+
+```makefile
+rule all:
+    input:
+        "results/data.root",
+        "results/plot.png"
+
+rule gendata:
+    output:
+        "results/data.root"
+    params:
+        events=20000
+    container:
+        "docker://docker.io/reanahub/reana-env-root6:6.18.04"
+    shell:
+        "mkdir -p results && root -b -q 'code/gendata.C({params.events},\"{output}\")'"
+
+rule fitdata:
+    input:
+        data="results/data.root"
+    output:
+        "results/plot.png"
+    container:
+        "docker://docker.io/reanahub/reana-env-root6:6.18.04"
+    shell:
+        "root -b -q 'code/fitdata.C(\"{input.data}\",\"{output}\")'"
+```
+{: .source}
+
+We see that the final plot is produced by the "fitdata" rule, which needs "data.root" file to be
+present, and it is the "gendata" rules that produces it. Hence Snakemake knows that it has to run
+the "gendata" rule first, and the computation of "fitdata" is deferred until "gendata" successfully
+completes. This process is very similar to how `Makefile` are being used in Unix software packages.
+
+After this parenthesis note about Snakemake, let us now return to our Yadage example.
 
 ## Running Yadage workflows
 
-Let us write the above workflow as ``workflow.yaml`` in the RooFit example directory.
+Let us try to write and run the above Yadage workflow on REANA.
 
-How can we run the example on REANA platform?  We have to instruct REANA that we are going to use
-Yadage as our workflow engine.  We can do that by editing ``reana.yaml`` and specifying:
+We have to instruct REANA that we are going to use Yadage as our workflow engine.  We can do that by
+editing ``reana.yaml`` and specifying:
 
 ```yaml
 inputs:
@@ -118,6 +185,8 @@ outputs:
     - fitdata/plot.png
 ```
 {: .source}
+
+Here, `workflow.yaml` is a new file with the same content as specified above.
 
 We now can run this example on REANA in the usual way:
 
@@ -151,24 +220,26 @@ reana-client run -w roofityadage
 
 ## Physics code vs orchestration code
 
-Note that it wasn't necessary to change anything in our code: we simply modified the workflow
-definition and we could run the RooFit code "as is" using another workflow engine.  This is a simple
-demonstration of the separation of concerns between "physics code" and "orchestration code".
+Note that it wasn't necessary to change anything in our research code: we simply modified the
+workflow definition from Serial to Yadage and we could run the RooFit code "as is" using another
+workflow engine. This is a simple demonstration of the separation of concerns between "physics
+code" and "orchestration code".
 
 ## Parallelism via step dependencies
 
-We have seen how serial workflows can be also expressed in Yadage syntax using step dependencies.
-Note that if dependency graph would have permitted, the workflow steps not depending on each other
-or on the results of previous computations could have been executed in parallel by the workflow
-engine -- the physicist _only_ has to supply knoweldge about which steps depend on which other steps
-and the workflow engine takes care about efficiently starting and scheduling tasks.
+We have seen how the sequential workflows were expressed in the Yadage syntax using stage
+dependencies. Note that if the stage dependency graph would have permitted, the workflow steps not
+depending on each other, or on the results of previous computations, would have been executed in
+parallel by the workflow engine out of the box. The physicist _only_ has to supply the knoweldge
+about which steps depend on which other steps and the workflow engine takes care of efficiently
+starting and scheduling tasks as necessary.
 
 ## HiggsToTauTau analysis: simple version
 
-Let us demonstrate how to write simple Yadage workflow for the HiggsToTauTau analysis using simple
-step dependencies.
+Let us demonstrate how to write a Yadage workflow for the HiggsToTauTau example analysis using
+simple step dependencies.
 
-The workflow looks like:
+The workflow stages look like:
 
 ```yaml
 stages:
@@ -275,21 +346,20 @@ fit:
 ```
 {: .source}
 
-The workflow definition is similar to that of the Serial workflow, and, as we can see, it can
-already lead to certain parallelism, because the fitting step and the plotting step can run
-simultaneously once the histograms are produced.
+The workflow definition is similar to that of the Serial workflow created in the previous episode.
+As we can see, this already leads to certain parallelism, because the fitting stage and the plotting
+stage can actually run simultaneously once the histograms are produced. The graphical representation
+of the above workflow looks as follows:
 
-The graphical representation of the workflow is:
-
-<img src="{{ page.root }}/fig/awesome-analysis-yadage-simple/workflow.png" width="300px" />
+<img src="{{ page.root }}/fig/awesome-analysis-yadage-simple/workflow.png" width="30%" />
 
 Let us try to run it on REANA cloud.
 
 > ## Exercise
 >
-> Run HiggsToTauTau analysis example using simple Yadage workflow version. Take the
-> workflow definition listed above, write corresponding `reana.yaml`, and run the example on REANA
-> cloud.
+> Write and run a HiggsToTauTau analysis example using the Yadage workflow version presented above.
+> Take the workflow definition, the step definition, and write the corresponding `reana.yaml`.
+> Afterwards run the example on REANA cloud.
 {: .challenge}
 
 > ## Solution
@@ -297,9 +367,9 @@ Let us try to run it on REANA cloud.
 > ```bash
 > mkdir awesome-analysis-yadage-simple
 > cd awesome-analysis-yadage-simple
-> vim workflow.yaml # take contents above and store it as workflow.yaml
-> vim steps.yaml    # take contents above and store it as steps.yaml
-> vim reana.yaml    # to create this file was the task
+> vim workflow.yaml # take workflow definition contents above
+> vim steps.yaml    # take step definition contents above
+> vim reana.yaml    # the goal of the exercise is to create this content
 > cat reana.yaml
 > ```
 > {: .source}
@@ -319,51 +389,62 @@ Let us try to run it on REANA cloud.
 
 ## Parallelism via scatter-gather paradigm
 
-A useful paradigm of workflow languages is a "scatter-gather" behaviour where we instruct the
-workflow engine to run a certain step over a certain input array in parallel as if each element of
-the input were a single item input (the "scatter" operation). The partial results processed in
-parallel are then assembled together (the "gather" operation). The "scatter-gather" paradigm allows
-to express "map-reduce" operations with a minimal of syntax without having to duplicate workflow
-code or statements.
+We have seen how to achieve a certain parallelism of workflow steps via simple dependency graph
+expressing which workflow steps depend on which others.
 
-Here is an example of scatter-gather paradim in the Yadage language:
+We now introduce a more advanced concept how to instruct the workflow engine to start many parallel
+computations. The paradigm is called "scatter-gather" and is used to instruct the workflow engine to
+run a certain parametrised command over an array of input values in parallel (the "scatter"
+operation) whilst assembling these results together afterwards (the "gather" operation). The
+"scatter-gather" paradigm allows to scale computations in a "map-reduce" fashion over input values
+with a minimal syntax without having to duplicate workflow code or write loop statements.
 
-<img src="{{ page.root }}/fig/yadage_multi_cascading_map_reduce.png" width="800px" />
-
-expressed as:
+Here is an example of scatter-gather paradim in the Yadage language. Note the use of "multi-step"
+stage definition, expressing that the given stage is actually running multiple parametrised steps:
 
 ```yaml
 stages:
-  - name: map
+  - name: filter1
     dependencies: [init]
     scheduler:
       scheduler_type: multistep-stage
       parameters:
         input: {stages: init, output: input, unwrap: true}
-      batchsize: 3
+      batchsize: 2
       scatter:
         method: zip
         parameters: [input]
-  - name: map2
-    dependencies: [map]
+      step: {$ref: steps.yaml#/filter}
+  - name: filter2
+    dependencies: [filter1]
     scheduler:
       scheduler_type: multistep-stage
       parameters:
-        input: {stages: map, output: outputA, unwrap: true}
+        input: {stages: filter1, output: output, unwrap:true}
       batchsize: 2
-      scatter: ...
-  - name: reduce
-    dependencies: [map2]
+      scatter:
+        method: zip
+        parameters: [input]
+      step: {$ref: steps.yaml#/filter}
+  - name: filter3
+    dependencies: [filter2]
     scheduler:
       scheduler_type: singlestep-stage
       parameters:
-        input: {stages: 'map2', output: outputA}
+        input: {stages: 'filter2', output: output}
+      step: {$ref: steps.yaml#/filter}
 ```
 {: .source}
 
-Note the "scatter" happening over "input" with a wanted batch size.
+The graphical representation of the computational graph looks like:
 
-In the next episode we shall see how the scatter paradigm can be used to speed up the HiggsToTauTau
-workflow using more parallelism.
+<img src="{{ page.root }}/fig/yadage_multi_cascading_map_reduce.png" width="90%" />
+
+Note how the "scatter" operation is _automatically_ happening over the given "input" array with the
+wanted `batch` size, processing files two by two irrespective of the number of input files. Note
+also the automatic "cascading" of computations.
+
+In the next episode we shall see how the scatter-gather paradigm can be used to speed up the
+HiggsToTauTau sequential workflow that we developed in the previous episode.
 
 {% include links.md %}
