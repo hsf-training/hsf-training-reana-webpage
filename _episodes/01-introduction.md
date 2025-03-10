@@ -23,7 +23,7 @@ keypoints:
 > software development environment and the complete set of instructions which generated the
 > figures._
 >
-> -- Jonathan B. Buckheit and David L. Donoho, "WaveLab and Reproducible Research", [source](https://statweb.stanford.edu/~wavelab/Wavelab_850/wavelab.pdf)
+> -- Jonathan B. Buckheit and David L. Donoho, "WaveLab and Reproducible Research", [source](https://doi.org/10.1007/978-1-4612-2544-7_5)
 {: .testimonial}
 
 Computational reproducibility has many definitions. The terms such as reproducibility, replicability, and repeatability have often different meaning in different scientific disciplines.
