@@ -288,9 +288,9 @@ We are now ready to assemble the previous stages together and run the example on
 >
 > ```yaml
 > inputs:
->  files:
->    - steps.yaml
->    - workflow.yaml
+>   files:
+>     - steps.yaml
+>     - workflow.yaml
 >   parameters:
 >     files:
 >       - root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/GluGluToHToTauTau.root
@@ -315,7 +315,7 @@ We are now ready to assemble the previous stages together and run the example on
 >     short_hands:
 >       - [ggH]
 >       - [qqH]
->       - [ZLL,ZTT]
+>       - [ZLL, ZTT]
 >       - [TT]
 >       - [W1J]
 >       - [W2J]
