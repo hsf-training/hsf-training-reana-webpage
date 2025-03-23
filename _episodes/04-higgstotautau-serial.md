@@ -55,6 +55,17 @@ And you have produced the plots and the fit:
 
 <img src="{{ page.root }}/fig/awesome-analysis-serial/fit.png" width="60%" />
 
+> ## If you haven't fully followed the previous lessons on Docker and GitLab CI/CD...
+>
+> Note that if you haven't fully followed the previous lessons on Docker and GitLab CI/CD and so you
+> haven't produced your own container images
+> `gitlab.cern.ch/johndoe/awesome-analysis-eventselection` and
+> `gitlab.cern.ch/johndoe/awesome-analysis-statistics`, you can follow the rest of the episodes in
+> this lesson using the following example images
+> `gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master` and
+> `gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-statistics-stage3:master`. It is these
+> images that we shall use in the solutions to the exercises below.
+{: .callout}
 
 ## Objective
 
