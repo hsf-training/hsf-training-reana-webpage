@@ -23,7 +23,7 @@
 
 * [Analysis Preservation Bootcamp 17-19 Feb 2020](https://indico.cern.ch/event/854880/)
 
-Emoji key: 🎥 (full video recordings availabile), ⛏️ (hackathon)
+Emoji key: 🎥 (full video recordings available), ⛏️ (hackathon)
 
 ## 🤗 Contributing
 
