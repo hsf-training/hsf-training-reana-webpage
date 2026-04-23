@@ -45,14 +45,27 @@ The REANA platform supports several DAG workflow specification languages:
 - [Snakemake](https://snakemake.readthedocs.io/en/stable/) originated in bioinformatics;
 - [Yadage](https://yadage.readthedocs.io/en/latest/) originated in particle physics.
 
-## Yadage
+## Workflow specification languages
 
-In this lesson we shall mostly use the [Yadage](https://yadage.readthedocs.io/en/latest/) workflow
-specification language (used e.g. in ATLAS). Yadage enables to describe even very complex
-computational workflows.
+The examples in this lesson use [Yadage](https://yadage.readthedocs.io/en/latest/) (used e.g. in
+ATLAS) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) (used e.g. in LHCb). Select a
+tab below to see the RooFit example expressed in each language.
 
-Let us start by having a look at the Yadage specification for the RooFit example we have used in the
-previous episodes:
+<ul class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active">
+    <a href="#yadage-roofit" aria-controls="yadage-roofit" role="tab" data-toggle="tab">Yadage</a>
+  </li>
+  <li role="presentation">
+    <a href="#snakemake-roofit" aria-controls="snakemake-roofit" role="tab" data-toggle="tab">Snakemake</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+
+<div role="tabpanel" class="tab-pane active" id="yadage-roofit" markdown="1">
+
+Yadage enables describing even very complex computational workflows. Here is the Yadage
+specification for the RooFit example used in the previous episodes:
 
 ```yaml
 stages:
@@ -114,16 +127,13 @@ to run the process, as well as the mapping of its outputs to the stage.
 This is how the Yadage workflow engine understands which stages can be run in which order, what
 commands to run in each stage, and how to pass inputs and outputs between steps.
 
-## Snakemake
+</div>
 
-Let us open a brief parenthesis about other workflow languages such as
-[Snakemake](https://snakemake.readthedocs.io/en/stable/) (used e.g. in LHCb). The same computational
-graph concepts apply here as well. What differs is the syntax how to express the dependencies
-between steps and the processes to run in each step.
+<div role="tabpanel" class="tab-pane" id="snakemake-roofit" markdown="1">
 
-For example, Snakemake uses "rules" where each rule defines its inputs and outputs and the command
-to run to produce them. The Snakemake workflow engine then computes the dependencies between rules
-based on how the outputs from some rules are used as inputs to other rules.
+Snakemake uses "rules" where each rule defines its inputs and outputs and the command to run to
+produce them. The Snakemake workflow engine then computes the dependencies between rules based on
+how the outputs from some rules are used as inputs to other rules.
 
 ```makefile
 rule all:
@@ -154,18 +164,31 @@ rule fitdata:
 {: .source}
 
 We see that the final plot is produced by the "fitdata" rule, which needs "data.root" file to be
-present, and it is the "gendata" rules that produces it. Hence Snakemake knows that it has to run
+present, and it is the "gendata" rule that produces it. Hence Snakemake knows that it has to run
 the "gendata" rule first, and the computation of "fitdata" is deferred until "gendata" successfully
 completes. This process is very similar to how `Makefile` are being used in Unix software packages.
 
-After this parenthesis note about Snakemake, let us now return to our Yadage example.
+</div>
 
-## Running Yadage workflows
+</div>
 
-Let us try to write and run the above Yadage workflow on REANA.
+### Running on REANA
 
-We have to instruct REANA that we are going to use Yadage as our workflow engine.  We can do that by
-editing ``reana.yaml`` and specifying:
+We have to instruct REANA which workflow engine to use by editing ``reana.yaml``. Select a tab
+below to see the configuration for each engine.
+
+<ul class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active">
+    <a href="#yadage-roofit-reana" aria-controls="yadage-roofit-reana" role="tab" data-toggle="tab">Yadage</a>
+  </li>
+  <li role="presentation">
+    <a href="#snakemake-roofit-reana" aria-controls="snakemake-roofit-reana" role="tab" data-toggle="tab">Snakemake</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+
+<div role="tabpanel" class="tab-pane active" id="yadage-roofit-reana" markdown="1">
 
 ```yaml
 inputs:
@@ -188,13 +211,6 @@ outputs:
 
 Here, `workflow.yaml` is a new file with the same content as specified above.
 
-We now can run this example on REANA in the usual way:
-
-```bash
-reana-client run -w roofityadage
-```
-{: .source}
-
 > ## Exercise
 >
 > Run RooFit example using Yadage workflow engine on the REANA cloud. Upload code, run workflow,
@@ -207,27 +223,75 @@ reana-client run -w roofityadage
 > Nothing changes in the usual user interaction with the REANA platform:
 >
 > ```bash
-> reana-client create -w roofityadage -f ./reana-yadage.yaml
-> reana-client upload ./code -w roofityadage
-> reana-client start -w roofityadage
-> reana-client status -w roofityadage
-> reana-client logs -w roofityadage
-> reana-client ls -w roofityadage
-> reana-client download plot.png -w roofityadage
+> reana-client create -w my-workflow -f ./reana.yaml
+> reana-client upload ./code -w my-workflow
+> reana-client start -w my-workflow
+> reana-client status -w my-workflow
+> reana-client logs -w my-workflow
+> reana-client ls -w my-workflow
+> reana-client download plot.png -w my-workflow
 > ```
 > {: .source}
 {: .solution}
 
+</div>
+
+<div role="tabpanel" class="tab-pane" id="snakemake-roofit-reana" markdown="1">
+
+```yaml
+inputs:
+  files:
+    - code/gendata.C
+    - code/fitdata.C
+    - Snakefile
+workflow:
+  type: snakemake
+  file: Snakefile
+outputs:
+  files:
+    - results/plot.png
+```
+{: .source}
+
+Here, `Snakefile` is a new file with the same content as specified above.
+
+> ## Exercise
+>
+> Run RooFit example using Snakemake workflow engine on the REANA cloud. Upload code, run workflow,
+> inspect status, check logs, download final plot.
+>
+{: .challenge}
+
+> ## Solution
+>
+> Nothing changes in the usual user interaction with the REANA platform:
+>
+> ```bash
+> reana-client create -w my-workflow -f ./reana.yaml
+> reana-client upload ./code -w my-workflow
+> reana-client start -w my-workflow
+> reana-client status -w my-workflow
+> reana-client logs -w my-workflow
+> reana-client ls -w my-workflow
+> reana-client download results/plot.png -w my-workflow
+> ```
+> {: .source}
+{: .solution}
+
+</div>
+
+</div>
+
 ## Physics code vs orchestration code
 
 Note that it wasn't necessary to change anything in our research code: we simply modified the
-workflow definition from Serial to Yadage and we could run the RooFit code "as is" using another
-workflow engine. This is a simple demonstration of the separation of concerns between "physics
-code" and "orchestration code".
+workflow definition and could run the RooFit code "as is" using a different workflow engine. This
+is a simple demonstration of the separation of concerns between "physics code" and "orchestration
+code".
 
 ## Parallelism via step dependencies
 
-We have seen how the sequential workflows were expressed in the Yadage syntax using stage
+We have seen how the sequential workflows were expressed in the Yadage/Snakemake syntax using stage
 dependencies. Note that if the stage dependency graph would have permitted, the workflow steps not
 depending on each other, or on the results of previous computations, would have been executed in
 parallel by the workflow engine out of the box. The physicist only needs to specify which steps depend on which others, and the workflow engine
@@ -235,8 +299,21 @@ takes care of efficiently starting and scheduling tasks as necessary.
 
 ## HiggsToTauTau analysis: simple version
 
-Let us demonstrate how to write a Yadage workflow for the HiggsToTauTau example analysis using
-simple step dependencies.
+Let us demonstrate how to write a workflow for the HiggsToTauTau example analysis using
+simple step dependencies. Select a tab below to see the workflow expressed in each language.
+
+<ul class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active">
+    <a href="#yadage-htautau-simple" aria-controls="yadage-htautau-simple" role="tab" data-toggle="tab">Yadage</a>
+  </li>
+  <li role="presentation">
+    <a href="#snakemake-htautau-simple" aria-controls="snakemake-htautau-simple" role="tab" data-toggle="tab">Snakemake</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+
+<div role="tabpanel" class="tab-pane active" id="yadage-htautau-simple" markdown="1">
 
 The workflow stages look like:
 
@@ -386,6 +463,19 @@ Let us try to run it on REANA cloud.
 > {: .output}
 {: .solution}
 
+</div>
+
+<div role="tabpanel" class="tab-pane" id="snakemake-htautau-simple" markdown="1">
+
+> ## Work in progress
+>
+> todo: write Snakemake version here!
+{: .callout}
+
+</div>
+
+</div>
+
 ## Parallelism via scatter-gather paradigm
 
 We have seen how to achieve a certain parallelism of workflow steps via simple dependency graph
@@ -397,6 +487,19 @@ run a certain parametrised command over an array of input values in parallel (th
 operation) whilst assembling these results together afterwards (the "gather" operation). The
 "scatter-gather" paradigm allows to scale computations in a "map-reduce" fashion over input values
 with a minimal syntax without having to duplicate workflow code or write loop statements.
+
+<ul class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active">
+    <a href="#yadage-scatter" aria-controls="yadage-scatter" role="tab" data-toggle="tab">Yadage</a>
+  </li>
+  <li role="presentation">
+    <a href="#snakemake-scatter" aria-controls="snakemake-scatter" role="tab" data-toggle="tab">Snakemake</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+
+<div role="tabpanel" class="tab-pane active" id="yadage-scatter" markdown="1">
 
 Here is an example of the scatter-gather paradigm in the Yadage language. Note the use of "multi-step"
 stage definition, expressing that the given stage is actually running multiple parametrised steps:
@@ -442,6 +545,19 @@ The graphical representation of the computational graph looks like:
 Note how the "scatter" operation is _automatically_ happening over the given "input" array with the
 wanted `batch` size, processing files two by two irrespective of the number of input files. Note
 also the automatic "cascading" of computations.
+
+</div>
+
+<div role="tabpanel" class="tab-pane" id="snakemake-scatter" markdown="1">
+
+> ## Work in progress
+>
+> todo: write Snakemake version here!
+{: .callout}
+
+</div>
+
+</div>
 
 In the next episode we shall see how the scatter-gather paradigm can be used to speed up the
 HiggsToTauTau sequential workflow that we developed in the previous episode.
