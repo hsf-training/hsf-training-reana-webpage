@@ -5,10 +5,10 @@ exercises: 20
 questions:
 - "Challenge: write the HiggsToTauTau analysis parallel workflow and run it on REANA"
 objectives:
-- "Develop a full HigssToTauTau analysis workflow using parallel language"
+- "Develop a full HiggsToTauTau analysis workflow using parallel language"
 keypoints:
 - "Use step dependencies to express main analysis stages"
-- "Use scatter-gather paradigm in staged to massively parallelise DAG workflow execution"
+- "Use scatter-gather paradigm in stages to massively parallelise DAG workflow execution"
 - "REANA usage scenarios remain the same regardless of workflow language details"
 ---
 
@@ -69,8 +69,8 @@ outputs:
 ```
 {: .source}
 
-Note that we define input files and cross sections and short names as an array.  It is this array
-that we shall be scattering around.
+Note that the input files, cross-sections, and short names are defined as arrays. These are the
+arrays we will scatter over.
 
 ## HiggsToTauTau skimming
 
@@ -157,7 +157,7 @@ histogram:
 
 ## HiggsToTauTau merging
 
-Gather time!  How do we merge scattered results?
+Time to gather! How do we merge scattered results?
 
 ```yaml
 - name: merge
@@ -237,7 +237,7 @@ Challenge time! Add plotting step to the workflow.
 
 > ## Solution
 >
-> The addition to the worklow specification is:
+> The addition to the workflow specification is:
 >
 > ```yaml
 > - name: plot
@@ -277,8 +277,8 @@ We are now ready to assemble the previous stages together and run the example on
 
 > ## Exercise
 >
-> Write and run the HiggsToTauTau parallel workflow on REANA cloud.  How many job does the workflow
-> have?  How much faster it is executed when compared to the simple Serial version?
+> Write and run the HiggsToTauTau parallel workflow on REANA cloud. How many jobs does the workflow
+> have? How much faster is it executed compared to the simple serial version?
 >
 {: .challenge}
 

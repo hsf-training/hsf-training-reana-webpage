@@ -279,13 +279,13 @@ reana-client close -w myanalysis.42
 
 ## Bridging GitLab with REANA
 
-WHen using GitLab for source code development, the GItLab's native Continuous Integration runners
+When using GitLab for source code development, GitLab's native Continuous Integration runners
 offer a comfortable testing environment for your analyses.
 
-However, the COU time is usually limited.
+However, the CPU time is usually limited.
 
-If you would like to run REANA workflows directly from GitLab, it is useful to bridge REANA platform
-and the GItLab platform via OAuth technology.
+If you would like to run REANA workflows directly from GitLab, it is useful to bridge the REANA platform
+and GitLab via OAuth technology.
 
 This can be easily achieved from "Your profile" page on REANA user interface:
 

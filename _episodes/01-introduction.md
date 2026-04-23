@@ -26,9 +26,9 @@ keypoints:
 > -- Jonathan B. Buckheit and David L. Donoho, "WaveLab and Reproducible Research", [source](https://doi.org/10.1007/978-1-4612-2544-7_5)
 {: .testimonial}
 
-Computational reproducibility has many definitions. The terms such as reproducibility, replicability, and repeatability have often different meaning in different scientific disciplines.
+Computational reproducibility has many definitions. Terms such as reproducibility, replicability, and repeatability often have different meanings in different scientific disciplines.
 
-One possible point of view on the computational reproducibility is provided by The Turing Way:
+One perspective on computational reproducibility is provided by The Turing Way:
 [source](https://the-turing-way.netlify.app/reproducible-research/reproducible-research.html)
 
 <img src="{{ page.root }}/fig/the-turing-way-reproducibility-definition.jpg" width="40%" />
@@ -39,7 +39,7 @@ underlying computing architecture such as from Intel to ARM processors).
 The more interesting use case is "reusable analyses", i.e. testing the same theory on new data, or
 altering the theory and reinterpreting old data.
 
-Another possible point of view on the computational reproducibility is provided by the PRIMAD model:
+Another perspective on computational reproducibility is provided by the PRIMAD model:
 [source](https://drops.dagstuhl.de/opus/volltexte/2016/5817/pdf/dagrep_v006_i001_p108_s16041.pdf)
 
 <img src="{{ page.root }}/fig/primad-model.png" width="60%" />
@@ -48,9 +48,9 @@ An analysis is reproducible, repeatable, reusable, robust if one can "wiggle" va
 entering the process. For example, change platform (from Intel to ARM processors); is it portable?
 Or change the actor performing the analysis (from Alice to Bob); is it independent of the analyst?
 
-The real life shows it often is not.
+In practice, it often is not.
 
-Example: Monya Baker published in Nature **533** (2016) 452-454 the results from surveying 1500 scientists:
+For example, Monya Baker published in Nature **533** (2016) 452–454 the results of surveying 1,500 scientists:
 [source](https://www.nature.com/news/1-500-scientists-lift-the-lid-on-reproducibility-1.19970)
 
 <img src="{{ page.root }}/fig/nature-reproducibility-failures.png" width="50%" />
@@ -80,15 +80,15 @@ Yet the uptake of good practices in real life has been slow. There are several r
 
 - sociological: publish-or-perish culture in scientific careers; missing incentives to create robust
   preserved and reusable technology stack;
-- technological: easy-to-use tools for "active analyses" that would facilitate their future reuse.
+- technological: easy-to-use tools for "active analyses" that facilitate their future reuse.
 
-The change is being brought by a combination of top-down approaches (e.g. funding bodies asking for
-Data Management Plans) and bottom-up approaches (building tools integrating into daily research
+The change is being brought about by a combination of top-down approaches (e.g. funding bodies asking for
+Data Management Plans) and bottom-up approaches (building tools that integrate into daily research
 workflows).
 
 > ## A reproducibility quote
 >
-> _Your closest collaborator is you six monhts ago... and your younger self does not reply to
+> _Your closest collaborator is you six months ago... and your younger self does not reply to
 > emails._
 {: .testimonial}
 
@@ -101,7 +101,7 @@ Four questions to aid assessing the robustness of analyses:
 3. **Which computing environment do you use?** Specify the operating system platform that is used to run the analysis.
 4. **What are the computational steps to achieve the results?** Specify all the commands and GUI clicks necessary to arrive at the final results.
 
-The input data for statistical analyses, such as CMS MiniAOD, is produced centrally and the locations are well understood.
+The input data for statistical analyses, such as CMS MiniAOD, is produced centrally, and its location is well-known.
 
 The analysis code and the containerised computational environments were covered in the previous two
 days of this workshop:
@@ -134,8 +134,8 @@ and reproduce user clicks.
 The use of custom helper scripts (e.g. ``run.sh`` shell scripts), or custom orchestration scripts
 (e.g. Python glue code) running the analysis is much better.
 
-However, porting glue code to new usage scenarios (for example to scale up to a new computer centre
-cluster) may be tedious technical word that would be better spent doing physics instead.
+However, porting glue code to new usage scenarios (for example to scale up to a new computing cluster)
+may be tedious technical work that would be better spent doing physics instead.
 
 Hence the birth of _declarative_ workflow systems that express the computational steps more
 abstractly.
@@ -185,7 +185,7 @@ preservation easy.
 
 <img src="{{ page.root }}/fig/reproducibility-and-preservation.png" width="60%" />
 
-Preserve first and think about reusability later is the "blue pill" way.
+Preserving data first and thinking about reusability later is the "blue pill" way.
 
 Make analysis preproducible _ab initio_ to facilitate its future preservation is the "red pill" way.
 

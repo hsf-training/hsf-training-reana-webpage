@@ -19,7 +19,7 @@ keypoints:
 In this lesson we shall run our first simple REANA example. We shall see:
 
 - structure of the example analysis and associated ``reana.yaml`` file
-- how to install of REANA command-line client
+- how to install the REANA command-line client
 - how to connect REANA client to remote REANA cluster
 - how to run analysis on remote REANA cluster
 
@@ -267,7 +267,7 @@ export REANA_SERVER_URL=https://reana.cern.ch
 In order to authenticate to REANA, you need to generate a token.
 
 > ## Exercise: Obtain a token.
->In order to obtain your token, please go to https://reana.cern.ch and ask for it.
+> In order to obtain your token, please go to https://reana.cern.ch and ask for it.
 {: .challenge}
 
 In your terminal, paste the line with your new access token as seen below.

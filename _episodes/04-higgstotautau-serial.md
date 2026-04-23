@@ -5,7 +5,7 @@ exercises: 20
 questions:
 - "Challenge: write the HiggsToTauTau analysis workflow and run it on REANA"
 objectives:
-- "Develop a full HigssToTauTau analysis workflow using a simple serial language"
+- "Develop a full HiggsToTauTau analysis workflow using a simple serial language"
 - "Get acquainted with writing moderately complex REANA examples"
 keypoints:
 - "Writing serial workflows is like chaining shell script commands"
@@ -69,7 +69,7 @@ And you have produced the plots and the fit:
 
 ## Objective
 
-Let us write a serial computational workflow automatising the previously-run manual steps and run
+Let us write a serial computational workflow automating the previously-run manual steps and run
 the HiggsToTauTau example on REANA.
 
 ### Note: Computing efficiency
@@ -93,8 +93,8 @@ It is a good practice to consider the absolute directories in your container ima
 needs. In this way, we don't risk to write over any code or configuration files provided by the
 container. This is good both for reproducibility and security purposes.
 
-Moreover, we don't modify the size of the running container by writing inside it, as it were.
-Writing to dynamic workspace that is _mounted_ inside the container allows to keep the container
+Moreover, writing into the running container would increase its size unnecessarily.
+Writing to the dynamic workspace that is _mounted_ inside the container keeps the container
 size small.
 
 ### Note: REANA_WORKSPACE environment variable
@@ -108,7 +108,7 @@ episodes.)
 
 ### OK, challenge time!
 
-With the above hints in mind, please try to write workflow either individually or in pairs.
+With the above hints in mind, please try to write the workflow either individually or in pairs.
 
 > ## Exercise
 >

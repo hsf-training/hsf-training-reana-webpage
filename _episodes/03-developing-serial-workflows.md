@@ -41,7 +41,7 @@ for (int i = 0; i < sizeof(people) / sizeof(struct people); i++) {
 ```
 {: .source}
 
-However, it has also its drawbacks. If you write scientific workflows imperatively and you need port
+However, it also has its drawbacks. If you write scientific workflows imperatively and you need to port
 the code to run on different compute architectures, or to scale up, it may be necessary to do
 considerable code refactoring. This is not writing _science code_, but rather _writing orchestration
 for the said science code_ onto different deployment scenarios.
@@ -54,8 +54,8 @@ SELECT name FROM people WHERE age<20
 ```
 {: .source}
 
-The idea of declarative approach to scientific workflows is to express research as a series of data
-analysis steps and let an independent "orchestration tool" or a "workflow system" the task of
+The idea of a declarative approach to scientific workflows is to express research as a series of data
+analysis steps and let an independent "orchestration tool" or a "workflow system" handle the task of
 running things properly on various deployment architectures.
 
 This achieves better separation of concerns between physics code knowledge and computing
@@ -73,11 +73,11 @@ pros and cons.  There is no silver bullet.
 
 Developing workflows declaratively may feel less natural. How do we do that?
 
-Start with earlier steps, run, debug, run, debug until satisfaction.
+Start with earlier steps, then run, debug, and iterate until satisfied.
 
-Continue with later steps only afterwards.
+Only then continue with later steps.
 
-How to run only first step of our example workflow?  Use `TARGET` step option:
+How do we run only the first step of our example workflow?  Use the `TARGET` step option:
 
 ```bash
 reana-client run -w roofit -o TARGET=gendata
@@ -136,7 +136,7 @@ results/data.root   154458   2020-02-17T16:08:43
 ```
 {: .output}
 
-As we can see, the workflow run only the first command and the ``data.root`` file was well
+As we can see, the workflow ran only the first command and the ``data.root`` file was successfully
 generated.  The final fitting step was not run and the final plot was not produced.
 
 ## Workflow runs
@@ -334,8 +334,8 @@ former stages of the workflow.
 
 ## Compile-time vs runtime code changes
 
-Sometimes you have to build a new container image when code changes (e.g. C++ compilation).
-sometimes you don't (e.g.  Python code, ROOT macros). Use latter for more productivity when
+Sometimes you have to build a new container image when code changes (e.g. C++ compilation);
+sometimes you don't (e.g. Python code, ROOT macros). Use the latter for more productivity when
 developing workflows.
 
 {% include links.md %}

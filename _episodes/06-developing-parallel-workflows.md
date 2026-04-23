@@ -22,22 +22,22 @@ keypoints:
 
 We now know how to develop reproducible analyses on small scale using serial workflows.
 
-In this lesson we shall learn how to scale-up for real-life work which usually requires using
+In this lesson we shall learn how to scale up for real-life work which usually requires using
 parallel workflows.
 
 ## Computational workflows as Directed Acyclic Graphs (DAG)
 
-The computational workflows can be expressed as a set of computational steps where some steps
-depends on other steps before they can begin their computations.  In other words, the computational
+Computational workflows can be expressed as a set of computational steps where some steps
+depend on other steps before they can begin their computations. In other words, the computational
 steps constitute a Directed Acyclic Graph (DAG) where each graph vertex represents a unit of
-computation with its inputs and outputs, and the graph edges describe the interconnection of various
+computation with its inputs and outputs, and the graph edges describe the interconnections between
 computational steps. For example:
 
 <img src="{{ page.root }}/fig/Tred-G.svg.png" width="20%" />
 
-The graph is "directed" and "acyclic" because it can be topographically ordered so that later steps
-depends on earlier steps without cyclic dependencies, the progress flowing steadily from former
-steps to latter steps during analysis.
+The graph is "directed" and "acyclic" because it can be topologically ordered so that later steps
+depend on earlier steps without cyclic dependencies, with progress flowing steadily from earlier
+steps to later steps.
 
 The REANA platform supports several DAG workflow specification languages:
 
@@ -230,9 +230,8 @@ code" and "orchestration code".
 We have seen how the sequential workflows were expressed in the Yadage syntax using stage
 dependencies. Note that if the stage dependency graph would have permitted, the workflow steps not
 depending on each other, or on the results of previous computations, would have been executed in
-parallel by the workflow engine out of the box. The physicist _only_ has to supply the knoweldge
-about which steps depend on which other steps and the workflow engine takes care of efficiently
-starting and scheduling tasks as necessary.
+parallel by the workflow engine out of the box. The physicist only needs to specify which steps depend on which others, and the workflow engine
+takes care of efficiently starting and scheduling tasks as necessary.
 
 ## HiggsToTauTau analysis: simple version
 
@@ -399,7 +398,7 @@ operation) whilst assembling these results together afterwards (the "gather" ope
 "scatter-gather" paradigm allows to scale computations in a "map-reduce" fashion over input values
 with a minimal syntax without having to duplicate workflow code or write loop statements.
 
-Here is an example of scatter-gather paradim in the Yadage language. Note the use of "multi-step"
+Here is an example of the scatter-gather paradigm in the Yadage language. Note the use of "multi-step"
 stage definition, expressing that the given stage is actually running multiple parametrised steps:
 
 ```yaml
