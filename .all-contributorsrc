@@ -10,19 +10,19 @@
   "skipCi": true,
   "contributors": [
     {
-      "login": "tiborsimko",
-      "name": "Tibor Šimko",
-      "avatar_url": "https://avatars.githubusercontent.com/u/517546?v=4",
-      "profile": "http://tiborsimko.org/",
+      "login": "CameronMcClymont",
+      "name": "Cameron McClymont",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50836068?v=4",
+      "profile": "http://cmcclymont.com/",
       "contributions": [
         "content"
       ]
     },
     {
-      "login": "CameronMcClymont",
-      "name": "Cameron McClymont",
-      "avatar_url": "https://avatars.githubusercontent.com/u/50836068?v=4",
-      "profile": "http://cmcclymont.com/",
+      "login": "tiborsimko",
+      "name": "Tibor Šimko",
+      "avatar_url": "https://avatars.githubusercontent.com/u/517546?v=4",
+      "profile": "http://tiborsimko.org/",
       "contributions": [
         "content"
       ]

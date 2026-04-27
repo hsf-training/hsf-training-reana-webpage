@@ -73,8 +73,8 @@ This lesson was written by:
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://tiborsimko.org/"><img src="https://avatars.githubusercontent.com/u/517546?v=4?s=100" width="100px;" alt="Tibor Šimko"/><br /><sub><b>Tibor Šimko</b></sub></a><br /><a href="#content-tiborsimko" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://cmcclymont.com/"><img src="https://avatars.githubusercontent.com/u/50836068?v=4?s=100" width="100px;" alt="Cameron McClymont"/><br /><sub><b>Cameron McClymont</b></sub></a><br /><a href="#content-cameronmcclymont" title="Content">🖋</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://tiborsimko.org/"><img src="https://avatars.githubusercontent.com/u/517546?v=4?s=100" width="100px;" alt="Tibor Šimko"/><br /><sub><b>Tibor Šimko</b></sub></a><br /><a href="#content-tiborsimko" title="Content">🖋</a></td>
     </tr>
   </tbody>
 </table>
@@ -90,8 +90,8 @@ Thanks also goes to these wonderful people ([emoji key][allcontrib-emoji-key]) f
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://tiborsimko.org/"><img src="https://avatars.githubusercontent.com/u/517546?v=4?s=100" width="100px;" alt="Tibor Šimko"/><br /><sub><b>Tibor Šimko</b></sub></a><br /><a href="#content-tiborsimko" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://cmcclymont.com/"><img src="https://avatars.githubusercontent.com/u/50836068?v=4?s=100" width="100px;" alt="Cameron McClymont"/><br /><sub><b>Cameron McClymont</b></sub></a><br /><a href="#content-cameronmcclymont" title="Content">🖋</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://tiborsimko.org/"><img src="https://avatars.githubusercontent.com/u/517546?v=4?s=100" width="100px;" alt="Tibor Šimko"/><br /><sub><b>Tibor Šimko</b></sub></a><br /><a href="#content-tiborsimko" title="Content">🖋</a></td>
     </tr>
   </tbody>
 </table>
