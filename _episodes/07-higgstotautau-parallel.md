@@ -26,16 +26,16 @@ The overall ``reana.yaml`` for this parallel analysis looks like:
 
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active">
-    <a href="#yadage-htautau-parallel-reana" aria-controls="yadage-htautau-parallel-reana" role="tab" data-toggle="tab">Yadage</a>
+    <a href="#snakemake-htautau-parallel-reana" aria-controls="snakemake-htautau-parallel-reana" role="tab" data-toggle="tab">Snakemake</a>
   </li>
   <li role="presentation">
-    <a href="#snakemake-htautau-parallel-reana" aria-controls="snakemake-htautau-parallel-reana" role="tab" data-toggle="tab">Snakemake</a>
+    <a href="#yadage-htautau-parallel-reana" aria-controls="yadage-htautau-parallel-reana" role="tab" data-toggle="tab">Yadage</a>
   </li>
 </ul>
 
 <div class="tab-content">
 
-<div role="tabpanel" class="tab-pane active" id="yadage-htautau-parallel-reana" markdown="1">
+<div role="tabpanel" class="tab-pane" id="yadage-htautau-parallel-reana" markdown="1">
 
 ```yaml
 inputs:
@@ -84,7 +84,7 @@ outputs:
 
 </div>
 
-<div role="tabpanel" class="tab-pane" id="snakemake-htautau-parallel-reana" markdown="1">
+<div role="tabpanel" class="tab-pane active" id="snakemake-htautau-parallel-reana" markdown="1">
 
 > ## Work in progress
 >
@@ -104,16 +104,16 @@ The skimming step definition looks like:
 
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active">
-    <a href="#yadage-htautau-skim" aria-controls="yadage-htautau-skim" role="tab" data-toggle="tab">Yadage</a>
+    <a href="#snakemake-htautau-skim" aria-controls="snakemake-htautau-skim" role="tab" data-toggle="tab">Snakemake</a>
   </li>
   <li role="presentation">
-    <a href="#snakemake-htautau-skim" aria-controls="snakemake-htautau-skim" role="tab" data-toggle="tab">Snakemake</a>
+    <a href="#yadage-htautau-skim" aria-controls="yadage-htautau-skim" role="tab" data-toggle="tab">Yadage</a>
   </li>
 </ul>
 
 <div class="tab-content">
 
-<div role="tabpanel" class="tab-pane active" id="yadage-htautau-skim" markdown="1">
+<div role="tabpanel" class="tab-pane" id="yadage-htautau-skim" markdown="1">
 
 ```yaml
 - name: skim
@@ -152,7 +152,7 @@ skim:
 
 </div>
 
-<div role="tabpanel" class="tab-pane" id="snakemake-htautau-skim" markdown="1">
+<div role="tabpanel" class="tab-pane active" id="snakemake-htautau-skim" markdown="1">
 
 > ## Work in progress
 >
@@ -171,16 +171,16 @@ The histograms can be produced as follows:
 
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active">
-    <a href="#yadage-htautau-histogram" aria-controls="yadage-htautau-histogram" role="tab" data-toggle="tab">Yadage</a>
+    <a href="#snakemake-htautau-histogram" aria-controls="snakemake-htautau-histogram" role="tab" data-toggle="tab">Snakemake</a>
   </li>
   <li role="presentation">
-    <a href="#snakemake-htautau-histogram" aria-controls="snakemake-htautau-histogram" role="tab" data-toggle="tab">Snakemake</a>
+    <a href="#yadage-htautau-histogram" aria-controls="yadage-htautau-histogram" role="tab" data-toggle="tab">Yadage</a>
   </li>
 </ul>
 
 <div class="tab-content">
 
-<div role="tabpanel" class="tab-pane active" id="yadage-htautau-histogram" markdown="1">
+<div role="tabpanel" class="tab-pane" id="yadage-htautau-histogram" markdown="1">
 
 ```yaml
 - name: histogram
@@ -222,7 +222,7 @@ histogram:
 
 </div>
 
-<div role="tabpanel" class="tab-pane" id="snakemake-htautau-histogram" markdown="1">
+<div role="tabpanel" class="tab-pane active" id="snakemake-htautau-histogram" markdown="1">
 
 > ## Work in progress
 >
@@ -239,16 +239,16 @@ Time to gather! How do we merge scattered results?
 
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active">
-    <a href="#yadage-htautau-merge" aria-controls="yadage-htautau-merge" role="tab" data-toggle="tab">Yadage</a>
+    <a href="#snakemake-htautau-merge" aria-controls="snakemake-htautau-merge" role="tab" data-toggle="tab">Snakemake</a>
   </li>
   <li role="presentation">
-    <a href="#snakemake-htautau-merge" aria-controls="snakemake-htautau-merge" role="tab" data-toggle="tab">Snakemake</a>
+    <a href="#yadage-htautau-merge" aria-controls="yadage-htautau-merge" role="tab" data-toggle="tab">Yadage</a>
   </li>
 </ul>
 
 <div class="tab-content">
 
-<div role="tabpanel" class="tab-pane active" id="yadage-htautau-merge" markdown="1">
+<div role="tabpanel" class="tab-pane" id="yadage-htautau-merge" markdown="1">
 
 ```yaml
 - name: merge
@@ -283,7 +283,7 @@ merge:
 
 </div>
 
-<div role="tabpanel" class="tab-pane" id="snakemake-htautau-merge" markdown="1">
+<div role="tabpanel" class="tab-pane active" id="snakemake-htautau-merge" markdown="1">
 
 > ## Work in progress
 >
@@ -300,16 +300,16 @@ The fit can be performed as follows:
 
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active">
-    <a href="#yadage-htautau-fit" aria-controls="yadage-htautau-fit" role="tab" data-toggle="tab">Yadage</a>
+    <a href="#snakemake-htautau-fit" aria-controls="snakemake-htautau-fit" role="tab" data-toggle="tab">Snakemake</a>
   </li>
   <li role="presentation">
-    <a href="#snakemake-htautau-fit" aria-controls="snakemake-htautau-fit" role="tab" data-toggle="tab">Snakemake</a>
+    <a href="#yadage-htautau-fit" aria-controls="yadage-htautau-fit" role="tab" data-toggle="tab">Yadage</a>
   </li>
 </ul>
 
 <div class="tab-content">
 
-<div role="tabpanel" class="tab-pane active" id="yadage-htautau-fit" markdown="1">
+<div role="tabpanel" class="tab-pane" id="yadage-htautau-fit" markdown="1">
 
 ```yaml
 - name: fit
@@ -344,7 +344,7 @@ fit:
 
 </div>
 
-<div role="tabpanel" class="tab-pane" id="snakemake-htautau-fit" markdown="1">
+<div role="tabpanel" class="tab-pane active" id="snakemake-htautau-fit" markdown="1">
 
 > ## Work in progress
 >
@@ -370,16 +370,16 @@ Challenge time! Add plotting step to the workflow.
 
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active">
-    <a href="#yadage-htautau-plot" aria-controls="yadage-htautau-plot" role="tab" data-toggle="tab">Yadage</a>
+    <a href="#snakemake-htautau-plot" aria-controls="snakemake-htautau-plot" role="tab" data-toggle="tab">Snakemake</a>
   </li>
   <li role="presentation">
-    <a href="#snakemake-htautau-plot" aria-controls="snakemake-htautau-plot" role="tab" data-toggle="tab">Snakemake</a>
+    <a href="#yadage-htautau-plot" aria-controls="yadage-htautau-plot" role="tab" data-toggle="tab">Yadage</a>
   </li>
 </ul>
 
 <div class="tab-content">
 
-<div role="tabpanel" class="tab-pane active" id="yadage-htautau-plot" markdown="1">
+<div role="tabpanel" class="tab-pane" id="yadage-htautau-plot" markdown="1">
 
 The addition to the workflow specification is:
 
@@ -416,7 +416,7 @@ plot:
 
 </div>
 
-<div role="tabpanel" class="tab-pane" id="snakemake-htautau-plot" markdown="1">
+<div role="tabpanel" class="tab-pane active" id="snakemake-htautau-plot" markdown="1">
 
 > ## Work in progress
 >
@@ -445,16 +445,16 @@ We are now ready to assemble the previous stages together and run the example on
 
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active">
-    <a href="#yadage-htautau-full" aria-controls="yadage-htautau-full" role="tab" data-toggle="tab">Yadage</a>
+    <a href="#snakemake-htautau-full" aria-controls="snakemake-htautau-full" role="tab" data-toggle="tab">Snakemake</a>
   </li>
   <li role="presentation">
-    <a href="#snakemake-htautau-full" aria-controls="snakemake-htautau-full" role="tab" data-toggle="tab">Snakemake</a>
+    <a href="#yadage-htautau-full" aria-controls="yadage-htautau-full" role="tab" data-toggle="tab">Yadage</a>
   </li>
 </ul>
 
 <div class="tab-content">
 
-<div role="tabpanel" class="tab-pane active" id="yadage-htautau-full" markdown="1">
+<div role="tabpanel" class="tab-pane" id="yadage-htautau-full" markdown="1">
 
 The REANA specification file `reana.yaml` looks as follows:
 
@@ -642,7 +642,7 @@ plot:
 
 </div>
 
-<div role="tabpanel" class="tab-pane" id="snakemake-htautau-full" markdown="1">
+<div role="tabpanel" class="tab-pane active" id="snakemake-htautau-full" markdown="1">
 
 > ## Work in progress
 >
@@ -659,16 +659,16 @@ plot:
 
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active">
-    <a href="#yadage-htautau-results" aria-controls="yadage-htautau-results" role="tab" data-toggle="tab">Yadage</a>
+    <a href="#snakemake-htautau-results" aria-controls="snakemake-htautau-results" role="tab" data-toggle="tab">Snakemake</a>
   </li>
   <li role="presentation">
-    <a href="#snakemake-htautau-results" aria-controls="snakemake-htautau-results" role="tab" data-toggle="tab">Snakemake</a>
+    <a href="#yadage-htautau-results" aria-controls="yadage-htautau-results" role="tab" data-toggle="tab">Yadage</a>
   </li>
 </ul>
 
 <div class="tab-content">
 
-<div role="tabpanel" class="tab-pane active" id="yadage-htautau-results" markdown="1">
+<div role="tabpanel" class="tab-pane" id="yadage-htautau-results" markdown="1">
 
 The computational graph of the workflow looks like:
 
@@ -680,7 +680,7 @@ The workflow produces the following fit:
 
 </div>
 
-<div role="tabpanel" class="tab-pane" id="snakemake-htautau-results" markdown="1">
+<div role="tabpanel" class="tab-pane active" id="snakemake-htautau-results" markdown="1">
 
 > ## Work in progress
 >
