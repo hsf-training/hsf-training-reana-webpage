@@ -47,22 +47,22 @@ The REANA platform supports several DAG workflow specification languages:
 
 ## Workflow specification languages
 
-The examples in this lesson use [Yadage](https://yadage.readthedocs.io/en/latest/) (used e.g. in
-ATLAS) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) (used e.g. in LHCb). Select a
+The examples in this lesson use [Snakemake](https://snakemake.readthedocs.io/en/stable/) (used e.g. in
+LHCb) and [Yadage](https://yadage.readthedocs.io/en/latest/) (used e.g. in ATLAS). Select a
 tab below to see the RooFit example expressed in each language.
 
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active">
-    <a href="#yadage-roofit" aria-controls="yadage-roofit" role="tab" data-toggle="tab">Yadage</a>
+    <a href="#snakemake-roofit" aria-controls="snakemake-roofit" role="tab" data-toggle="tab">Snakemake</a>
   </li>
   <li role="presentation">
-    <a href="#snakemake-roofit" aria-controls="snakemake-roofit" role="tab" data-toggle="tab">Snakemake</a>
+    <a href="#yadage-roofit" aria-controls="yadage-roofit" role="tab" data-toggle="tab">Yadage</a>
   </li>
 </ul>
 
 <div class="tab-content">
 
-<div role="tabpanel" class="tab-pane active" id="yadage-roofit" markdown="1">
+<div role="tabpanel" class="tab-pane" id="yadage-roofit" markdown="1">
 
 Yadage enables describing even very complex computational workflows. Here is the Yadage
 specification for the RooFit example used in the previous episodes:
@@ -129,7 +129,7 @@ commands to run in each stage, and how to pass inputs and outputs between steps.
 
 </div>
 
-<div role="tabpanel" class="tab-pane" id="snakemake-roofit" markdown="1">
+<div role="tabpanel" class="tab-pane active" id="snakemake-roofit" markdown="1">
 
 Snakemake uses "rules" where each rule defines its inputs and outputs and the command to run to
 produce them. The Snakemake workflow engine then computes the dependencies between rules based on
@@ -179,16 +179,16 @@ below to see the configuration for each engine.
 
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active">
-    <a href="#yadage-roofit-reana" aria-controls="yadage-roofit-reana" role="tab" data-toggle="tab">Yadage</a>
+    <a href="#snakemake-roofit-reana" aria-controls="snakemake-roofit-reana" role="tab" data-toggle="tab">Snakemake</a>
   </li>
   <li role="presentation">
-    <a href="#snakemake-roofit-reana" aria-controls="snakemake-roofit-reana" role="tab" data-toggle="tab">Snakemake</a>
+    <a href="#yadage-roofit-reana" aria-controls="yadage-roofit-reana" role="tab" data-toggle="tab">Yadage</a>
   </li>
 </ul>
 
 <div class="tab-content">
 
-<div role="tabpanel" class="tab-pane active" id="yadage-roofit-reana" markdown="1">
+<div role="tabpanel" class="tab-pane" id="yadage-roofit-reana" markdown="1">
 
 ```yaml
 inputs:
@@ -205,7 +205,7 @@ workflow:
   file: workflow.yaml
 outputs:
   files:
-    - fitdata/plot.png
+    - results/plot.png
 ```
 {: .source}
 
@@ -229,14 +229,14 @@ Here, `workflow.yaml` is a new file with the same content as specified above.
 > reana-client status -w my-workflow
 > reana-client logs -w my-workflow
 > reana-client ls -w my-workflow
-> reana-client download plot.png -w my-workflow
+> reana-client download results/plot.png -w my-workflow
 > ```
 > {: .source}
 {: .solution}
 
 </div>
 
-<div role="tabpanel" class="tab-pane" id="snakemake-roofit-reana" markdown="1">
+<div role="tabpanel" class="tab-pane active" id="snakemake-roofit-reana" markdown="1">
 
 ```yaml
 inputs:
@@ -291,7 +291,7 @@ code".
 
 ## Parallelism via step dependencies
 
-We have seen how the sequential workflows were expressed in the Yadage/Snakemake syntax using stage
+We have seen how the sequential workflows were expressed in the Snakemake/Yadage syntax using stage
 dependencies. Note that if the stage dependency graph would have permitted, the workflow steps not
 depending on each other, or on the results of previous computations, would have been executed in
 parallel by the workflow engine out of the box. The physicist only needs to specify which steps depend on which others, and the workflow engine
@@ -304,16 +304,16 @@ simple step dependencies. Select a tab below to see the workflow expressed in ea
 
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active">
-    <a href="#yadage-htautau-simple" aria-controls="yadage-htautau-simple" role="tab" data-toggle="tab">Yadage</a>
+    <a href="#snakemake-htautau-simple" aria-controls="snakemake-htautau-simple" role="tab" data-toggle="tab">Snakemake</a>
   </li>
   <li role="presentation">
-    <a href="#snakemake-htautau-simple" aria-controls="snakemake-htautau-simple" role="tab" data-toggle="tab">Snakemake</a>
+    <a href="#yadage-htautau-simple" aria-controls="yadage-htautau-simple" role="tab" data-toggle="tab">Yadage</a>
   </li>
 </ul>
 
 <div class="tab-content">
 
-<div role="tabpanel" class="tab-pane active" id="yadage-htautau-simple" markdown="1">
+<div role="tabpanel" class="tab-pane" id="yadage-htautau-simple" markdown="1">
 
 The workflow stages look like:
 
@@ -465,7 +465,7 @@ Let us try to run it on REANA cloud.
 
 </div>
 
-<div role="tabpanel" class="tab-pane" id="snakemake-htautau-simple" markdown="1">
+<div role="tabpanel" class="tab-pane active" id="snakemake-htautau-simple" markdown="1">
 
 > ## Work in progress
 >
@@ -490,16 +490,16 @@ with a minimal syntax without having to duplicate workflow code or write loop st
 
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active">
-    <a href="#yadage-scatter" aria-controls="yadage-scatter" role="tab" data-toggle="tab">Yadage</a>
+    <a href="#snakemake-scatter" aria-controls="snakemake-scatter" role="tab" data-toggle="tab">Snakemake</a>
   </li>
   <li role="presentation">
-    <a href="#snakemake-scatter" aria-controls="snakemake-scatter" role="tab" data-toggle="tab">Snakemake</a>
+    <a href="#yadage-scatter" aria-controls="yadage-scatter" role="tab" data-toggle="tab">Yadage</a>
   </li>
 </ul>
 
 <div class="tab-content">
 
-<div role="tabpanel" class="tab-pane active" id="yadage-scatter" markdown="1">
+<div role="tabpanel" class="tab-pane" id="yadage-scatter" markdown="1">
 
 Here is an example of the scatter-gather paradigm in the Yadage language. Note the use of "multi-step"
 stage definition, expressing that the given stage is actually running multiple parametrised steps:
@@ -548,7 +548,7 @@ also the automatic "cascading" of computations.
 
 </div>
 
-<div role="tabpanel" class="tab-pane" id="snakemake-scatter" markdown="1">
+<div role="tabpanel" class="tab-pane active" id="snakemake-scatter" markdown="1">
 
 > ## Work in progress
 >
