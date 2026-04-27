@@ -22,7 +22,7 @@ example via the scatter-gather paradigm introduced in the previous episode.
 
 ## HiggsToTauTau analysis
 
-The overall ``reana.yaml`` for this parallel analysis looks like:
+Let us start by defining the overall skeleton of the analysis workflow.
 
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active">
@@ -36,6 +36,8 @@ The overall ``reana.yaml`` for this parallel analysis looks like:
 <div class="tab-content">
 
 <div role="tabpanel" class="tab-pane" id="yadage-htautau-parallel-reana" markdown="1">
+
+The overall ``reana.yaml`` for this parallel analysis in Yadage looks like:
 
 ```yaml
 inputs:
@@ -82,21 +84,101 @@ outputs:
 ```
 {: .source}
 
+Note that the input files, cross-sections, and short names are defined as arrays. These are the
+arrays we will scatter over.
+
 </div>
 
 <div role="tabpanel" class="tab-pane active" id="snakemake-htautau-parallel-reana" markdown="1">
 
-> ## Work in progress
->
-> todo: write Snakemake version here!
-{: .callout}
+The overall ``reana.yaml`` for this parallel analysis in Snakemake looks like:
+
+```yaml
+inputs:
+  files:
+    - Snakefile
+workflow:
+  type: snakemake
+  file: Snakefile
+outputs:
+  files:
+    - fit/fit.png
+```
+{: .source}
+
+Note that this `reana.yaml` file is very minimal: we are basically only declaring that we shall use
+Snakemake workflow type, and all the details will live in the `Snakefile` that will be defining the
+workflow. The `Snakefile` will start by defining parameters:
+
+```python
+uri = "root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced"
+
+files = [
+    "GluGluToHToTauTau",
+    "VBF_HToTauTau",
+    "DYJetsToLL",
+    "DYJetsToLL",
+    "TTbar",
+    "W1JetsToLNu",
+    "W2JetsToLNu",
+    "W3JetsToLNu",
+    "Run2012B_TauPlusX",
+    "Run2012C_TauPlusX",
+]
+
+cross_sections = [
+    19.6,
+    1.55,
+    3503.7,
+    3503.7,
+    225.2,
+    6381.2,
+    2039.8,
+    612.5,
+    1.0,
+    1.0,
+]
+
+short_hands = [
+    "ggH",
+    "qqH",
+    "ZLL",
+    "ZTT",
+    "TT",
+    "W1J",
+    "W2J",
+    "W3J",
+    "dataRunB",
+    "dataRunC",
+]
+```
+{: .source}
+
+Note how we have defined `files`, `cross_sections`, and `short_hands` representing various data
+sets that we shall be processing in parallel. We shall use these arrays as Snakemake wildcards
+over which the computations will be distributed in a parallel manner. The `short_hands` array
+gives each dataset a compact label used in downstream rules and output filenames.
+
+Note also that `DYJetsToLL` appears twice on purpose: the same input dataset is processed under
+two different selections, `ZLL` (Z → ℓℓ) and `ZTT` (Z → ττ). Because Snakemake aligns the three
+arrays element-by-element, the file and its cross-section are repeated so that each selection
+gets its own scatter slot.
+
+We can also declare the desired overall final outputs of the workflow:
+
+```python
+rule all:
+    input:
+        "fit/fit.png",
+        "plot/pt_met.png"
+```
+{: .source}
+
+The rest of the `Snakefile` will be discussed below.
 
 </div>
 
 </div>
-
-Note that the input files, cross-sections, and short names are defined as arrays. These are the
-arrays we will scatter over.
 
 ## HiggsToTauTau skimming
 
@@ -150,20 +232,26 @@ skim:
 ```
 {: .source}
 
+Note the scatter paradigm that will cause nine parallel jobs for each input dataset file.
+
 </div>
 
 <div role="tabpanel" class="tab-pane active" id="snakemake-htautau-skim" markdown="1">
 
-> ## Work in progress
->
-> todo: write Snakemake version here!
-{: .callout}
+```python
+rule skim:
+    output:
+        "skim/{files}_{cross_sections}.root"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p skim && cd /analysis/skim && ./skim {uri}/{wildcards.files}.root $workspace/{output} {wildcards.cross_sections} 11467.0 0.1"
+```
+{: .source}
 
 </div>
 
 </div>
-
-Note the scatter paradigm that will cause nine parallel jobs for each input dataset file.
 
 ## HiggsToTauTau histogramming
 
@@ -224,10 +312,18 @@ histogram:
 
 <div role="tabpanel" class="tab-pane active" id="snakemake-htautau-histogram" markdown="1">
 
-> ## Work in progress
->
-> todo: write Snakemake version here!
-{: .callout}
+```python
+rule histogram:
+    input:
+        "skim/{files}_{cross_sections}.root"
+    output:
+        "histogram/{files}_{cross_sections}_{short_hands}.root"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p histogram && cd /analysis/skim && python histograms.py $workspace/{input} {wildcards.short_hands} $workspace/{output}"
+```
+{: .source}
 
 </div>
 
@@ -285,10 +381,18 @@ merge:
 
 <div role="tabpanel" class="tab-pane active" id="snakemake-htautau-merge" markdown="1">
 
-> ## Work in progress
->
-> todo: write Snakemake version here!
-{: .callout}
+```python
+rule merge:
+    input:
+        expand("histogram/{files}_{cross_sections}_{short_hands}.root", zip, files=files, cross_sections=cross_sections, short_hands=short_hands)
+    output:
+        "merge/merged.root"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "mkdir -p merge && hadd {output} {input}"
+```
+{: .source}
 
 </div>
 
@@ -346,10 +450,18 @@ fit:
 
 <div role="tabpanel" class="tab-pane active" id="snakemake-htautau-fit" markdown="1">
 
-> ## Work in progress
->
-> todo: write Snakemake version here!
-{: .callout}
+```python
+rule fit:
+    input:
+        "merge/merged.root"
+    output:
+        "fit/fit.png"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-statistics-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p fit && cd /fit && python fit.py $workspace/{input} $workspace/fit"
+```
+{: .source}
 
 </div>
 
@@ -418,10 +530,18 @@ plot:
 
 <div role="tabpanel" class="tab-pane active" id="snakemake-htautau-plot" markdown="1">
 
-> ## Work in progress
->
-> todo: write Snakemake version here!
-{: .callout}
+```python
+rule plot:
+    input:
+        "merge/merged.root"
+    output:
+        "plot/pt_met.png"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p plot && cd /analysis/skim && python plot.py $workspace/{input} $workspace/plot 0.1"
+```
+{: .source}
 
 </div>
 
@@ -644,10 +764,119 @@ plot:
 
 <div role="tabpanel" class="tab-pane active" id="snakemake-htautau-full" markdown="1">
 
-> ## Work in progress
->
-> todo: write Snakemake version here!
-{: .callout}
+The REANA specification file `reana.yaml` looks as follows:
+
+```yaml
+inputs:
+  files:
+    - Snakefile
+workflow:
+  type: snakemake
+  file: Snakefile
+outputs:
+  files:
+    - fit/fit.png
+```
+{: .source}
+
+The workflow definition file `Snakefile` is:
+
+```python
+uri = "root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced"
+
+files = [
+    "GluGluToHToTauTau",
+    "VBF_HToTauTau",
+    "DYJetsToLL",
+    "DYJetsToLL",
+    "TTbar",
+    "W1JetsToLNu",
+    "W2JetsToLNu",
+    "W3JetsToLNu",
+    "Run2012B_TauPlusX",
+    "Run2012C_TauPlusX",
+]
+
+cross_sections = [
+    19.6,
+    1.55,
+    3503.7,
+    3503.7,
+    225.2,
+    6381.2,
+    2039.8,
+    612.5,
+    1.0,
+    1.0,
+]
+
+short_hands = [
+    "ggH",
+    "qqH",
+    "ZLL",
+    "ZTT",
+    "TT",
+    "W1J",
+    "W2J",
+    "W3J",
+    "dataRunB",
+    "dataRunC",
+]
+
+rule all:
+    input:
+        "fit/fit.png",
+        "plot/pt_met.png"
+
+rule skim:
+    output:
+        "skim/{files}_{cross_sections}.root"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p skim && cd /analysis/skim && ./skim {uri}/{wildcards.files}.root $workspace/{output} {wildcards.cross_sections} 11467.0 0.1"
+
+rule histogram:
+    input:
+        "skim/{files}_{cross_sections}.root"
+    output:
+        "histogram/{files}_{cross_sections}_{short_hands}.root"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p histogram && cd /analysis/skim && python histograms.py $workspace/{input} {wildcards.short_hands} $workspace/{output}"
+
+rule merge:
+    input:
+        expand("histogram/{files}_{cross_sections}_{short_hands}.root", zip, files=files, cross_sections=cross_sections, short_hands=short_hands)
+    output:
+        "merge/merged.root"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "mkdir -p merge && hadd {output} {input}"
+
+rule fit:
+    input:
+        "merge/merged.root"
+    output:
+        "fit/fit.png"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-statistics-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p fit && cd /fit && python fit.py $workspace/{input} $workspace/fit"
+
+rule plot:
+    input:
+        "merge/merged.root"
+    output:
+        "plot/pt_met.png"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p plot && cd /analysis/skim && python plot.py $workspace/{input} $workspace/plot 0.1"
+```
+{: .source}
 
 </div>
 
@@ -682,10 +911,18 @@ The workflow produces the following fit:
 
 <div role="tabpanel" class="tab-pane active" id="snakemake-htautau-results" markdown="1">
 
-> ## Work in progress
->
-> todo: write Snakemake version here!
-{: .callout}
+The dependency graph of the workflow rules, defined in `Snakefile`, looks like:
+
+<img src="{{ page.root }}/fig/awesome-analysis-snakemake-parallel/rules.png" />
+
+The skimming and histogramming calculations were parallelised over various input files, leading to
+the following runtime computational graph:
+
+<img src="{{ page.root }}/fig/awesome-analysis-snakemake-parallel/dag.png" />
+
+The workflow produces the following fit:
+
+<img src="{{ page.root }}/fig/awesome-analysis-snakemake-parallel/fit_fit.png" />
 
 </div>
 
