@@ -1,6 +1,5 @@
 {% comment %}
   JavaScript used in lesson and workshop pages.
-  Overrides hsf-training-theme to add synchronized tab switching.
 {% endcomment %}
 <script src="{{ relative_root_path }}/assets/js/jquery.min.js"></script>
 <script src="{{ relative_root_path }}/assets/js/bootstrap.min.js"></script>
@@ -55,20 +54,3 @@ https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js
     anchors.add();
 </script>
 
-<script>
-  // Sync tabs with matching engine names (yadage-* / snakemake-*) across all tab groups.
-  $(document).on('shown.bs.tab', '[data-toggle="tab"]', function(e) {
-    var href = $(e.target).attr('href');
-    var engine = null;
-    if (href && /^#yadage-/.test(href))    engine = 'yadage';
-    if (href && /^#snakemake-/.test(href)) engine = 'snakemake';
-    if (!engine) return;
-
-    $('[data-toggle="tab"]').not(e.target).each(function() {
-      var thisHref = $(this).attr('href');
-      if (thisHref && new RegExp('^#' + engine + '-').test(thisHref) && !$(this).parent().hasClass('active')) {
-        $(this).tab('show');
-      }
-    });
-  });
-</script>
