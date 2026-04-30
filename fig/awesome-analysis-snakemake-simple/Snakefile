@@ -1,0 +1,44 @@
+uri = "root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced"
+
+rule all:
+    input:
+        "fit/fit.png",
+        "plot/pt_met.png"
+
+rule skim:
+    output:
+        directory("skim")
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p skim && cd /analysis/skim && bash ./skim.sh {uri} $workspace/skim"
+
+rule histogram:
+    input:
+        "skim"
+    output:
+        "histogram/histograms.root"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p histogram && cd /analysis/skim && bash ./histograms_with_custom_output_location.sh $workspace/{input} $workspace/histogram"
+
+rule fit:
+    input:
+        "histogram/histograms.root"
+    output:
+        "fit/fit.png"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-statistics-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p fit && cd /fit && bash ./fit.sh $workspace/{input} $workspace/fit"
+
+rule plot:
+    input:
+        "histogram/histograms.root"
+    output:
+        "plot/pt_met.png"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p plot && cd /analysis/skim && bash ./plot.sh $workspace/{input} $workspace/plot 0.1"

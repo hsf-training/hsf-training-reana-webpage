@@ -467,10 +467,88 @@ Let us try to run it on REANA cloud.
 
 <div role="tabpanel" class="tab-pane active" id="snakemake-htautau-simple" markdown="1">
 
-> ## Work in progress
+The Snakemake workflow can be expressed by the following `Snakefile`:
+
+```python
+uri = "root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced"
+
+rule all:
+    input:
+        "fit/fit.png",
+        "plot/pt_met.png"
+
+rule skim:
+    output:
+        directory("skim")
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p skim && cd /analysis/skim && bash ./skim.sh {uri} $workspace/skim"
+
+rule histogram:
+    input:
+        "skim"
+    output:
+        "histogram/histograms.root"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p histogram && cd /analysis/skim && bash ./histograms_with_custom_output_location.sh $workspace/{input} $workspace/histogram"
+
+rule fit:
+    input:
+        "histogram/histograms.root"
+    output:
+        "fit/fit.png"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-statistics-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p fit && cd /fit && bash ./fit.sh $workspace/{input} $workspace/fit"
+
+rule plot:
+    input:
+        "histogram/histograms.root"
+    output:
+        "plot/pt_met.png"
+    container:
+        "docker://gitlab-registry.cern.ch/awesome-workshop/awesome-analysis-eventselection-stage3:master"
+    shell:
+        "workspace=$(pwd) && mkdir -p plot && cd /analysis/skim && bash ./plot.sh $workspace/{input} $workspace/plot 0.1"
+```
+
+Let us try to run it on REANA cloud.
+
+> ## Exercise
 >
-> todo: write Snakemake version here!
-{: .callout}
+> Write and run a HiggsToTauTau analysis example using the Snakemake workflow version presented above.
+> Take the workflow definition, the step definition, and write the corresponding `reana.yaml`.
+> Afterwards run the example on REANA cloud.
+{: .challenge}
+
+> ## Solution
+>
+> ```bash
+> mkdir awesome-analysis-snakemake-simple
+> cd awesome-analysis-snakemake-simple
+> vim Snakefile     # take workflow definition contents above
+> vim reana.yaml    # the goal of the exercise is to create this content
+> cat reana.yaml
+> ```
+> {: .source}
+> ```
+> inputs:
+>   files:
+>     - Snakefile
+>     - reana.yaml
+> workflow:
+>   type: snakemake
+>   file: Snakefile
+> outputs:
+>   files:
+>     - fit/fit.png
+> ```
+> {: .output}
+{: .solution}
 
 </div>
 
@@ -550,10 +628,33 @@ also the automatic "cascading" of computations.
 
 <div role="tabpanel" class="tab-pane active" id="snakemake-scatter" markdown="1">
 
-> ## Work in progress
->
-> todo: write Snakemake version here!
-{: .callout}
+Snakemake has several concepts how to parametrise calculations. One can start by using rule
+[wildcards](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#snakefiles-wildcards).
+For example, if we would like to process five data samples concurrently, you can specify rules like:
+
+```python
+samples = ["1","2","3","4","5"]
+
+rule scatter:
+    input:
+        "myinputs{n}.txt"
+    output:
+        "myresults{n}.txt"
+    shell:
+      ...
+
+rule gather:
+    input:
+        expand("myresults{n}.txt", n=samples)
+    output:
+        "sum.txt"
+    shell:
+        ...
+```
+
+Here Snakemake will start five independent jobs to "scatter" computations over data, yielding
+partial `myresults.txt` files for each sample, and then aggregates them as necessary in the "gather"
+rule.
 
 </div>
 

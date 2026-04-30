@@ -1,0 +1,10 @@
+inputs:
+  files:
+    - Snakefile
+    - reana.yaml
+workflow:
+  type: snakemake
+  file: Snakefile
+outputs:
+  files:
+    - fit/fit.png
