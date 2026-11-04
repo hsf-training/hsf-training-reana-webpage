@@ -1,14 +1,24 @@
-name: Check Markdown links
+name: Check links
 
 on:
-  push:
   pull_request:
+  push:
+    branches: [gh-pages]
   schedule:
-    - cron: "0 0 1 * *"
+    - cron: "0 4 1 * *" # monthly, to catch links that break over time
+  workflow_dispatch:
 
 jobs:
-  markdown-link-check:
+  lychee:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: gaurav-nelson/github-action-markdown-link-check@v1
+      - uses: actions/checkout@v7
+
+      - name: Check links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress "./**/*.md"
+          fail: true
+        env:
+          # Authenticated requests avoid GitHub rate limits.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
