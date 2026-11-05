@@ -1,0 +1,8 @@
+# Local links in the Jekyll sources point to the built site (`{{ page.root }}/fig/...`,
+# `../setup`), not to the Markdown files, so they can't be checked here. The old
+# markdown-link-check config also ignored relative links.
+^file://
+# Known broken links, left for the lesson maintainers to decide on
+# (see hsf-training/hsf-training-ai-maintenance#4).
+# Contributor's homepage in the all-contributors table: HTTPS fails, HTTP works.
+https://tiborsimko\.org/
